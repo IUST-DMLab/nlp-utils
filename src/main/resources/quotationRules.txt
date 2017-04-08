@@ -1,0 +1,1 @@
+(?$teller [{word:/.+/}]+  [{tag:/V/} ]+) (?$quotationMark [{word:/:/}])  (?$quotation [!({word:/\n/}|{word:/\?/})]+)

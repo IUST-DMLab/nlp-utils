@@ -1,8 +1,15 @@
 package ir.ac.iust.dml.kg.raw;
 
+import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.ling.TaggedWord;
+import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.util.ArrayCoreMap;
+import edu.stanford.nlp.util.CoreMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SentenceTokenizer {
@@ -18,4 +25,5 @@ public class SentenceTokenizer {
       logger.trace("tokenize to sentences: " + text);
       return sentenceTokenizer.tokenize(text);
    }
+
 }

@@ -1,0 +1,862 @@
+﻿Sub * SUBJ SUBJ !اجتماعي!
+W * DELM DELM #
+W * N N,SING,COM منبع
+W * DELM DELM :
+W * DELM DELM )
+W * N N,SING,COM,GEN مجله ي
+W * N N,SING,PR,GEN سروش
+W * ADJ ADJ,SIM هفتگي
+W * DELM DELM (
+W * DELM DELM #
+W * DELM DELM #
+W * N N,SING,COM,INDF نگاهي
+W * P P به
+W * N N,PL,COM,GEN ويژه برنامه هاي
+W * N N,SING,MON محرم
+W * P P در
+W * N N,SING,COM تلويزيون
+W * DELM DELM #
+W * N N,SING,TIME,GEN نوروز
+W * N N,SING,NUM هشتاد
+W * P P در
+W * N N,SING,COM,GEN لابه لاي
+W * N N,PL,ORD,GEN بيرق هاي
+W * ADJ ADJ,SIM سبز
+W * CON CON و
+W * ADJ ADJ,SIM,GEN سياه
+W * N N,SING,MON محرم
+W * CON CON و
+W * N N,SING,COM,GEN سفره ي
+W * N N,SING,COM هفت سين
+W * N N,SING,COM,INDF جلوه اي
+W * ADJ ADJ,SIM خاص
+W * V V,PA,SIM,POS,3 داشت
+W * DELM DELM .
+W * ADV ADV,GENR,TIME هرازگاهي
+W * CON CON كه
+W * ADJ ADJ,SIM نرمه
+W * N N,SING,COM,GEN باد
+W * ADJ ADJ,SIM بهاري
+W * DELM DELM ،
+W * N N,SING,COM,GEN گونه ي
+W * ADJ ADJ,SIM نرم
+W * CON CON و
+W * ADJ ADJ,SIM,GEN مخملي
+W * N N,PL,COM بنفشه ها
+W * RA RA را
+W * V V,PA,PRG,POS,3 مي بوسيد
+W * CON CON و
+W * N N,SING,COM,AFF,1 سرودم
+W * N N,PL,COM ماهي قرمزها
+W * RA RA را
+W * V V,PA,PRG,POS,3 مي جنباند
+W * N N,SING,TIME نوروز
+W * ADV ADV,GENR,SIM حسابي
+W * P P به
+W * N N,SING,COM تك وتا
+W * V V,PA,PRG,POS,3 مي افتاد
+W * CON CON و
+W * N N,SING,COM رخ
+W * V V,PRS,POS,3 مي تاباند
+W * CON CON و
+W * N N,PL,COM دلها
+W * RA RA را
+W * P P به
+W * N N,SING,COM شوق
+W * CON CON و
+W * N N,SING,COM شعف
+W * V V,PA,PRG,POS,3 مي كشاند
+W * CON CON اما
+W * N N,SING,COM,INDF زماني
+W * CON CON كه
+W * ADJ ADJ,SIM نرمه
+W * N N,SING,COM,GEN باد
+W * ADJ ADJ,SIM بهاري
+W * N N,SING,COM,GEN گونه ي
+W * ADJ ADJ,SIM,GEN داغ
+W * N N,PL,COM لاله ها
+W * RA RA را
+W * V V,PA,PRG,POS,3 مي بوسيد
+W * CON CON و
+W * N N,PL,ORD,GEN بيرق هاي
+W * N N,SING,COM,GEN سردر
+W * N N,PL,LOC خانه ها
+W * RA RA را
+W * V V,PA,PRG,POS,3 مي افراشت
+W * DELM DELM ،
+W * N N,SING,TIME نوروز
+W * DELM DELM ،
+W * ADV ADV,deg,SIM تف زده
+W * CON CON و
+W * ADV ADV,deg,SIM عطشناك
+W * N N,SING,COM,GEN حديث
+W * ADJ ADJ,SIM,GEN سرخ
+W * N N,SING,COM عشق
+W * N N,SING,COM نجوا
+W * V V,PA,PRG,POS,3 مي كرد
+W * CON CON و
+W * ADV ADV,GENR,SIM ناگاه
+W * N N,PL,COM دلها
+W * RA RA را
+W * N N,SING,COM پر
+W * V V,PA,PRG,POS,3 مي داد
+W * P P به
+W * N N,SING,COM,GEN سوي
+W * N N,SING,COM,GEN وادي
+W * N N,SING,LOC,PR كربلا
+W * CON CON و
+W * N N,SING,COM,GEN وادي
+W * N N,SING,COM رنج
+W * CON CON و
+W * N N,SING,COM اندوه
+W * DELM DELM ...
+W * N N,SING,TIME,GEN نوروز
+W * N N,SING,NUM هشتاد
+W * ADJ ADJ,SIM آميخته
+W * P P با
+W * DET DET اين
+W * N N,SING,COM,GEN حس
+W * ADJ ADJ,SIM دوگانه
+W * DELM DELM ،
+W * P P در
+W * N N,SING,COM,GEN قاب
+W * N N,SING,COM تلويزيون
+W * ADJ ADJ,SIM آشفته
+W * CON CON و
+W * ADJ ADJ,SIM پريشان
+W * V V,PA,PRG,POS,3 مي نمود
+W * DELM DELM .
+W * N N,SING,COM,SET1_ خنده
+W * CON CON,SET1_ و
+W * N N,SING,COM,SET1_ اندوه
+W * N N,SING,NUM دو
+W * N N,SING,COM,GEN واژه ي
+W * ADJ ADJ,SIM,INDF نامانوسي
+W * V V,PA,SIM,POS,3 بود
+W * CON CON كه
+W * N N,SING,COM تلاش
+W * V V,PA,SIM,POS,3 داشت
+W * P P در
+W * PRO PRO,REC,SET1 هم
+W * ADJ ADJ,INO آميخته
+W * V V,SUB,POS,3 شود
+W * CON CON اما
+W * N N,SING,COM,INDF نتيجه اي
+W * CON CON,COMP جز
+W * ADJ ADJ,SIM معلق
+W * N N,SING,COM نگه
+W * N N,SING,NFL داشتن
+W * CON CON و
+W * N N,SING,COM,GEN سرگرداني
+W * N N,SING,COM بيننده
+W * P P در
+W * N N,SING,COM,GEN مرز
+W * ADJ ADJ,SIM نوش
+W * CON CON و
+W * N N,SING,COM اندوه
+W * V V,PA,SIM,NEG,3 نداشت
+W * DELM DELM .
+W * P P با
+W * N N,SING,COM,INDF مروري
+W * ADJ ADJ,SIM اجمالي
+W * P P بر
+W * N N,PL,COM,GEN برنامه هاي
+W * ADJ ADJ,SIM,GEN ويژه ي
+W * N N,SING,MON,GEN محرم
+W * N N,SING,NUM هشتاد
+W * P P در
+W * N N,PL,COM,GEN شبكه هاي
+W * N N,SING,COM تلويزيون
+W * ADV ADV,GENR,SIM به راحتي
+W * V V,AUX,NIN,POS مي توان
+W * P P به
+W * N N,SING,COM ساختار
+W * CON CON و
+W * N N,SING,COM,INDF فرمي
+W * ADJ ADJ,SIM يك دست
+W * CON CON و
+W * ADJ ADJ,SIM همگون
+W * P P در
+W * N N,PL,COM برنامه ها
+W * V V,PA,SIM,POS,3 رسيد
+W * DELM DELM :
+W * N N,SING,COM روايت
+W * CON CON و
+W * N N,SING,COM,GEN تفسير
+W * N N,PL,COM,GEN وقايع
+W * N N,SING,DAY عاشورا
+W * P P در
+W * N N,PL,COM,GEN قالبهاي
+W * N N,SING,COM شعر
+W * DELM DELM ،
+W * N N,SING,COM نمايش
+W * DELM DELM ،
+W * N N,SING,COM سخن راني
+W * DELM DELM ،
+W * CON CON و
+W * N N,SING,COM نماهنگ
+W * CON CON و
+W * N N,SING,COM مداحي
+W * DELM DELM ؛
+W * CON CON كه
+W * P P در
+W * PRO PRO,DEMO,SING اين
+W * N N,SING,COM ميان
+W * N N,SING,COM شعر
+W * CON CON و
+W * N N,SING,COM نمايش
+W * P P در
+W * N N,SING,COM,GEN اولويت
+W * N N,SING,COM كار
+W * N N,SING,COM قرار
+W * ADJ ADJ,INO گرفته
+W * V V,PRE,SIM است
+W * DELM DELM .
+W * N N,SING,NUM 1
+W * DELM DELM ـ
+W * N N,SING,COM شعر
+W * P P در
+W * N N,PL,COM,GEN برنامه هاي
+W * ADJ ADJ,SIM,GEN ويژه ي
+W * N N,SING,MON محرم
+W * DELM DELM ؛
+W * N N,PL,COM,INDF برنامه هايي
+W * ADV ADV,GENR,EXM چون
+W * DELM DELM »
+W * N N,PL,COM,GEN نغمه هاي
+W * ADJ ADJ,SIM عاشورايي
+W * DELM DELM «
+W * DELM DELM )
+W * N N,SING,COM,GEN شبكه ي
+W * N N,SING,NUM دو
+W * DELM DELM ،
+W * DELM DELM »
+W * N N,SING,COM,GEN شعر
+W * N N,SING,DAY عاشورا
+W * DELM DELM «
+W * DELM DELM )
+W * N N,SING,COM,GEN شبكه ي
+W * N N,SING,NUM دو
+W * DELM DELM (
+W * DELM DELM «
+W * DELM DELM ،
+W * DELM DELM »
+W * N N,SING,COM,GEN شعر
+W * ADV ADV,GENR,TIME امروز
+W * P P در
+W * N N,SING,DAY عاشورا
+W * DELM DELM «
+W * DELM DELM )
+W * N N,SING,COM,GEN شبكه ي
+W * N N,SING,NUM چهار
+W * DELM DELM (
+W * CON CON و
+W * DELM DELM ...
+W * P P از
+W * SPEC SPEC جمله
+W * N N,PL,COM,INDF برنامه هايي
+W * V V,PRS,POS,6 هستند
+W * CON CON كه
+W * P P به
+W * N N,SING,COM روايت
+W * CON CON و
+W * N N,SING,COM,GEN تفسير
+W * N N,PL,COM,GEN وقايع
+W * N N,SING,DAY عاشورا
+W * P P در
+W * N N,SING,COM,GEN قالب
+W * N N,SING,COM شعر
+W * V V,PA,NAR,POS,6 پرداخته اند
+W * DELM DELM .
+W * P P در
+W * N N,PL,COM,INDF برنامه هايي
+W * ADV ADV,GENR,EXM چون
+W * DELM DELM »
+W * N N,SING,COM,GEN حج
+W * ADJ ADJ,SIM سرخ
+W * DELM DELM «
+W * DELM DELM ،
+W * DELM DELM »
+W * N N,SING,COM,GEN نسيم
+W * ADJ ADJ,SIM شبانه
+W * DELM DELM «
+W * DELM DELM ،
+W * DELM DELM »
+W * N N,SING,COM بهاريه
+W * DELM DELM «
+W * DELM DELM ،
+W * DELM DELM »
+W * N N,SING,COM فراق
+W * DELM DELM «
+W * CON CON و
+W * DELM DELM ...
+W * CON CON هم
+W * ADV ADV,GENR,SIM به وفور
+W * P P از
+W * N N,SING,COM,GEN قالب
+W * N N,SING,COM شعر
+W * N N,SING,COM استفاده
+W * ADJ ADJ,INO شده
+W * V V,PRE,SIM است
+W * DELM DELM .
+W * N N,SING,COM,GEN استفاده ي
+W * ADJ ADJ,SIM مكرر
+W * P P از
+W * DET DET اين
+W * N N,SING,COM قالب
+W * P P در
+W * N N,PL,COM,GEN برنامه هاي
+W * ADJ ADJ,SIM,GEN ويژه ي
+W * N N,SING,MON محرم
+W * DELM DELM ،
+W * N N,SING,COM مفهوم
+W * CON CON و
+W * ADJ ADJ,SIM,GEN قابل
+W * N N,SING,COM هضم
+W * N N,SING,NFL,GEN نبودن
+W * QUA QUA,GEN اغلب
+W * N N,PL,COM,GEN منظومه هاي
+W * ADJ ADJ,SIM ارائه شده
+W * P P,GEN براي
+W * N N,SING,COM,GEN عامه ي
+W * N N,SING,GR مردم
+W * DELM DELM ،
+W * N N,SING,NFL,GEN پرداختن
+W * ADJ ADJ,SIM بيش
+W * P P از
+W * N N,SING,COM حد
+W * P P به
+W * N N,SING,COM كارشناسي
+W * CON CON و
+W * N N,SING,COM تفسير
+W * CON CON و
+W * N N,SING,COM بحث
+W * N N,SING,NFL كردن
+W * DELM DELM ،
+W * CON CON و
+W * N N,SING,COM روي
+W * N N,SING,NFL,GEN آوردن
+W * N N,PL,COM سخنرانها
+W * DELM DELM ،
+W * N N,PL,COM مداحان
+W * CON CON و
+W * N N,PL,COM مجريان
+W * DELM DELM ،
+W * P P به
+W * N N,SING,COM,GEN سمت
+W * DET DET اين
+W * N N,SING,COM قالب
+W * N N,SING,COM باعث
+W * ADJ ADJ,INO شده
+W * CON CON تا
+W * N N,SING,COM,SET2 بيننده
+W * P P,GEN بدون
+W * PRO PRO,DEMO,SING آن
+W * CON CON كه
+W * ADV ADV,GENR,SIM به درستي
+W * N N,SING,COM شعر
+W * CON CON و
+W * N N,SING,COM نظم
+W * RA RA را
+W * V V,SUB,POS,3 بشناسد
+W * ADV ADV,GENR,SIM آهسته آهسته
+W * DET DET,SET3_ اين
+W * N N,SING,COM,GEN,SET3_ ملكه ي
+W * N N,PL,COM,SET3_ هنرها
+W * RA RA را
+W * P P از
+W * PRO PRO,R,XOD,SET2 خود
+W * V V,SUB,POS,3 براند
+W * CON CON و
+W * N N,SING,COM نسبت
+W * P P به
+W * PRO PRO,DEMO,SING,SET3 آن
+W * ADJ ADJ,SIM بي التفات
+W * V V,SUB,POS,3 بماند
+W * DELM DELM ،
+W * N N,SING,COM,INDF بيننده اي
+W * CON CON كه
+W * ADV ADV,GENR,SIM تنها
+W * P P با
+W * N N,SING,COM,GEN لحن
+W * N N,SING,COM,GEN بيان
+W * N N,SING,COM,GEN شاعر
+W * N N,SING,COM شعر
+W * ADJ ADJ,SIM مانوس
+W * ADJ ADJ,INO بوده
+W * CON CON و
+W * ADJ ADJ,SIM بس
+W * DELM DELM .
+W * N N,SING,NUM 2
+W * DELM DELM ـ
+W * N N,SING,COM نمايش
+W * P P در
+W * N N,PL,COM,GEN ويژه برنامه هاي
+W * N N,SING,MON محرم
+W * DELM DELM ؛
+W * N N,SING,TIME بعد
+W * P P از
+W * N N,SING,COM,GEN قالب
+W * N N,SING,COM شعر
+W * DELM DELM ،
+W * N N,SING,COM نمايش
+W * DELM DELM ،
+W * ADJ ADJ,ORD دومين
+W * CON CON و
+W * ADJ ADJ,SUP فراوانترين
+W * N N,SING,COM,GEN قالب
+W * N N,PL,COM,GEN برنامه هاي
+W * ADJ ADJ,SIM,GEN ويژه ي
+W * N N,SING,MON,GEN محرم
+W * N N,SING,NUM هشتاد
+W * V V,PA,SIM,POS,3 بود
+W * ADV ADV,GENR,SIM شايد
+W * IF IF اگر
+W * N N,SING,COM بيننده
+W * CON CON و
+W * N N,SING,COM,GEN مخاطب
+W * DET DET اين
+W * N N,PL,COM نمايشها
+W * N N,SING,COM,AFF,3 انگشتش
+W * P P,GEN روي
+W * N N,PL,COM,GEN دگمه هاي
+W * N N,SING,COM,GEN كنترل
+W * N N,SING,COM تلويزيون
+W * N N,SING,COM سر
+W * V V,PA,PRG,POS,3 مي خورد
+W * CON CON و
+W * N N,PL,COM شبكه ها
+W * N N,SING,COM عوض
+W * V V,PA,PRG,POS,3 مي شد
+W * ADV ADV,GENR,SIM اصلاً
+W * ADJ ADJ,SIM,GEN متوجه
+W * N N,SING,COM,GEN تغيير
+W * N N,PL,COM كانالها
+W * V V,PA,PRG,NEG,3 نمي شد
+W * DELM DELM ،
+W * CON CON چرا كه
+W * QUA QUA,GEN اغلب
+W * N N,PL,COM نمايشها
+W * P P از
+W * N N,SING,COM,GEN لحاظ
+W * ADJ ADJ,SIM ساختاري
+W * DELM DELM ،
+W * ADJ ADJ,SIM داستاني
+W * CON CON و
+W * N N,SING,COM فرم
+W * ADV ADV,GENR,SIM تقريباً
+W * ADJ ADJ,SIM يكسان
+W * CON CON و
+W * ADJ ADJ,SIM همگون
+W * V V,PA,SIM,POS,6 بودند
+W * DET DET اين
+W * N N,SING,COM,GEN ضعف
+W * ADJ ADJ,SIM ساختاري
+W * P P به
+W * N N,SING,COM,GEN دليل
+W * N N,SING,NFL,GEN نداشتن
+W * N N,SING,COM,GEN نگاه
+W * ADJ ADJ,SIM نو
+W * CON CON و
+W * N N,SING,COM,INDF نگرشي
+W * ADJ ADJ,SIM ديگرگونه
+W * P P به
+W * N N,SING,COM,GEN واقعه ي
+W * N N,SING,LOC,PR كربلا
+W * CON CON و
+W * V V,PRE,NC,3 عاشوراست
+W * DELM DELM .
+W * N N,SING,COM استفاده
+W * P P از
+W * N N,SING,NUM يك
+W * N N,SING,COM راوي
+W * P P در
+W * N N,SING,COM,GEN سرتاسر
+W * N N,SING,COM نمايش
+W * P P,GEN براي
+W * N N,SING,COM پوشش دهي
+W * CON CON و
+W * N N,SING,COM,GEN اطلاع رساني
+W * ADJ ADJ,SIM تاريخي
+W * CON CON و
+W * N N,SING,COM,GEN تكامل
+W * N N,SING,COM نقش
+W * CON CON و
+W * N N,SING,COM,GEN بازي
+W * N N,PL,COM,GEN شخصيتهاي
+W * N N,SING,COM نمايش
+W * DELM DELM ،
+W * N N,SING,COM,GEN قطع
+W * ADJ ADJ,SIM مكرر
+W * N N,PL,COM,SET4 نمايشها
+W * CON CON و
+W * N N,SING,COM,GEN تفسير
+W * N N,PL,COM,GEN وقايع
+W * N N,SING,TIME بعد
+W * P P از
+W * PRO PRO,DEMO,SING,SET4 آن
+W * P P از
+W * N N,SING,COM,GEN زبان
+W * N N,PL,COM شخصيتها
+W * DELM DELM ،
+W * N N,SING,COM استفاده
+W * P P از
+W * N N,PL,COM,INDF فيلمهايي
+W * ADV ADV,GENR,EXM چون
+W * DELM DELM »
+W * N N,SING,SURN امام
+W * N N,SING,PR علي
+W * DELM DELM «
+W * DELM DELM ،
+W * DELM DELM »
+W * ADJ ADJ,SUP تنهاترين
+W * N N,SING,SURN سردار
+W * DELM DELM «
+W * CON CON و
+W * DELM DELM »
+W * N N,SING,TIME,GEN روز
+W * N N,SING,COM واقعه
+W * DELM DELM «
+W * CON CON و
+W * DELM DELM ...
+W * P P در
+W * N N,SING,COM,GEN خلال
+W * N N,PL,COM نمايشها
+W * P P,GEN براي
+W * N N,SING,COM سرعت
+W * N N,SING,NFL دادن
+W * P P به
+W * N N,SING,COM,GEN بازگويي
+W * N N,PL,COM,GEN وقايع
+W * N N,SING,LOC,PR كربلا
+W * CON CON و
+W * N N,SING,COM مفهوم
+W * N N,SING,NFL,GEN ساختن
+W * N N,SING,COM,GEN داستان
+W * N N,SING,COM نمايش
+W * P P,GEN براي
+W * N N,SING,COM مخاطب
+W * CON CON و
+W * N N,SING,COM تفسير
+W * N N,PL,COM,GEN وقايع
+W * N N,SING,LOC,PR كربلا
+W * N N,SING,TIME بعد
+W * P P از
+W * N N,SING,COM واقعه
+W * P P به
+W * N N,SING,COM,GEN صورت
+W * N N,SING,COM نمايش
+W * CON CON و
+W * N N,SING,COM,GEN تئاتر
+W * ADJ ADJ,SIM تلويزيوني
+W * N N,SING,COM,INDF گواهي
+W * P P بر
+W * N N,SING,COM,GEN مدعاي
+W * ADJ ADJ,SIM يك شكل
+W * CON CON و
+W * ADJ ADJ,SIM يك فرم
+W * N N,SING,NFL,GEN بودن
+W * N N,SING,COM نمايش
+W * P P در
+W * V V,PRE,NC,3 شبكه هاست
+W * DELM DELM .
+W * P P در
+W * N N,PL,COM,GEN لحظات
+W * ADJ ADJ,SIM,GEN ناب
+W * N N,PL,COM,GEN وقايع
+W * N N,PL,COM,GEN نمايشهاي
+W * N N,SING,COM تلويزيون
+W * DELM DELM ،
+W * DET DET آن
+W * N N,SING,COM جا
+W * CON CON كه
+W * N N,PL,COM,SET5 شخصيتها
+W * V V,AUX,NIN,POS بايد
+W * N N,SING,COM,GEN نهايت
+W * N N,SING,COM شكوفايي
+W * CON CON و
+W * N N,SING,COM قدرت
+W * CON CON و
+W * N N,SING,COM,GEN بزرگي
+W * N N,SING,COM,GEN نقش
+W * PRO PRO,R,XOD,SET5 خود
+W * RA RA را
+W * V V,SUB,POS,6 بنمايانند
+W * ADV ADV,GENR,SIM ناگاه
+W * ADJ ADJ,SIM خاموش
+W * CON CON و
+W * ADJ ADJ,SIM ايستا
+W * V V,PRS,POS,6 مي مانند
+W * CON CON و
+W * N N,SING,COM,GEN ادامه ي
+W * N N,PL,COM وقايع
+W * P P به
+W * N N,SING,COM راوي
+W * CON CON كه
+W * ADJ ADJ,SIM معلوم
+W * V V,PRS,NEG,3 نيست
+W * P P در
+W * DET DET,I كدام
+W * N N,SING,COM سمت
+W * CON CON و
+W * N N,SING,COM,GEN سوي
+W * N N,SING,COM مكان
+W * CON CON و
+W * N N,SING,COM,GEN زمان
+W * N N,PL,COM وقايع
+W * ADJ ADJ,INO ايستاده
+W * CON CON و
+W * ADV ADV,GENR,SIM مدام
+W * P P در
+W * N N,SING,COM حركت
+W * CON CON و
+W * DET DET اين
+W * N N,SING,COM سو
+W * CON CON و
+W * DET DET آن
+W * N N,SING,COM سو
+W * N N,SING,NFL رفتن
+W * V V,PRE,SIM است
+W * ADJ ADJ,INO سپرده
+W * V V,PRS,POS,3 مي شود
+W * DELM DELM .
+W * ADV ADV,GENR,SIM خصوصاً
+W * N N,PL,COM,SET6_ وقايع
+W * CON CON,SET6_ و
+W * N N,PL,COM,INDF,SET6_ صحنه هايي
+W * CON CON كه
+W * P P در
+W * N N,SING,COM,GEN صورت
+W * ADJ ADJ,SIM روايت گونه
+W * N N,SING,NFL شدن
+W * CON CON و
+W * N N,SING,NFL,GEN بازگفتن
+W * PRO PRO,DEMO,SING,SET6 آن
+W * P P در
+W * N N,SING,COM شكل
+W * CON CON و
+W * N N,SING,COM,GEN حد
+W * N N,SING,NUM يك
+W * N N,SING,COM,GEN نثر
+W * ADJ ADJ,SIM انشايي
+W * ADV ADV,GENR,SIM مسلماً
+W * P P از
+W * N N,SING,COM,GEN احساس
+W * N N,SING,COM خشم
+W * CON CON و
+W * N N,SING,COM تعصب
+W * CON CON و
+W * N N,SING,COM جان فشاني
+W * CON CON و
+W * N N,SING,COM عطش
+W * CON CON و
+W * N N,SING,COM جنگ
+W * CON CON و
+W * N N,SING,COM مظلوميت
+W * CON CON و
+W * N N,SING,COM قدرت
+W * CON CON و
+W * DELM DELM ...
+W * ADJ ADJ,SIM تهي
+W * V V,AUX,FEA,POS,3 خواهد
+W * V V,PA,SIM,POS,3 ماند
+W * DELM DELM .
+W * P P در
+W * N N,SING,COM,GEN خلال
+W * DET DET اين
+W * N N,PL,COM نمايشها
+W * PRO PRO,personal,PL,1 ما
+W * N N,SING,COM,GEN شاهد
+W * N N,PL,COM,GEN نمايشهاي
+W * ADJ ADJ,SIM,INDF ديگري
+W * CON CON چون
+W * DELM DELM »
+W * N N,SING,COM,AFF,1 صدايم
+W * V V,IMP,POS,2 كن
+W * DELM DELM «
+W * DELM DELM ،
+W * DELM DELM »
+W * N N,SING,COM حمله دار
+W * DELM DELM «
+W * DELM DELM ،
+W * DELM DELM »
+W * N N,SING,PR ثقةالاسلام
+W * N N,SING,PR تبريزي
+W * DELM DELM «
+W * CON CON و
+W * DELM DELM ...
+W * P P با
+W * N N,SING,COM,GEN مضمون
+W * ADJ ADJ,SIM تاريخي
+W * DELM DELM ،
+W * ADJ ADJ,SIM اخلاقي
+W * CON CON و
+W * ADJ ADJ,SIM اجتماعي
+W * V V,PA,SIM,POS,4 بوديم
+W * CON CON كه
+W * P P به
+W * N N,SING,COM,INDF نحوي
+W * N N,PL,COM ماجراها
+W * RA RA را
+W * P P به
+W * N N,SING,COM,GEN سمت
+W * N N,SING,COM توسل
+W * CON CON و
+W * N N,SING,COM توجه
+W * P P به
+W * N N,PL,COM ائمه
+W * V V,PA,PRG,POS,3 مي كشاند
+W * DELM DELM .
+W * DET DET,SET7_ اين
+W * N N,PL,COM,SET7_ سريالها
+W * P P با
+W * N N,SING,NFL,GEN داشتن
+W * N N,PL,COM,GEN عناصر
+W * ADJ ADJ,SIM سرگرم كننده
+W * DELM DELM ،
+W * N N,SING,COM آموزش
+W * CON CON و
+W * N N,PL,COM,GEN معارف
+W * ADJ ADJ,SIM مذهبي
+W * CON CON و
+W * ADJ ADJ,SIM معنوي
+W * P P در
+W * PRO PRO,R,XOD,SET7 خود
+W * DELM DELM ،
+W * V V,PA,SIM,POS,6 توانستند
+W * P P در
+W * N N,PL,COM,GEN نمايشهاي
+W * ADJ ADJ,SIM يكنواخت
+W * CON CON و
+W * ADJ ADJ,SIM هم سان
+W * N N,SING,COM تنوع
+W * CON CON و
+W * N N,SING,COM جذابيت
+W * N N,SING,COM ايجاد
+W * V V,SUB,POS,6 كنند
+W * DELM DELM ؛
+W * CON CON اگرچه
+W * DET DET اين
+W * N N,PL,COM سريالها
+W * ADV ADV,GENR,SIM خصوصاً
+W * N N,SING,COM,GEN سريال
+W * ADJ ADJ,SIM اپيزوديك
+W * DELM DELM »
+W * N N,SING,COM,AFF,1 صدايم
+W * V V,IMP,POS,2 كن
+W * DELM DELM «
+W * P P از
+W * N N,SING,COM,GEN جنبه ي
+W * N N,SING,COM,GEN,SET8_ ارتباط
+W * ADJ ADJ,SIM,SET8_ معنوي
+W * CON CON كه
+W * P P در
+W * N N,SING,COM,GEN خلال
+W * N N,PL,COM داستانها
+W * N N,SING,COM سعي
+W * P P در
+W * N N,SING,COM,GEN ايجاد
+W * PRO PRO,DEMO,SING,SET8 آن
+W * V V,PA,SIM,POS,6 داشتند
+W * CON CON و
+W * ADV ADV,deg,SIM كاملاً
+W * ADJ ADJ,SIM موفق
+W * V V,PA,SIM,NEG,6 نبودند
+W * CON CON و
+W * ADJ ADJ,SIM تصنعي
+W * N N,SING,COM جلوه
+W * V V,PA,PRG,POS,6 مي كردند
+W * DELM DELM .
+W * N N,SING,NUM 3
+W * DELM DELM ـ
+W * P P با
+W * N N,SING,COM,INDF نگاهي
+W * ADJ ADJ,SIM كوتاه
+W * P P به
+W * N N,PL,COM,GEN ويژه برنامه هاي
+W * ADJ ADJ,SIM مناسبتي
+W * CON CON و
+W * ADJ ADJ,SIM مذهبي
+W * P P در
+W * N N,PL,COM,GEN شبكه هاي
+W * N N,SING,COM تلويزيون
+W * V V,AUX,NIN,POS بايد
+W * ADV ADV,GENR,SIM صراحتاً
+W * V V,PA,SIM,POS,3 گفت
+W * CON CON كه
+W * N N,SING,COM كفگير
+W * P P به
+W * N N,SING,COM,GEN ته
+W * N N,SING,COM ديگ
+W * ADJ ADJ,INO خورده
+W * V V,PRE,SIM است
+W * CON CON و
+W * PRO PRO,INDF,SING آنچه
+W * V V,PRE,NC,3 سالهاست
+W * P P,GEN پيش
+W * N N,SING,COM,GEN روي
+W * N N,SING,COM بيننده
+W * N N,SING,COM قرار
+W * V V,PRS,POS,3 مي گيرد
+W * DET DET همان
+W * N N,SING,COM روايت
+W * CON CON و
+W * N N,SING,COM,GEN تصوير
+W * N N,PL,NUM صدها
+W * N N,SING,COM بار
+W * ADJ ADJ,INO گفته
+W * CON CON و
+W * ADJ ADJ,SIM,INDF پخش شده اي
+W * V V,PRE,SIM است
+W * CON CON كه
+W * P P با
+W * N N,SING,COM,INDF نشستي
+W * CON CON و
+W * N N,SING,COM,INDF بحثي
+W * CON CON و
+W * N N,SING,COM,INDF نماهنگي
+W * ADJ ADJ,SIM امروزي
+W * P P با
+W * N N,SING,COM ظرافت
+W * N N,SING,COM وصله
+W * V V,PRS,POS,3 مي شود
+W * CON CON و
+W * P P به
+W * N N,SING,COM,GEN خورد
+W * N N,SING,COM بيننده
+W * ADJ ADJ,INO داده
+W * V V,PRS,POS,3 مي شود
+W * DELM DELM .
+W * CON CON همچنين
+W * ADJ ADJ,SIM بد
+W * V V,PRS,NEG,3 نيست
+W * CON CON كه
+W * N N,SING,COM,INDF نامي
+W * CON CON و
+W * N N,SING,COM,INDF يادي
+W * P P از
+W * N N,SING,COM,GEN فيلم
+W * ADJ ADJ,SIM ماندگار
+W * DELM DELM »
+W * N N,SING,TIME,GEN روز
+W * N N,SING,COM واقعه
+W * DELM DELM «
+W * CON CON و
+W * N N,SING,COM نماهنگ
+W * DELM DELM »
+W * N N,SING,LOC جاده
+W * CON CON و
+W * N N,SING,COM اسب
+W * V V,PRE,ADJC,3 مهياست
+W * DELM DELM «
+W * V V,SUB,POS,4 بكنيم
+W * CON CON كه
+W * V V,PRE,NC,3 سالهاست
+W * N N,SING,COM,GEN دست
+W * N N,SING,COM ياري
+W * P P به
+W * N N,SING,COM,GEN سوي
+W * N N,SING,COM تلويزيون
+W * ADJ ADJ,SIM دراز
+W * V V,PA,NAR,POS,6 كرده اند
+W * DELM DELM !

@@ -1,0 +1,1243 @@
+﻿Sub * SUBJ SUBJ !تاريخي!
+W * DELM DELM #
+W * N N,SING,COM,GEN شروع
+W * N N,SING,COM,GEN تدريس
+W * N N,SING,COM,GEN ولايت
+W * N N,SING,COM فقيه
+W * P P در
+W * N N,SING,LOC,PR نجف
+W * DELM DELM #
+W * N N,SING,COM,GEN سواري
+W * ADJ ADJ,SIM سرفراز
+W * P P از
+W * N N,SING,COM,GEN پشت
+W * N N,SING,COM اسب
+W * P P بر
+W * N N,SING,COM خاك
+W * V V,PA,SIM,POS,3 افتاد
+W * DELM DELM .
+W * N N,SING,PR مصطفي
+W * DELM DELM ،
+W * P P به
+W * N N,SING,COM,GEN دست
+W * N N,PL,COM,GEN مزدوران
+W * N N,PL,COM خانها
+W * DELM DELM ،
+W * ADV ADV,GENR,SIM بي خبر
+W * CON CON و
+W * ADV ADV,GENR,SIM ناجوانمردانه
+W * N N,SING,COM,GEN هدف
+W * N N,SING,COM گلوله
+W * N N,SING,COM قرار
+W * V V,PA,SIM,POS,3 گرفت
+W * CON CON و
+W * P P از
+W * N N,SING,COM پا
+W * V V,PA,SIM,POS,3 درآمد
+W * DELM DELM .
+W * N N,SING,PR,SET1 روح الله
+W * P P به
+W * N N,SING,LOC,PR تهران
+W * ADJ ADJ,INO رسيده
+W * V V,PA,SIM,POS,3 بود
+W * DELM DELM .
+W * N N,PL,COM,SET2_ علما
+W * CON CON,SET2_ و
+W * N N,PL,COM,INDF,SET2_ كساني
+W * CON CON كه
+W * PRO PRO,personal,SING,3,SET1 او
+W * RA RA را
+W * V V,PA,PRG,POS,6 مي شناختند
+W * DELM DELM ،
+W * P P تا
+W * DET DET آن
+W * N N,SING,COM جا
+W * CON CON كه
+W * N N,SING,COM امكان
+W * V V,PA,SIM,POS,3 داشت
+W * P P از
+W * PRO PRO,DEMO,PL,SET2 آن ها
+W * V V,PA,SIM,POS,3 آموخت
+W * DELM DELM .
+W * P P در
+W * N N,SING,COM,GEN كنار
+W * N N,SING,COM,GEN تحصيل
+W * N N,SING,COM علم
+W * DELM DELM ،
+W * N N,SING,COM خوشنويسي
+W * CON CON هم
+W * V V,PA,PRG,POS,3 مي كرد
+W * DELM DELM .
+W * P P,GEN براي
+W * N N,SING,NFL,GEN آموختن
+W * N N,SING,COM خط
+W * DELM DELM ،
+W * N N,SING,COM,GEN برادر
+W * ADJ ADJ,SIM,AFF,3 بزرگش
+W * CON CON يعني
+W * N N,SING,SURN,SET3_ آيت الله
+W * N N,SING,SURN,SET3_ حاج
+W * N N,SING,SURN,SET3_ آقا
+W * N N,SING,PR,SET3_ مرتضي
+W * N N,SING,PR,SET3_ پسنديده
+W * RA RA را
+W * N N,SING,COM انتخاب
+W * ADJ ADJ,INO كرده
+W * V V,PA,SIM,POS,3 بود
+W * CON CON و
+W * N N,SING,COM,GEN پيش
+W * PRO PRO,personal,SING,3,SET3 او
+W * N N,SING,LOC,GEN مشق
+W * N N,SING,COM خط
+W * V V,PA,PRG,POS,3 مي كرد
+W * CON CON و
+W * ADV ADV,GENR,SIM خوش
+W * N N,SING,NFL نوشتن
+W * RA RA را
+W * P P از
+W * PRO PRO,personal,SING,3,SET3 وي
+W * V V,PA,PRG,POS,3 مي آموخت
+W * DELM DELM .
+W * N N,SING,PR,SET5 روح الله
+W * P P تا
+W * N N,SING,COM نوزده سالگي
+W * P P در
+W * N N,SING,LOC,PR خمين
+W * N N,SING,COM,GEN تحصيل
+W * N N,SING,COM علم
+W * V V,PRS,POS,3 مي كند
+W * DELM DELM ،
+W * CON CON اما
+W * ADV ADV,GENR,SIM رفته رفته
+W * P P به
+W * N N,SING,COM,INDF جايي
+W * V V,PRS,POS,3 مي رسد
+W * CON CON كه
+W * N N,SING,COM,GEN محيط
+W * ADJ ADJ,SIM,GEN كوچك
+W * N N,SING,LOC,GEN,SET4_ شهر
+W * N N,SING,LOC,PR,SET4_ خمين
+W * CON CON و
+W * N N,PL,COM,GEN مدرسه هاي
+W * PRO PRO,DEMO,SING,SET4 آن
+W * DELM DELM ،
+W * N N,SING,COM,GEN جوابگوي
+W * N N,SING,COM,GEN استعداد
+W * ADJ ADJ,SIM درخشان
+W * CON CON و
+W * N N,SING,COM,GEN هوش
+W * ADJ ADJ,SIM,AFF,3 سرشارش
+W * V V,PRS,NEG,3 نمي شود
+W * DELM DELM .
+W * ADV ADV,GENR,TIME اكنون
+W * PRO PRO,personal,SING,3,SET5 او
+W * N N,SING,COM,INDF پرنده اي
+W * V V,PA,SIM,POS,3 بود
+W * CON CON كه
+W * P P,GEN براي
+W * N N,SING,COM پرواز
+W * DELM DELM ،
+W * ADJ ADJ,SIM,GEN نيازمند
+W * N N,SING,COM,INDF آسماني
+W * ADJ ADJ,SIM وسيع
+W * CON CON و
+W * N N,SING,COM,INDF افقي
+W * ADJ ADJ,SIM گسترده
+W * V V,PA,SIM,POS,3 بود
+W * CON CON و
+W * N N,SING,LOC,GEN شهر
+W * ADJ ADJ,SIM,GEN كوچك
+W * N N,SING,LOC,PR خمين
+W * ADV ADV,GENR,NEGG نه
+W * ADJ ADJ,SIM,GEN صاحب
+W * DET DET آن
+W * N N,SING,COM آسمان
+W * V V,PA,SIM,POS,3 بود
+W * CON CON و
+W * ADV ADV,GENR,NEGG نه
+W * ADJ ADJ,SIM,GEN داراي
+W * DET DET آن
+W * N N,SING,COM,GEN افق
+W * ADJ ADJ,SIM,GEN علمي
+W * ADJ ADJ,SIM گسترده
+W * DELM DELM .
+W * CON CON بنابراين
+W * N N,SING,COM پرنده
+W * N N,SING,COM پرواز
+W * V V,PA,SIM,POS,3 كرد
+W * DELM DELM .
+W * PRO PRO,personal,SING,3,SET5 او
+W * P P,GEN براي
+W * N N,SING,COM,GEN ادامه ي
+W * N N,SING,COM تحصيل
+W * DELM DELM ،
+W * N N,SING,COM,GEN حوزه ي
+W * ADJ ADJ,SIM,GEN علميه
+W * N N,SING,LOC,PR اراك
+W * RA RA را
+W * V V,PA,SIM,POS,3 برگزيد
+W * DELM DELM .
+W * N N,SING,COM,GEN,SET6_ طلبه ي
+W * ADJ ADJ,SIM,GEN,SET6_ جوان
+W * N N,SING,COM,GEN,SET6_ اهل
+W * N N,SING,LOC,PR,SET6_ خمين
+W * DELM DELM ،
+W * ADV ADV,deg,SIM خيلي
+W * ADJ ADJ,SIM زود
+W * V V,PA,SIM,POS,3 توانست
+W * P P در
+W * N N,SING,COM,GEN حوزه ي
+W * ADJ ADJ,SIM,GEN علميه
+W * N N,SING,LOC,PR اراك
+W * N N,PL,COM نظرها
+W * RA RA را
+W * P P به
+W * N N,SING,COM,GEN سوي
+W * PRO PRO,R,XOD,SET6 خود
+W * N N,SING,COM جلب
+W * V V,SUB,POS,3 كند
+W * DELM DELM .
+W * PRO PRO,personal,SING,3,SET6 او
+W * N N,SING,COM,INDF طلبه اي
+W * ADV ADV,deg,SIM بسيار
+W * ADJ ADJ,SIM باسواد
+W * DELM DELM ،
+W * ADJ ADJ,SIM پرتلاش
+W * CON CON و
+W * ADJ ADJ,SIM مرتب
+W * V V,PA,SIM,POS,3 بود
+W * CON CON و
+W * P P با
+W * N N,SING,COM عشق
+W * CON CON و
+W * N N,SING,COM علاقه
+W * N N,SING,COM,GEN تحصيل
+W * N N,SING,COM علم
+W * V V,PA,PRG,POS,3 مي كرد
+W * DELM DELM .
+W * P P از
+W * PRO PRO,DEMO,SING آن
+W * ADJ ADJ,SIM گذشته
+W * DELM DELM ،
+W * N N,SING,COM,GEN قامت
+W * ADJ ADJ,SIM بلند
+W * CON CON و
+W * ADJ ADJ,SIM موزون
+W * DELM DELM ،
+W * N N,SING,COM,GEN چهره ي
+W * ADJ ADJ,SIM نجيب
+W * CON CON و
+W * N N,SING,COM,GEN رفتار
+W * ADJ ADJ,SIM,GEN متين
+W * PRO PRO,personal,SING,3,SET6 او
+W * DELM DELM ،
+W * PRO PRO,INDF,SING بسياري
+W * RA RA را
+W * N N,SING,COM شيفته
+W * CON CON و
+W * N N,SING,COM علاقه مند
+W * V V,PA,PRG,POS,3 مي كرد
+W * DELM DELM .
+W * ADV ADV,GENR,TIME بعدها
+W * DELM DELM ،
+W * ADJ ADJ,SIM بيش
+W * P P از
+W * N N,SING,NUM نيم
+W * N N,SING,TIME قرن
+W * N N,SING,TIME پس
+W * P P از
+W * DET DET آن
+W * N N,PL,TIME سالها
+W * DELM DELM ،
+W * DET DET اين
+W * N N,SING,COM,GEN طلبه ي
+W * ADJ ADJ,SIM,GEN گمنام
+W * N N,SING,COM,GEN اهل
+W * N N,SING,LOC,PR خمين
+W * DELM DELM ،
+W * P P با
+W * DET DET همين
+W * N N,SING,COM عمامه
+W * CON CON و
+W * N N,SING,COM عبا
+W * DELM DELM ،
+W * P P,GEN نزد
+W * N N,PL,COM علما
+W * CON CON و
+W * N N,PL,GR,GEN توده هاي
+W * N N,SING,GR مردم
+W * P P به
+W * N N,SING,SURN امام
+W * N N,SING,PR خميني
+W * ADJ ADJ,SIM مشهور
+W * V V,PA,SIM,POS,3 شد
+W * CON CON و
+W * N N,SING,COM,GEN عشق
+W * PRO PRO,personal,SING,3,SET6 او
+W * P P در
+W * N N,SING,COM,GEN قلب
+W * N N,PL,NUM ميليونها
+W * N N,SING,COM نفر
+W * N N,SING,COM جاي
+W * V V,PA,SIM,POS,3 گرفت
+W * DELM DELM ،
+W * CON CON اما
+W * P P در
+W * N N,SING,COM,GEN حوزه ي
+W * N N,SING,LOC,PR اراك
+W * N N,SING,COM,INDF كسي
+W * V V,PA,PRG,NEG,3 نمي دانست
+W * CON CON كه
+W * DET DET اين
+W * N N,SING,COM,GEN طلبه ي
+W * ADJ ADJ,SIM جوان
+W * CON CON و
+W * ADJ ADJ,SIM,GEN مؤدب
+W * N N,SING,COM,GEN اهل
+W * N N,SING,LOC,PR خمين
+W * DELM DELM ،
+W * DET DET همان
+W * N N,SING,SURN امام
+W * N N,SING,PR,GEN خميني
+W * ADJ ADJ,SIM معروف
+W * V V,AUX,FEA,POS,3 خواهد
+W * V V,PA,SIM,POS,3 شد
+W * DELM DELM .
+W * P P به
+W * QUA QUA هر
+W * N N,SING,COM حال
+W * DELM DELM ،
+W * N N,SING,PR,SET7 امام
+W * P P در
+W * N N,SING,COM,GEN حوزه ي
+W * ADJ ADJ,SIM,GEN علميه
+W * N N,SING,LOC,PR اراك
+W * P P با
+W * N N,SING,COM,INDF پشتكاري
+W * ADJ ADJ,SIM مثال زدني
+W * DELM DELM ،
+W * ADV ADV,GENR,EXM,GEN مثل
+W * N N,SING,COM,INDF تشنه اي
+W * CON CON كه
+W * P P در
+W * N N,SING,COM,INDF بياباني
+W * ADJ ADJ,SIM بي آب
+W * V V,SUB,POS,3 باشد
+W * DELM DELM ،
+W * N N,SING,LOC,GEN,SET8_ چشمه ي
+W * ADJ ADJ,SIM,GEN,SET8_ گواراي
+W * PRO PRO,R,XOD,SET7,SET8_ خود
+W * RA RA را
+W * ADJ ADJ,INO يافته
+W * V V,PA,SIM,POS,3 بود
+W * CON CON و
+W * P P از
+W * PRO PRO,DEMO,SING,SET8 آن
+W * ADJ ADJ,SIM سيراب
+W * V V,PA,PRG,POS,3 مي شد
+W * DELM DELM .
+W * PRO PRO,DEMO,PL آن ها
+W * CON CON نيز
+W * ADJ ADJ,SIM,GEN خواستار
+W * N N,SING,COM,GEN مجازات
+W * N N,SING,COM قاتل
+W * V V,PA,SIM,POS,6 بودند
+W * CON CON و
+W * P P,GEN براي
+W * DET DET اين
+W * N N,SING,COM كار
+W * N N,SING,COM فعاليت
+W * V V,PA,PRG,POS,6 مي كردند
+W * DELM DELM .
+W * N N,SING,NUM,SET9_ چند
+W * N N,SING,COM,SET9_ نفر
+W * P P,SET9_ از
+W * N N,SING,GR,GEN,SET9_ خانواده ي
+W * N N,SING,PR,SET9_ مصطفي
+W * P P به
+W * N N,SING,LOC,PR تهران
+W * ADJ ADJ,INO آمده
+W * V V,PA,SIM,POS,6 بودند
+W * DELM DELM .
+W * PRO PRO,DEMO,PL,SET9 آن ها
+W * P P از
+W * N N,SING,COM دولت
+W * V V,PA,PRG,POS,6 مي خواستند
+W * N N,SING,COM عدالت
+W * N N,SING,COM اجرا
+W * V V,SUB,POS,3 شود
+W * CON CON و
+W * N N,SING,COM,SET10 قاتل
+W * P P به
+W * N N,SING,COM,GEN سزاي
+W * N N,SING,COM,GEN عمل
+W * PRO PRO,R,XOD,SET10 خود
+W * V V,SUB,POS,3 برسد
+W * DELM DELM .
+W * P P از
+W * N N,SING,COM,INDF سويي
+W * ADJ ADJ,SIM ديگر
+W * DELM DELM ،
+W * N N,PL,COM,GEN هواداران
+W * N N,SING,COM,SET11 قاتل
+W * N N,SING,COM فشار
+W * V V,PA,PRG,POS,6 مي آوردند
+W * CON CON تا
+W * PRO PRO,personal,SING,3,SET11 او
+W * N N,SING,COM محاكمه
+W * V V,SUB,NEG,3 نشود
+W * DELM DELM .
+W * ADV ADV,GENR,SIM عاقبت
+W * N N,SING,COM حكم
+W * P P به
+W * N N,SING,COM,GEN مجازات
+W * N N,SING,COM قاتل
+W * ADJ ADJ,INO داده
+W * V V,PA,SIM,POS,3 شد
+W * CON CON و
+W * PRO PRO,personal,SING,3,SET11 او
+W * RA RA را
+W * P P در
+W * N N,SING,COM,GEN مقابل
+W * N N,SING,COM,GEN مجلس
+W * N N,SING,GR,GEN شوراي
+W * ADJ ADJ,SIM,GEN ملي
+W * ADJ ADJ,SIM سابق
+W * P P در
+W * N N,SING,LOC,GEN ميدان
+W * N N,SING,PR,GEN بهارستان
+W * ADJ ADJ,SIM كنوني
+W * N N,SING,COM اعدام
+W * V V,PA,SIM,POS,6 كردند
+W * DELM DELM .
+W * P P,DET بدين
+W * SPEC SPEC گونه
+W * DELM DELM ،
+W * N N,SING,PR,SET13 روح الله
+W * P P,GEN بدون
+W * N N,SING,NFL,GEN داشتن
+W * QUA QUA هيچ
+W * N N,SING,COM,INDF خاطره اي
+W * P P از
+W * N N,SING,COM,SET12 پدر
+W * DELM DELM ،
+W * ADJ ADJ,SIM بزرگ
+W * V V,PRS,POS,3 مي شود
+W * CON CON و
+W * ADV ADV,GENR,SIM تنها
+W * N N,SING,COM,GEN آوازه ي
+W * N N,PL,COM بزرگيها
+W * CON CON و
+W * N N,PL,COM,GEN شجاعتهاي
+W * PRO PRO,personal,SING,3,SET12 او
+W * RA RA را
+W * P P از
+W * N N,PL,COM اطرافيان
+W * V V,PRS,POS,3 مي شنود
+W * CON CON و
+W * P P در
+W * N N,SING,COM,GEN ذهن
+W * ADJ ADJ,SIM,GEN كودكانه ي
+W * PRO PRO,R,XOD,SET13 خود
+W * DELM DELM ،
+W * N N,SING,COM,GEN سيماي
+W * ADJ ADJ,SIM مهربان
+W * DELM DELM ،
+W * N N,SING,COM,GEN صداي
+W * ADJ ADJ,SIM گرم
+W * CON CON و
+W * N N,SING,COM,GEN نگاه
+W * ADJ ADJ,SIM,AFF,3 نوازش گرش
+W * RA RA را
+W * N N,SING,COM مجسم
+W * V V,PRS,POS,3 مي كند
+W * CON CON و
+W * ADV ADV,GENR,TIME گاهي
+W * CON CON هم
+W * ADV ADV,GENR,EXM,GEN مثل
+W * QUA QUA,GEN همه ي
+W * N N,PL,COM,INDF بچه هايي
+W * CON CON كه
+W * P P با
+W * N N,SING,COM,AFF,6 پدرشان
+W * N N,SING,COM درددل
+W * V V,PRS,POS,6 مي كنند
+W * DELM DELM ،
+W * P P با
+W * DET DET آن
+W * N N,SING,COM,GEN سيماي
+W * ADJ ADJ,SIM خيالي
+W * N N,SING,COM حرف
+W * V V,PRS,POS,3 مي زند
+W * DELM DELM .
+W * DELM DELM #
+W * N N,SING,COM پرنده
+W * N N,SING,COM پرواز
+W * V V,PRS,POS,3 مي كند
+W * DELM DELM #
+W * CON CON وقتي
+W * N N,SING,PR,SET14 روح الله
+W * ADJ ADJ,SIM بزرگ
+W * V V,PA,SIM,POS,3 شد
+W * CON CON و
+W * P P به
+W * N N,SING,COM,INDF سني
+W * V V,PA,SIM,POS,3 رسيد
+W * CON CON كه
+W * V V,SUB,POS,3 بتواند
+W * N N,SING,COM,GEN تحصيل
+W * N N,SING,COM علم
+W * V V,SUB,POS,3 كند
+W * DELM DELM ،
+W * PRO PRO,personal,SING,3,SET14 او
+W * RA RA را
+W * P P در
+W * N N,SING,LOC,GEN شهر
+W * N N,SING,LOC,PR خمين
+W * P P به
+W * N N,SING,LOC,GEN مكتبخانه ي
+W * N N,SING,SURN ملا
+W * N N,SING,PR ابوالقاسم
+W * V V,PA,SIM,POS,6 فرستادند
+W * CON CON كه
+W * ADJ ADJ,SIM,GEN نزديك
+W * N N,SING,LOC,GEN خانه ي
+W * PRO PRO,DEMO,PL آن ها
+W * V V,PA,SIM,POS,3 بود
+W * DELM DELM .
+W * P P در
+W * DET DET آن
+W * N N,SING,COM زمان
+W * DELM DELM ،
+W * N N,PL,LOC مدارس
+W * P P به
+W * N N,SING,COM,GEN شكل
+W * ADJ ADJ,SIM امروزي
+W * V V,PA,SIM,NEG,3 نبود
+W * CON CON و
+W * N N,PL,COM بچه ها
+W * P P در
+W * N N,PL,LOC مكتب خانه ها
+W * N N,SING,COM درس
+W * V V,PA,PRG,POS,6 مي خواندند
+W * DELM DELM .
+W * N N,SING,PR روح الله
+W * P P در
+W * N N,SING,COM هفت سالگي
+W * V V,PA,SIM,POS,3 توانست
+W * N N,SING,PR قرآن
+W * RA RA را
+W * N N,SING,COM ياد
+W * V V,SUB,POS,3 بگيرد
+W * CON CON و
+W * P P به
+W * N N,SING,COM,GEN قول
+W * N N,PL,COM آنروزيها
+W * DELM DELM ،
+W * N N,SING,PR قرآن
+W * RA RA را
+W * N N,SING,COM ختم
+W * V V,SUB,POS,3 كند
+W * DELM DELM .
+W * N N,SING,TIME پس
+W * P P از
+W * PRO PRO,DEMO,SING آن
+W * P P به
+W * N N,SING,COM,GEN فراگيري
+W * N N,SING,COM,GEN ادبيات
+W * ADJ ADJ,SIM عرب
+W * V V,PA,SIM,POS,3 پرداخت
+W * DELM DELM .
+W * P P,GEN براي
+W * N N,SING,COM ياد
+W * N N,SING,NFL,GEN گرفتن
+W * DET DET اين
+W * N N,SING,COM علم
+W * DELM DELM ،
+W * N N,SING,COM,INDF معلمي
+W * P P به
+W * N N,SING,COM,GEN نام
+W * N N,SING,SURN شيخ
+W * N N,SING,PR جعفر
+W * RA RA را
+W * P P,AFF,3 برايش
+W * N N,SING,COM انتخاب
+W * V V,PA,SIM,POS,6 كردند
+W * DELM DELM .
+W * ADV ADV,GENR,SIM شايد
+W * N N,SING,COM,INDF وقتي
+W * CON CON كه
+W * N N,SING,COM,GEN صداي
+W * N N,SING,COM,GEN شليك
+W * N N,SING,COM گلوله
+W * P P در
+W * N N,SING,LOC كوهستان
+W * V V,PA,SIM,POS,3 پيچيد
+W * CON CON و
+W * N N,SING,COM گلوله
+W * N N,SING,COM,GEN سينه ي
+W * N N,SING,COM,AFF,3 پدرش
+W * RA RA را
+W * V V,PA,SIM,POS,3 شكافت
+W * DELM DELM ،
+W * N N,SING,PR روح الله
+W * ADJ ADJ,SIM هراسان
+W * P P از
+W * N N,SING,COM خواب
+W * ADJ ADJ,INO پريده
+W * CON CON و
+W * N N,SING,COM گريه
+W * ADJ ADJ,INO كرده
+W * V V,SUB,POS,3 باشد
+W * DELM DELM ،
+W * CON CON ولي
+W * N N,SING,COM,INDF كسي
+W * V V,PA,PRG,NEG,3 نمي توانست
+W * DET DET اين
+W * N N,SING,COM گريه
+W * RA RA را
+W * N N,SING,COM,GEN نشانه ي
+W * DET DET آن
+W * N N,SING,COM شهادت
+W * V V,SUB,POS,3 بداند
+W * DELM DELM .
+W * QUA QUA,GEN,SET15_ همه ي
+W * N N,PL,COM,GEN,SET15_ بچه هاي
+W * ADJ ADJ,SIM,GEN,SET15_ همسن
+W * N N,SING,PR,SET15_ روح الله
+W * ADV ADV,GENR,SIM ناگهان
+W * P P از
+W * N N,SING,COM خواب
+W * V V,PRS,POS,6 مي پرند
+W * CON CON و
+W * N N,SING,COM گريه
+W * V V,PRS,POS,6 مي كنند
+W * DELM DELM ،
+W * CON CON اما
+W * CON CON وقتي
+W * P P به
+W * N N,SING,COM,GEN آغوش
+W * ADJ ADJ,SIM,GEN گرم
+W * N N,SING,COM مادر
+W * N N,SING,COM پناه
+W * V V,PRS,POS,6 مي برند
+W * DELM DELM ،
+W * ADJ ADJ,SIM آرام
+W * V V,PRS,POS,6 مي شوند
+W * DELM DELM ؛
+W * ADJ ADJ,SIM آرام
+W * CON CON و
+W * ADJ ADJ,SIM ساكت
+W * CON CON و
+W * CON CON بعد
+W * ADV ADV,GENR,REPT دوباره
+W * N N,SING,COM خواب
+W * DELM DELM ،
+W * N N,SING,COM,GEN خواب
+W * ADJ ADJ,SIM شيرين
+W * CON CON و
+W * ADJ ADJ,SIM معصومانه
+W * PRO PRO,DEMO,PL,SET15 آن ها
+W * RA RA را
+W * P P در
+W * V V,PRS,POS,3 برمي گيرد
+W * DELM DELM .
+W * N N,SING,PR,SET16 روح الله
+W * P P بي
+W * PRO PRO,DEMO,SING آن
+W * CON CON كه
+W * PRO PRO,R,XOD,SET16 خود
+W * V V,SUB,POS,3 بداند
+W * DELM DELM ،
+W * P P در
+W * N N,SING,COM چندماهگي
+W * N N,SING,COM,GEN فرزند
+W * N N,SING,COM,INDF شهيدي
+W * ADJ ADJ,SIM دلاور
+W * V V,PA,SIM,POS,3 شد
+W * DELM DELM ،
+W * CON CON اما
+W * QUA QUA هيچ
+W * N N,SING,COM وقت
+W * V V,PA,SIM,NEG,3 نتوانست
+W * N N,SING,COM,GEN چهره ي
+W * N N,SING,COM,GEN,SET17_ پدر
+W * ADJ ADJ,SIM,AFF,3,SET17_ شهيدش
+W * RA RA را
+W * N N,SING,COM,GEN پيش
+W * N N,SING,COM چشم
+W * ADJ ADJ,SIM مجسم
+W * V V,SUB,POS,3 كند
+W * DELM DELM ،
+W * N N,SING,COM,AFF,3 صدايش
+W * RA RA را
+W * V V,SUB,POS,3 بشنود
+W * DELM DELM ،
+W * N N,SING,COM,GEN بوسه هاي
+W * ADJ ADJ,SIM,GEN گرم
+W * PRO PRO,personal,SING,3,SET17 او
+W * RA RA را
+W * P P بر
+W * N N,PL,COM,GEN گونه هاي
+W * ADJ ADJ,SIM,GEN لطيف
+W * PRO PRO,R,XOD,SET16 خود
+W * N N,SING,COM احساس
+W * V V,SUB,POS,3 كند
+W * DELM DELM ،
+W * CON CON چرا كه
+W * PRO PRO,personal,SING,3,SET16 او
+W * ADV ADV,GENR,SIM هنوز
+W * ADV ADV,deg,SIM خيلي
+W * ADJ ADJ,SIM كوچك
+W * V V,PA,SIM,POS,3 بود
+W * DELM DELM ؛
+W * PRO PRO,INDF,SING,AFF,3 همه اش
+W * N N,SING,NUM چهار
+W * N N,SING,TIME ماه
+W * ADJ ADJ,CMPR بيش تر
+W * V V,PA,SIM,NEG,3 نداشت
+W * DELM DELM .
+W * ADV ADV,deg,SIM خيلي
+W * ADJ ADJ,SIM زود
+W * V V,PA,SIM,POS,3 بود
+W * CON CON كه
+W * N N,PL,COM چهره ها
+W * RA RA را
+W * P P به
+W * N N,SING,COM خاطره
+W * V V,SUB,POS,3 بسپارد
+W * CON CON و
+W * N N,PL,COM صداها
+W * RA RA را
+W * P P در
+W * N N,SING,COM حافظه
+W * N N,SING,COM نگه
+W * V V,PRS,POS,3 دارد
+W * DELM DELM .
+W * N N,SING,COM,GEN,SET18_ خبر
+W * N N,SING,COM,GEN,SET18_ قتل
+W * N N,SING,PR,SET18_,SET19 مصطفي
+W * P P در
+W * N N,PL,LOC,GEN شهرهاي
+W * ADJ ADJ,SIM اطراف
+W * V V,PRS,POS,3 مي پيچد
+W * DELM DELM ،
+W * QUA QUA هر
+W * N N,SING,COM,GEN مظلوم
+W * ADJ ADJ,SIM,INDF بي پناهي
+W * CON CON كه
+W * PRO PRO,DEMO,SING,SET18 آن
+W * RA RA را
+W * V V,PRS,POS,3 مي شنود
+W * DELM DELM ،
+W * ADJ ADJ,SIM ناراحت
+W * V V,PRS,POS,3 مي شود
+W * DELM DELM .
+W * N N,PL,COM,GEN علماي
+W * N N,PL,LOC شهرها
+W * ADJ ADJ,SIM بيش
+W * P P از
+W * PRO PRO,INDF,SING همه
+W * N N,SING,COM,GEN اظهار
+W * N N,SING,COM تأسف
+W * V V,PRS,POS,6 مي كنند
+W * CON CON و
+W * P P از
+W * N N,SING,COM,GEN حاكم
+W * N N,SING,LOC,PR اراك
+W * V V,PRS,POS,6 مي خواهند
+W * ADV ADV,deg,SIM هرچه
+W * ADJ ADJ,CMPR زودتر
+W * N N,SING,COM قاتل
+W * CON CON و
+W * CON CON يا
+W * N N,PL,COM,GEN قاتلان
+W * PRO PRO,personal,SING,3,SET19 او
+W * RA RA را
+W * ADJ ADJ,SIM دستگير
+W * V V,SUB,POS,3 كند
+W * DELM DELM .
+W * N N,SING,COM,GEN حاكم
+W * N N,SING,LOC,PR اراك
+W * CON CON هم
+W * DELM DELM ،
+W * N N,SING,COM,GEN حكم
+W * N N,SING,COM بازداشت
+W * RA RA را
+W * ADJ ADJ,SIM صادر
+W * V V,PRS,POS,3 مي كند
+W * DELM DELM .
+W * N N,PL,COM مأموران
+W * P P به
+W * N N,SING,LOC منطقه
+W * V V,PRS,POS,6 مي آيند
+W * CON CON و
+W * N N,SING,TIME پس
+W * P P از
+W * N N,SING,COM,INDF مدتي
+W * N N,SING,COM تعقيب
+W * CON CON و
+W * N N,SING,COM گريز
+W * DELM DELM ،
+W * N N,SING,COM,SET20 قاتل
+W * RA RA را
+W * P P در
+W * N N,SING,LOC,INDF قلعه اي
+W * ADJ ADJ,SIM كهنه
+W * CON CON و
+W * ADJ ADJ,SIM قديمي
+W * P P به
+W * N N,SING,COM دام
+W * V V,PRS,POS,6 مي اندازند
+W * CON CON و
+W * N N,SING,TIME بعد
+W * P P از
+W * N N,SING,NUM چند
+W * N N,SING,TIME ساعت
+W * N N,SING,COM تيراندازي
+W * DELM DELM ،
+W * ADV ADV,GENR,SIM عاقبت
+W * PRO PRO,personal,SING,3,SET20 او
+W * RA RA را
+W * ADJ ADJ,SIM دستگير
+W * V V,PRS,POS,6 مي كنند
+W * CON CON و
+W * P P به
+W * N N,SING,LOC,PR تهران
+W * V V,PRS,POS,6 مي فرستند
+W * DELM DELM .
+W * N N,PL,COM,GEN انگشتهاي
+W * PRO PRO,personal,SING,3,SET16 او
+W * ADV ADV,GENR,SIM تنها
+W * P P با
+W * N N,SING,COM قلم
+W * ADJ ADJ,SIM آشنا
+W * V V,PA,SIM,NEG,3 نبود
+W * CON CON بلكه
+W * ADJ ADJ,SIM,GEN آشناي
+W * N N,SING,COM,GEN ماشه ي
+W * N N,SING,COM تفنگ
+W * CON CON هم
+W * V V,PA,SIM,POS,6 بودند
+W * DELM DELM .
+W * ADV ADV,GENR,SIM به راحتي
+W * N N,SING,COM ماشه
+W * RA RA را
+W * V V,PA,PRG,POS,6 مي چكاندند
+W * CON CON و
+W * N N,SING,COM گلوله
+W * RA RA را
+W * N N,SING,COM شليك
+W * V V,PA,PRG,POS,6 مي كردند
+W * DELM DELM .
+W * N N,SING,PR مصطفي
+W * P P با
+W * N N,SING,COM زبان
+W * DELM DELM ،
+W * N N,SING,COM قلم
+W * CON CON و
+W * N N,SING,COM گلوله
+W * P P از
+W * N N,PL,COM اشرار
+W * N N,SING,COM,GEN زهر
+W * N N,SING,COM چشم
+W * V V,PA,PRG,POS,3 مي گرفت
+W * DELM DELM .
+W * ADV ADV,GENR,SIM شايد
+W * P P از
+W * DET DET اين
+W * N N,SING,COM نظر
+W * DELM DELM ،
+W * N N,SING,PR روح الله
+W * ADV ADV,deg,CMPR بيش تر
+W * P P از
+W * QUA QUA,GEN همه ي
+W * N N,PL,COM برادرها
+W * CON CON و
+W * N N,PL,COM,AFF,3 خواهرهايش
+W * DELM DELM ،
+W * N N,PL,COM,GEN خصوصيات
+W * N N,SING,COM پدر
+W * RA RA را
+W * P P به
+W * N N,SING,COM ارث
+W * ADJ ADJ,INO برده
+W * V V,PA,SIM,POS,3 بود
+W * DELM DELM ،
+W * CON CON چرا كه
+W * ADV ADV,GENR,TIME بعدها
+W * P P به
+W * N N,SING,COM,GEN عالم
+W * ADJ ADJ,SIM دلاور
+W * N N,SING,NFL بودن
+W * N N,SING,COM,INDF معنايي
+W * ADJ ADJ,SIM جهاني
+W * V V,PA,SIM,POS,3 بخشيد
+W * DELM DELM .
+W * N N,SING,COM,INDF زماني
+W * CON CON كه
+W * N N,SING,PR مصطفي
+W * N N,SING,COM قلم
+W * P P بر
+W * N N,SING,LOC زمين
+W * V V,PA,PRG,POS,3 مي گذاشت
+W * DELM DELM ،
+W * N N,SING,COM تفنگ
+W * P P بر
+W * N N,SING,COM دوش
+W * V V,PA,PRG,POS,3 مي كشيد
+W * CON CON و
+W * P P بر
+W * N N,SING,COM,GEN پشت
+W * N N,SING,COM اسب
+W * V V,PA,PRG,POS,3 مي نشست
+W * DELM DELM ،
+W * N N,SING,LOC,PR ايران
+W * N N,SING,COM,GEN روزگار
+W * ADJ ADJ,SIM,INDF پريشاني
+W * V V,PA,SIM,POS,3 داشت
+W * DELM DELM .
+W * N N,SING,COM,GEN سلسله ي
+W * ADJ ADJ,SIM,GEN فاسد
+W * N N,SING,PR قاجاريه
+W * ADJ ADJ,ORD آخرين
+W * N N,PL,COM,AFF,3 نفسهايش
+W * RA RA را
+W * V V,PA,PRG,POS,3 مي كشيد
+W * DELM DELM ،
+W * N N,PL,COM,GEN,SET21_ شاهزادگان
+W * ADJ ADJ,SIM,SET21_ ريز
+W * CON CON,SET21_ و
+W * ADJ ADJ,SIM,SET21_ درشت
+W * DELM DELM ،
+W * N N,SING,LOC,PR ايران
+W * RA RA را
+W * N N,SING,COM تبديل
+W * P P به
+W * N N,SING,COM,GEN ملك
+W * ADJ ADJ,SIM,GEN شخصي
+W * PRO PRO,R,XOD,SET21 خود
+W * ADJ ADJ,INO كرده
+W * V V,PA,SIM,POS,6 بودند
+W * DELM DELM .
+W * QUA QUA هر
+W * N N,SING,COM,INDF گوشه اي
+W * P P از
+W * DET DET اين
+W * N N,SING,COM,GEN سرزمين
+W * ADJ ADJ,SIM بلاديده
+W * DELM DELM ،
+W * P P به
+W * N N,SING,COM,GEN نام
+W * N N,SING,NUM,INDF يكي
+W * P P از
+W * DET DET آن
+W * N N,PL,COM,SET22_ شاهزادگان
+W * ADJ ADJ,INO,SET22_ شده
+W * V V,PA,SIM,POS,3 بود
+W * CON CON و
+W * QUA QUA هر
+W * N N,SING,COM كدام
+W * P P,GEN براي
+W * N N,SING,COM,GEN اداره ي
+W * N N,PL,COM,GEN املاك
+W * PRO PRO,R,XOD,SET22 خود
+W * DELM DELM ،
+W * N N,PL,COM,SET23_ خانها
+W * CON CON,SET23_ و
+W * N N,PL,COM,GEN,SET23_ قلدرهاي
+W * N N,SING,LOC,SET23_ منطقه
+W * RA RA را
+W * P P در
+W * N N,SING,COM,GEN حلقه ي
+W * N N,PL,COM دوستان
+W * CON CON و
+W * N N,PL,COM,GEN پشتيبانان
+W * PRO PRO,R,XOD,SET22 خود
+W * N N,SING,COM گرد
+W * ADJ ADJ,INO آورده
+W * V V,PA,SIM,POS,6 بودند
+W * CON CON و
+W * QUA QUA هر
+W * N N,SING,COM,INDF بلايي
+W * CON CON كه
+W * V V,PA,PRG,POS,6 مي خواستند
+W * P P به
+W * N N,SING,COM,GEN وسيله ي
+W * PRO PRO,DEMO,PL,SET23 آن ها
+W * P P بر
+W * N N,SING,COM,GEN سر
+W * N N,SING,COM,GEN رعيت
+W * ADJ ADJ,SIM درمانده
+W * V V,PA,PRG,POS,6 مي آوردند
+W * DELM DELM .
+W * QUA QUA هر
+W * SPEC SPEC ميزان
+W * N N,SING,COM بهره
+W * CON CON و
+W * N N,SING,COM ماليات
+W * CON CON كه
+W * V V,PA,PRG,POS,6 مي خواستند
+W * DELM DELM ،
+W * V V,PA,PRG,POS,6 مي گرفتند
+W * DELM DELM .
+W * QUA QUA هر
+W * N N,SING,COM,INDF صدايي
+W * RA RA را
+W * CON CON كه
+W * N N,SING,COM دوست
+W * V V,PA,SIM,NEG,6 نداشتند
+W * V V,SUB,POS,6 بشنوند
+W * DELM DELM ،
+W * P P در
+W * N N,SING,COM حلقوم
+W * ADJ ADJ,SIM خفه
+W * V V,PA,PRG,POS,6 مي كردند
+W * CON CON و
+W * QUA QUA هر
+W * N N,SING,COM,INDF قيافه اي
+W * RA RA را
+W * CON CON كه
+W * ADJ ADJ,SIM,AFF,6 خوششان
+W * V V,PA,PRG,NEG,3 نمي آمد
+W * DELM DELM ،
+W * P P از
+W * N N,SING,COM,GEN صفحه ي
+W * N N,SING,COM روزگار
+W * ADJ ADJ,SIM پاك
+W * V V,PA,PRG,POS,6 مي كردند
+W * DELM DELM .
+W * N N,SING,COM حامي
+W * CON CON و
+W * N N,SING,COM,INDF فريادرسي
+W * V V,PA,SIM,NEG,3 نبود
+W * DELM DELM .
+W * N N,SING,COM,GEN فرياد
+W * N N,PL,COM مظلومان
+W * P P به
+W * N N,SING,COM,INDF جايي
+W * V V,PRS,NEG,5 نمي رسيد
+W * DELM DELM .
+W * P P در
+W * SPEC SPEC چنين
+W * N N,SING,COM,INDF روزگاري
+W * DELM DELM ،
+W * N N,SING,PR مصطفي
+W * DELM DELM ،
+W * DET DET آن
+W * N N,SING,COM,GEN عالم
+W * ADJ ADJ,SIM دلاور
+W * DELM DELM ،
+W * DET DET آن
+W * N N,SING,COM,GEN مجتهد
+W * ADJ ADJ,SIM پاكنهاد
+W * DELM DELM ،
+W * ADJ ADJ,SIM ناگزير
+W * P P از
+W * N N,SING,COM قلم
+W * CON CON و
+W * N N,SING,COM تفنگ
+W * P P به
+W * N N,SING,NUM يك
+W * N N,SING,COM ميزان
+W * N N,SING,COM استفاده
+W * V V,PA,PRG,POS,3 مي كرد
+W * DELM DELM .
+W * N N,SING,NUM چند
+W * N N,SING,TIME ماه
+W * P P از
+W * N N,SING,COM,GEN تولد
+W * N N,SING,PR روح الله
+W * ADJ ADJ,INO,NEG نگذشته
+W * V V,PA,SIM,POS,3 بود
+W * CON CON كه
+W * N N,SING,COM,GEN صداي
+W * N N,SING,COM,GEN شليك
+W * N N,SING,COM,INDF گلوله اي
+W * DELM DELM ،
+W * P P در
+W * N N,SING,COM,GEN كوره راه
+W * N N,PL,LOC,GEN كوهستانهاي
+W * N N,SING,COM,GEN ميان
+W * N N,SING,LOC,PR خمين
+W * CON CON و
+W * N N,SING,LOC,PR اراك
+W * V V,PA,SIM,POS,3 پيچيد
+W * DELM DELM .
+W * N N,SING,TIME,INDF روزي
+W * CON CON كه
+W * P P به
+W * N N,SING,COM دنيا
+W * V V,PA,SIM,POS,3 آمد
+W * DELM DELM ،
+W * QUA QUA هيچ
+W * N N,SING,COM كس
+W * N N,SING,COM فكر
+W * V V,PA,PRG,NEG,3 نمي كرد
+W * CON CON كه
+W * N N,PL,TIME سالها
+W * ADJ ADJ,SIM بعد
+W * DELM DELM ،
+W * N N,SING,COM,GEN مسير
+W * N N,SING,COM,GEN تاريخ
+W * N N,SING,LOC,PR ايران
+W * CON CON و
+W * N N,SING,COM اسلام
+W * RA RA را
+W * N N,SING,COM عوض
+W * V V,AUX,FEA,POS,3 خواهد
+W * V V,PA,SIM,POS,3 كرد
+W * CON CON و
+W * N N,PL,NUM ميليونها
+W * N N,SING,COM,GEN انسان
+W * ADJ ADJ,SIM,GEN مظلوم
+W * N N,SING,COM جهان
+W * DELM DELM ،
+W * N N,SING,COM,AFF,3 نامش
+W * RA RA را
+W * ADV ADV,GENR,SIM يكصدا
+W * N N,SING,COM فرياد
+W * V V,AUX,FEA,POS,6 خواهند
+W * V V,PA,SIM,POS,3 كشيد
+W * DELM DELM .
+W * N N,SING,TIME,INDF روزي
+W * CON CON كه
+W * P P به
+W * N N,SING,COM دنيا
+W * V V,PA,SIM,POS,3 آمد
+W * DELM DELM ،
+W * ADV ADV,GENR,EXM,GEN مثل
+W * QUA QUA,GEN همه ي
+W * N N,PL,TIME,GEN روزهاي
+W * ADJ ADJ,SIM ديگر
+W * V V,PA,SIM,POS,3 بود
+W * DELM DELM .
+W * N N,SING,PR خورشيد
+W * ADV ADV,GENR,EXM,GEN مثل
+W * ADV ADV,GENR,TIME هميشه
+W * P P از
+W * N N,SING,DIR مشرق
+W * N N,SING,COM طلوع
+W * ADJ ADJ,INO كرده
+W * V V,PA,SIM,POS,3 بود
+W * DELM DELM ،
+W * N N,PL,LOC چشمه ها
+W * ADJ ADJ,SIM جوشيده
+W * V V,PA,SIM,POS,6 بودند
+W * CON CON و
+W * N N,PL,LOC رودها
+W * ADV ADV,GENR,SIM هم چنان
+W * N N,SING,COM,GEN راه
+W * N N,SING,LOC دريا
+W * RA RA را
+W * ADJ ADJ,INO پيموده
+W * V V,PA,SIM,POS,6 بودند
+W * DELM DELM .
+W * SPEC SPEC تنها
+W * N N,SING,COM,GEN فرق
+W * DET DET,SET24_ آن
+W * N N,SING,TIME,SET24_ روز
+W * P P با
+W * N N,PL,TIME,GEN روزهاي
+W * ADJ ADJ,SIM ديگر
+W * PRO PRO,DEMO,SING اين
+W * V V,PA,SIM,POS,3 بود
+W * CON CON كه
+W * N N,PL,NUM صدها
+W * N N,SING,TIME سال
+W * N N,SING,COM پيش
+W * P P از
+W * PRO PRO,DEMO,SING,SET24 آن
+W * DELM DELM ،
+W * ADJ ADJ,SUP نجيبترين
+W * N N,SING,COM,GEN بانوي
+W * N N,SING,COM عالم
+W * DELM DELM ،
+W * N N,SING,SURN,GEN حضرت
+W * N N,SING,PR,GEN فاطمه ي
+W * N N,SING,PR زهرا
+W * P P در
+W * SPEC SPEC چنان
+W * N N,SING,TIME,INDF روزي
+W * ADJ ADJ,SIM متولد
+W * ADJ ADJ,INO شده
+W * V V,PA,SIM,POS,3 بود
+W * DELM DELM ؛
+W * N N,SING,COM,INDF كسي
+W * V V,PRS,NEG,3 نمي داند
+W * ADV ADV,I چرا
+W * N N,SING,COM,AFF,3 اسمش
+W * RA RA را
+W * N N,SING,PR,SET25 روح الله
+W * V V,PA,SIM,POS,6 گذاشتند
+W * DELM DELM .
+W * ADV ADV,GENR,SIM شايد
+W * P P به
+W * N N,SING,COM,GEN خاطر
+W * N N,SING,COM هم آوايي
+W * P P با
+W * N N,SING,COM,GEN نام
+W * N N,SING,COM,AFF,3 پدرش
+W * CON CON كه
+W * N N,SING,PR مصطفي
+W * V V,PA,SIM,POS,3 بود
+W * DELM DELM .
+W * P P به
+W * QUA QUA هر
+W * N N,SING,COM حال
+W * DELM DELM ،
+W * PRO PRO,personal,SING,3,SET25 او
+W * N N,SING,PR روح الله
+W * V V,PA,SIM,POS,3 شد
+W * CON CON تا
+W * ADV ADV,GENR,TIME بعدها
+W * N N,SING,COM,GEN نام
+W * ADJ ADJ,SIM,GEN بلند
+W * N N,SING,PR,GEN روح الله
+W * N N,SING,PR,GEN الموسوي
+W * N N,SING,PR الخميني
+W * P P در
+W * N N,SING,COM,GEN پاي
+W * ADJ ADJ,SUP كوبنده ترين
+W * CON CON و
+W * ADJ ADJ,SUP شجاعانه ترين
+W * N N,PL,COM,GEN اعلاميه هاي
+W * ADJ ADJ,SIM,GEN انقلابي
+W * N N,SING,COM تاريخ
+W * ADJ ADJ,INO نوشته
+W * V V,SUB,POS,3 شود
+W * CON CON و
+W * N N,PL,COM چشمها
+W * RA RA را
+W * ADJ ADJ,SIM خيره
+W * V V,SUB,POS,3 كند
+W * DELM DELM .
+W * N N,SING,COM,AFF,3,SET26_ پدرش
+W * N N,SING,PR,SET26_ مصطفي
+W * DELM DELM ،
+W * N N,SING,NUM يك
+W * N N,SING,COM,GEN روحاني
+W * ADJ ADJ,SIM مشهور
+W * CON CON و
+W * ADJ ADJ,SIM شجاع
+W * P P در
+W * N N,SING,LOC,PR خمين
+W * CON CON و
+W * N N,PL,LOC,GEN روستاهاي
+W * N N,PL,COM,AFF,3 اطرافش
+W * V V,PA,SIM,POS,3 بود
+W * DELM DELM .
+W * N N,SING,GR مردم
+W * PRO PRO,personal,SING,3,SET26 او
+W * RA RA را
+W * N N,SING,COM دوست
+W * V V,PA,SIM,POS,6 داشتند
+W * DELM DELM ،
+W * CON CON چرا كه
+W * CON CON,DCOR هم
+W * ADJ ADJ,SIM عالم
+W * V V,PA,SIM,POS,3 بود
+W * CON CON و
+W * CON CON,DCOR هم
+W * ADJ ADJ,SIM دلاور
+W * DELM DELM .
