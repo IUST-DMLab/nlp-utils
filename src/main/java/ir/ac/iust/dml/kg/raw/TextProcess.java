@@ -7,11 +7,7 @@ import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.util.ArrayCoreMap;
 import edu.stanford.nlp.util.CoreMap;
 import ir.ac.iust.dml.kg.raw.coreference.CorefUtility;
-import ir.ac.iust.nlp.jhazm.Lemmatizer;
-import ir.ac.iust.nlp.jhazm.SentenceTokenizer;
-import org.maltparser.concurrent.graph.ConcurrentDependencyGraph;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,22 +22,19 @@ public class TextProcess {
     private POSTagger posTagger;
     private Lemmatizer lemmatizer;
     private Normalizer normalizer;
+    private SentenceTokenizer sentenceTokenizer;
     private DependencyParser dependencyParser;
     private List<String> entityList;
 
     public TextProcess() {
-        entityList= new CorefUtility().readListedFile(TextProcess.class,"/personLexicon.txt");
-           // entityList = new ir.ac.iust.dml.kg.raw.coreference.CorefUtility().readLines(this.getClass().getResource("/personLexicon.txt").getPath().substring(1));
-            normalizer = new Normalizer();
-           // String wordsFilePath = this.getClass().getResource("/data/words.dat").getPath().substring(1);
-            //String verbsFilePath = this.getClass().getResource("/data/verbs.dat").getPath().substring(1);
-           // wordTokenizer = new WordTokenizer();
-            // posTagger = new POSTagger(this.getClass().getResource("/models/persian.tagger").getPath().substring(1));
-        try {
-            lemmatizer = new Lemmatizer();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        entityList = new CorefUtility().readListedFile(TextProcess.class, "/personLexicon.txt");
+        // entityList = new ir.ac.iust.dml.kg.raw.coreference.CorefUtility().readLines(this.getClass().getResource("/personLexicon.txt").getPath().substring(1));
+        normalizer = new Normalizer();
+        // String wordsFilePath = this.getClass().getResource("/data/words.dat").getPath().substring(1);
+        //String verbsFilePath = this.getClass().getResource("/data/verbs.dat").getPath().substring(1);
+        // wordTokenizer = new WordTokenizer();
+        // posTagger = new POSTagger(this.getClass().getResource("/models/persian.tagger").getPath().substring(1));
+        lemmatizer = new Lemmatizer();
         //   dependencyParser = new DependencyParser(posTagger, lemmatizer, this.getClass().getResource("/models/langModel.mco").getPath().substring(1));
 
 
@@ -69,7 +62,7 @@ public class TextProcess {
         int tokenIndex = 0;
         for (String paragraph : paragraphs) {
             CoreMap newParagraph = new ArrayCoreMap();
-            List<String> sentences = SentenceTokenizer.i().tokenize(paragraph);
+            List<String> sentences = SentenceTokenizer.SentrenceSplitter(paragraph);
             List<CoreMap> coreMaps = new ArrayList<CoreMap>();
 
             List<CoreLabel> coreLabels = new ArrayList<CoreLabel>();
@@ -78,6 +71,7 @@ public class TextProcess {
                 List<TaggedWord> tags = POSTagger.tag(words);
                 List<CoreLabel> sentenceCoreLabel = new ArrayList<CoreLabel>();
                 CoreMap sentenceCoreMap = new ArrayCoreMap();
+                sentenceCoreMap.set(CoreAnnotations.TextAnnotation.class, sentence);
                 for (int i = 0; i < words.size(); i++) {
                     CoreLabel coreLabel = new CoreLabel();
                     coreLabel.setWord(words.get(i));
@@ -129,7 +123,6 @@ public class TextProcess {
         }
         annotation.set(CoreAnnotations.ParagraphsAnnotation.class, paragraphs);
     }
-
 
 
     public void annotateNamedEntity(Annotation annotation) {

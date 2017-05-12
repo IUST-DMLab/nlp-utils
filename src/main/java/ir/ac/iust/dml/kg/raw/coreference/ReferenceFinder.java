@@ -21,20 +21,20 @@ public class ReferenceFinder {
 
     }
 
-    public List<CorefChain> extractCorefChains(String inputText)
-    {
+    public List<CorefChain> extractCorefChains(String inputText) {
         Annotation annotation = new Annotation(inputText);
 
         TextProcess tp = new TextProcess();
         tp.preProcess(annotation);
         tp.annotateNamedEntity(annotation);
 
-       ReferenceFinder rfinder = new ReferenceFinder();
+        ReferenceFinder rfinder = new ReferenceFinder();
         List<ir.ac.iust.dml.kg.raw.coreference.CorefChain> corefChains = rfinder.annotateCoreference(annotation);
         return corefChains;
     }
-    public  List<CorefChain> annotateCoreference(Annotation annotation) {
-        List<CorefChain> finalCorefChains =new ArrayList<CorefChain>();
+
+    public List<CorefChain> annotateCoreference(Annotation annotation) {
+        List<CorefChain> finalCorefChains = new ArrayList<CorefChain>();
         QuotationExtractor quotationExtractor = new QuotationExtractor();
         List<QuotationBound> quotationBounds = quotationExtractor.applyQuotationRules(annotation);
         int index = 0;
@@ -56,22 +56,14 @@ public class ReferenceFinder {
                 allQuotationMentions.addAll(quotationMentions);
                 List<ReferenceEntity> quotationReferences = CorefUtility.getReferenceEntities(qBound.getQuotationBoundCoreLabels(), index);
                 allQuotationReference.addAll(quotationReferences);
-
-
             }
 
             finalCorefChains = extractChainsFromQuotaionTellerBound(allQuotationTellerMentions, allQuotationTellerReference);
 
-           finalCorefChains.addAll( extractChainsFromQuotaionTellerBound(allQuotationMentions, allQuotationReference));
-        }
-        else
-        {
+            finalCorefChains.addAll(extractChainsFromQuotaionTellerBound(allQuotationMentions, allQuotationReference));
+        } else {
             finalCorefChains = extractChainsFromRawText(annotation);
         }
-
-
-
-
         return finalCorefChains;
     }
 
