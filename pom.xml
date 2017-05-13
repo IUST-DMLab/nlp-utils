@@ -28,14 +28,6 @@
         <lang.version>3.3.2</lang.version>
     </properties>
 
-    <distributionManagement>
-        <repository>
-            <id>central</id>
-            <name>38c51b48d203-releases</name>
-            <url>http://194.225.227.161:8083/artifactory/libs-release</url>
-        </repository>
-    </distributionManagement>
-
     <build>
         <finalName>jhazm</finalName>
         <plugins>

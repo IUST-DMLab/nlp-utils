@@ -101,7 +101,7 @@ public class CorefTest {
     }
 
     @Test
-    public static void evaluateCoref() {
+    public void evaluateCoref() {
         String filePath = config.getString("testFileInput");
         FileInputStream fstream = null;
         Annotation annotation = new Annotation("");
