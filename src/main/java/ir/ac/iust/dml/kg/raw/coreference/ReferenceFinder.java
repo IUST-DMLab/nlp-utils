@@ -97,9 +97,13 @@ public class ReferenceFinder {
         List<Mention> mentions = new ArrayList<Mention>();
         mentions.add(mention);
         CorefChain corefChain = new CorefChain();
+        int mentionIndex = mention.getMentionCoreLabel().get(CoreAnnotations.IndexAnnotation.class);
+
         for (ReferenceEntity referenceEntity : referenceEntities) {
+            int referenceIndex = referenceEntity.getEntityTokens().get(0).get(CoreAnnotations.IndexAnnotation.class);
             if (referenceEntity.getType().equals(mention.getType())) {
-                corefChain.setMentions(mentions);
+                if (referenceIndex < mentionIndex)
+                    corefChain.setMentions(mentions);
                 corefChain.setReferenceEntity(referenceEntity);
             }
         }
