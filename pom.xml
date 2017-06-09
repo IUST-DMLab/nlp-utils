@@ -12,9 +12,9 @@
 
     <groupId>ir.ac.iust.dml.kg.raw</groupId>
     <artifactId>nlp-utils</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <name>Knowledge Graph Raw Text Extractor Core</name>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <description>Core NLP Tools of Knowledge Graph Project</description>
 
     <properties>

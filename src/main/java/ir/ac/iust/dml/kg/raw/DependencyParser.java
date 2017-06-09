@@ -38,7 +38,7 @@ public class DependencyParser {
       try {
          return parser.rawParse(sentence);
       } catch (IOException | MaltChainedException e) {
-         logger.error("error in dependency parse", e);
+        logger.trace("error in dependency parse", e);
       }
       return null;
    }
