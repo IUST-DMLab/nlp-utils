@@ -11,6 +11,7 @@ public class RawTripleBuilder {
   private String sourceUrl;
   private Long extractionTime;
   private String version;
+  private boolean needsMapping;
 
   public RawTripleBuilder() {
   }
@@ -35,6 +36,14 @@ public class RawTripleBuilder {
     this.sourceUrl = sourceUrl;
     this.extractionTime = extractionTime;
     this.version = version;
+  }
+
+  public RawTripleBuilder(String module, String sourceUrl, Long extractionTime, String version, boolean needsMapping) {
+    this.module = module;
+    this.sourceUrl = sourceUrl;
+    this.extractionTime = extractionTime;
+    this.version = version;
+    this.needsMapping = needsMapping;
   }
 
   public RawTriple create() {
