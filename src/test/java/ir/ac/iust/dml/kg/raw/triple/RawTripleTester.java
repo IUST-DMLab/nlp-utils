@@ -20,12 +20,12 @@ public class RawTripleTester {
     final RawTriple triple1 = builder.create()
         .subject("http://test.org/s1").predicate("http://test.org/p1")
         .object("http://test.org/o1").rawText("Sample Text 1")
-        .accuracy(0.1).needsMapping(false);
+        .accuracy(0.1).needsMapping(true);
     exporter.write(triple1);
     final RawTriple triple2 = builder.create()
         .subject("http://test.org/s2").predicate("http://test.org/p2")
         .object("http://test.org/o2").rawText("Sample Text 2")
-        .accuracy(0.1).needsMapping(false);
+        .accuracy(0.1).needsMapping(true);
     exporter.write(triple2);
     exporter.close();
 
