@@ -34,6 +34,11 @@ public class RawTripleExporter implements Closeable {
                 e.printStackTrace();
             }
         }
+        try {
+            this.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
