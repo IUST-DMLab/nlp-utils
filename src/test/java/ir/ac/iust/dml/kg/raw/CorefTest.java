@@ -45,6 +45,15 @@ public class CorefTest {
 
     }
 
+    @Test
+    public void testCorefWithMentionReplace() {
+        String testString = "مرتضی پاشایی از دوران کودکی همیشه نسبت به موسیقی حس خاص و مبهمی داشت. او از سال ۱۳۸۹ با انتشار اینترنتیِ قطعات خود شروع به کار کرد. او با قطعهٔ «یکی هست» به شهرت رسید. کارشناسان، او را از پیروان سبک محسن یگانه و شادمهر عقیلی می‌دانند.";
+        ReferenceFinder rfinder = new ReferenceFinder();
+        String outputText = rfinder.getAnnotationTextAfterCoref(testString);
+        System.out.println(outputText);
+
+    }
+
     public static void main(String[] args) {
 
         String testString = "بذرپاش تاکید کرد: بخش عمده‌ای از بانک‌هایی که در کشور حضور دارند تنها و تنها برای تامین اعتبار پروژه‌های یک سری افراد خاص، از جیب مردم شکل گرفته‌اند و در این راه وفادارانه به این افراد خدمت می‌کنند.\n" +

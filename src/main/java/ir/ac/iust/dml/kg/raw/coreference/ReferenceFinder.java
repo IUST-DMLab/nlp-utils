@@ -17,9 +17,7 @@ import java.util.ListIterator;
  */
 public class ReferenceFinder {
 
-    private void main(String[] args) {
 
-    }
 
     public List<CorefChain> extractCorefChains(String inputText) {
         Annotation annotation = new Annotation(inputText);
@@ -67,6 +65,24 @@ public class ReferenceFinder {
         return finalCorefChains;
     }
 
+    public String getAnnotationTextAfterCoref(String inputText) {
+        Annotation annotation = new Annotation(inputText);
+
+        TextProcess tp = new TextProcess();
+        tp.preProcess(annotation);
+        tp.annotateNamedEntity(annotation);
+
+        ReferenceFinder rfinder = new ReferenceFinder();
+        rfinder.annotateCoreference(annotation);
+
+        String outputText = "";
+        for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
+            for (CoreLabel coreLabel : sentence.get(CoreAnnotations.TokensAnnotation.class))
+                outputText += " " + coreLabel.get(CoreAnnotations.TextAnnotation.class);
+            outputText += " ";
+        }
+        return outputText;
+    }
     public List<CorefChain> extractChainsFromRawText(Annotation annotation) {
         List<CorefChain> corefChains = new ArrayList<CorefChain>();
         List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
@@ -81,6 +97,7 @@ public class ReferenceFinder {
                     List<ReferenceEntity> referenceEntities = new CorefUtility().getReferenceEntities(sentenceCoreLabels, j);
                     CorefChain corefChain = extractChainsFromSentence(referenceEntities, mention);
                     if (corefChain.getMentions() != null) {
+                        changeMentionText(corefChain);
                         corefChains.add(corefChain);
                         break;
                     } else {
@@ -91,6 +108,11 @@ public class ReferenceFinder {
             sentenceIndex++;
         }
         return corefChains;
+    }
+
+    private void changeMentionText(CorefChain corefChain) {
+        //Mention mention=corefChain.getMentions().get(0);
+        corefChain.getMentions().get(0).getMentionCoreLabel().set(CoreAnnotations.TextAnnotation.class, corefChain.getReferenceEntity().toString());
     }
 
     private CorefChain extractChainsFromSentence(List<ReferenceEntity> referenceEntities, Mention mention) {

@@ -1,5 +1,6 @@
 package ir.ac.iust.dml.kg.raw.coreference;
 
+import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  */
 public class ReferenceEntity {
     List<CoreLabel> entityTokens;
+
     String type;
     int Number;
     boolean isMofrad;
@@ -41,7 +43,6 @@ public class ReferenceEntity {
     }
 
 
-
     public String getType() {
         return type;
     }
@@ -49,7 +50,6 @@ public class ReferenceEntity {
     public void setType(String type) {
         this.type = type;
     }
-
 
 
     public List<CoreLabel> getEntityTokens() {
@@ -60,6 +60,11 @@ public class ReferenceEntity {
         this.entityTokens = entityTokens;
     }
 
-
+    public String toString() {
+        String refStr = "";
+        for (CoreLabel coreLabel : this.entityTokens)
+            refStr += " " + coreLabel.get(CoreAnnotations.TextAnnotation.class);
+        return refStr.trim();
+    }
 
 }

@@ -148,7 +148,7 @@ public class TextProcess {
                 windowSizeIndex = tokens.size();
             candidateString = getCandidateString(tokens, startOfWindow, windowSizeIndex);
 
-            if ((startOfWindow + windowSizeIndex <= tokens.size()) && neList.contains(candidateString)) {
+            if ((startOfWindow + windowSizeIndex <= tokens.size()) && neList.contains(candidateString.replace("\uFEFF", ""))) {
                 assignTagToTokens(tokens, startOfWindow, windowSizeIndex);
                 // this scope is final scope and the candidate string is finded.
                 startOfWindow += windowSizeIndex;
