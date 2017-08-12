@@ -78,6 +78,7 @@ public class ResourceExtractionWrapper {
   }
 
   private boolean mustFilter(Resource resource, FilterType filterType) {
+    if(resource == null) return true;
     switch (filterType) {
       case AnyResources:
         if (resource.getType() == null || resource.getType() == ResourceType.Resource) return true;
