@@ -94,6 +94,6 @@ public class ResourceExtractionWrapper {
 
   private boolean isBadTagForMatchedResource(TaggedWord taggedWord) {
     final String tag = taggedWord.tag();
-    return tag.equals("P") || tag.equals("CONJ") || tag.equals("V") || tag.equals("PRO");
+    return tag.equals("P") || tag.equals("CONJ") || tag.equals("V") || tag.equals("PRO") || tag.equals("ADV");
   }
 }
