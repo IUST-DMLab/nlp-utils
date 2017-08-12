@@ -39,7 +39,6 @@ public class ResourceExtractionWrapper {
     final List<MatchedResource> filteredResult = new ArrayList<>();
     final Set<FilterType> filterTypeSet = new HashSet<>(Arrays.asList(filterTypes));
     for (MatchedResource resource : result) {
-
       if (filterTypeSet.contains(FilterType.CommonPosTags)) {
         boolean mustNotBeRemoved = false;
         for (int i = resource.getStart(); i <= resource.getEnd(); i++)
@@ -57,11 +56,12 @@ public class ResourceExtractionWrapper {
         if (!mustBeRemoved) continue;
       }
 
-      if (mustFilter(resource.getResource(), filterTypes))
+      if (mustFilter(taggedWords, resource, resource.getResource(), filterTypes))
         resource.setResource(null);
       final List<Resource> filteredAmbiguities = new ArrayList<>();
       for (Resource ambiguity : resource.getAmbiguities())
-        if (mustFilter(ambiguity, filterTypes)) filteredAmbiguities.add(ambiguity);
+        if (mustFilter(taggedWords, resource, ambiguity, filterTypes) || filterTypeSet.contains(FilterType.Ambiguities))
+          filteredAmbiguities.add(ambiguity);
       resource.getAmbiguities().removeAll(filteredAmbiguities);
 
       if (resource.getResource() != null || !resource.getAmbiguities().isEmpty())
@@ -70,14 +70,16 @@ public class ResourceExtractionWrapper {
     return filteredResult;
   }
 
-  private boolean mustFilter(Resource resource, FilterType... filterTypes) {
+  private boolean mustFilter(List<TaggedWord> taggedWords, MatchedResource matchedResource,
+                             Resource resource, FilterType... filterTypes) {
     for (FilterType filterType : filterTypes) {
-      if (mustFilter(resource, filterType)) return true;
+      if (mustFilter(taggedWords, matchedResource, resource, filterType)) return true;
     }
     return false;
   }
 
-  private boolean mustFilter(Resource resource, FilterType filterType) {
+  private boolean mustFilter(List<TaggedWord> taggedWords, MatchedResource matchedResource,
+                             Resource resource, FilterType filterType) {
     if(resource == null) return true;
     switch (filterType) {
       case AnyResources:
@@ -88,6 +90,18 @@ public class ResourceExtractionWrapper {
         if (resource.getType() != null && resource.getType() == ResourceType.Property) return true;
       case Things:
         if (resource.getInstanceOf() == null || resource.getInstanceOf().contains("Thing")) return true;
+      case EmptyClassTree:
+        if (resource.getClassTree() == null || resource.getClassTree().isEmpty()) return true;
+      case NotNullDisambiguatedFrom:
+        if (resource.getDisambiguatedFrom() != null && !resource.getDisambiguatedFrom().isEmpty()) return true;
+      case NotMatchedLabels:
+        final String label = resource.getLabel() != null ? resource.getLabel() :
+            (resource.getIri() == null ? "" : resource.getIri().substring(resource.getIri().lastIndexOf('/')));
+        StringBuilder matchedLabel = new StringBuilder();
+        for (int i = matchedResource.getStart(); i <= matchedResource.getEnd(); i++)
+          matchedLabel.append(taggedWords.get(i).word()).append(' ');
+        matchedLabel.setLength(matchedLabel.length() - 1);
+        if (!label.equals(matchedLabel.toString())) return true;
     }
     return false;
   }
