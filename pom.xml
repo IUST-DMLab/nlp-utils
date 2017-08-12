@@ -12,7 +12,7 @@
 
   <groupId>ir.ac.iust.dml.kg.raw</groupId>
   <artifactId>nlp-utils</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.1</version>
   <name>Knowledge Graph Raw Text Extractor Core</name>
   <packaging>jar</packaging>
   <description>Core NLP Tools of Knowledge Graph Project</description>
@@ -79,6 +79,11 @@
       <groupId>ir.ac.iust.nlp</groupId>
       <artifactId>jhazm</artifactId>
       <version>0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>ir.ac.iust.dml.kg.services</groupId>
+      <artifactId>resource-extractor-client</artifactId>
+      <version>0.2.0</version>
     </dependency>
     <dependency>
       <groupId>edu.stanford.nlp</groupId>
