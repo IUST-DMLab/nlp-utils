@@ -64,6 +64,10 @@ public class ResourceExtractionWrapper {
           filteredAmbiguities.add(ambiguity);
       resource.getAmbiguities().removeAll(filteredAmbiguities);
 
+      if (resource.getResource() == null && resource.getAmbiguities().size() == 1) {
+        resource.setResource(resource.getAmbiguities().get(0));
+        resource.getAmbiguities().clear();
+      }
       if (resource.getResource() != null || !resource.getAmbiguities().isEmpty())
         filteredResult.add(resource);
     }
@@ -84,16 +88,24 @@ public class ResourceExtractionWrapper {
     switch (filterType) {
       case AnyResources:
         if (resource.getType() == null || resource.getType() == ResourceType.Resource) return true;
+        break;
       case Villages:
         if (resource.getInstanceOf() != null && resource.getInstanceOf().contains("Village")) return true;
+        break;
       case Properties:
-        if (resource.getType() != null && resource.getType() == ResourceType.Property) return true;
+        if ((resource.getType() != null && resource.getType() == ResourceType.Property)
+            || (resource.getType() == null && resource.getIri() != null && resource.getIri().contains("ontology")))
+          return true;
+        break;
       case Things:
         if (resource.getInstanceOf() == null || resource.getInstanceOf().contains("Thing")) return true;
+        break;
       case EmptyClassTree:
         if (resource.getClassTree() == null || resource.getClassTree().isEmpty()) return true;
+        break;
       case NotNullDisambiguatedFrom:
         if (resource.getDisambiguatedFrom() != null && !resource.getDisambiguatedFrom().isEmpty()) return true;
+        break;
       case NotMatchedLabels:
         final String label = resource.getLabel() != null ? resource.getLabel() :
             (resource.getIri() == null ? "" : resource.getIri().substring(resource.getIri().lastIndexOf('/')));
