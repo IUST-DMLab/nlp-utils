@@ -101,7 +101,8 @@ public class EnhancedEntityExtractor {
     final List<ResolvedEntityToken> result = new ArrayList<>();
     for (int i = 0; i < taggedWords.size(); i++) {
       final ResolvedEntityToken token = new ResolvedEntityToken();
-      token.setWord(taggedWords.get(i));
+      token.setWord(taggedWords.get(i).word());
+      token.setPos(taggedWords.get(i).tag());
       final ResourceAndIob aligned = alignedResources.get(i);
       if (aligned == null) token.setIobType(IobType.Outside);
       else {
