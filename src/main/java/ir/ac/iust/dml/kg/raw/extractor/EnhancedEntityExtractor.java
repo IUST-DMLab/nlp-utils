@@ -25,7 +25,7 @@ public class EnhancedEntityExtractor {
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText) {
-    return extract(rawText, true, FilterType.CommonPosTags, FilterType.Properties, FilterType.NotNullDisambiguatedFrom);
+    return extract(rawText, true, FilterType.CommonPosTags, FilterType.Properties);
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText, boolean removeSubset, FilterType... filterTypes) {
@@ -72,6 +72,11 @@ public class EnhancedEntityExtractor {
     for (Resource r : resources) {
       ResourceAndRank rr = new ResourceAndRank(r,
           (r.getClassTree() == null || r.getClassTree().size() <= 1) ? 0.0f : 0.5f);
+      for (String variantLabel : r.getVariantLabel()) {
+        // Check if it has dis-ambiguity.
+        if (variantLabel.contains("(")) rr.rate -= 1;
+        break;
+      }
       ranked.add(rr);
     }
     Collections.sort(ranked);
