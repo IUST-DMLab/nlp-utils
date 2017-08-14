@@ -25,7 +25,7 @@ public class EnhancedEntityExtractor {
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText) {
-    return extract(rawText, true, FilterType.CommonPosTags, FilterType.Properties);
+    return extract(rawText, true, FilterType.CommonPosTags, FilterType.Properties, FilterType.NotNullDisambiguatedFrom);
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText, boolean removeSubset, FilterType... filterTypes) {
