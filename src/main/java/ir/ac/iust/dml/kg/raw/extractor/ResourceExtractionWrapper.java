@@ -105,6 +105,9 @@ public class ResourceExtractionWrapper {
         break;
       case NotNullDisambiguatedFrom:
         if (resource.getDisambiguatedFrom() != null && !resource.getDisambiguatedFrom().isEmpty()) return true;
+        for (String variantLabel : resource.getVariantLabel()) {
+          if (variantLabel.contains(")")) return true;
+        }
         break;
       case NotMatchedLabels:
         final String label = resource.getLabel() != null ? resource.getLabel() :
