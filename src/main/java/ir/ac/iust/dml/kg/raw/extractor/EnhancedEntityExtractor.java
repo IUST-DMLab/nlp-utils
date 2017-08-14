@@ -81,6 +81,7 @@ public class EnhancedEntityExtractor {
       ranked.add(rr);
     }
     Collections.sort(ranked);
+    if (ranked.isEmpty() || ranked.get(0).rate < 0) return new ArrayList<>();
     return ranked.stream().map(it -> it.resource).collect(Collectors.toList());
   }
 
@@ -100,6 +101,7 @@ public class EnhancedEntityExtractor {
         if (matchedResource.getAmbiguities() != null)
           all.addAll(matchedResource.getAmbiguities());
         final List<Resource> rankedResources = rank(context, all);
+        if (rankedResources.isEmpty()) continue;
         alignedResources.set(i, new ResourceAndIob(rankedResources, i == matchedResource.getStart()));
       }
     }
