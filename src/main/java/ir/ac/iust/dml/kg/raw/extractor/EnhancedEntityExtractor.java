@@ -7,7 +7,9 @@ import ir.ac.iust.dml.kg.resource.extractor.client.Resource;
 import ir.ac.iust.dml.kg.resource.extractor.client.ResourceType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("WeakerAccess")
 public class EnhancedEntityExtractor {
@@ -47,8 +49,33 @@ public class EnhancedEntityExtractor {
     }
   }
 
+  private class ResourceAndRank implements Comparable<ResourceAndRank> {
+    Resource resource;
+    float rate = 0f;
+
+    public ResourceAndRank(Resource resource, float rate) {
+      this.resource = resource;
+      this.rate = rate;
+    }
+
+    @Override
+    @SuppressWarnings("NotNull")
+    public int compareTo(ResourceAndRank rank) {
+      // Sort descending
+      return Float.compare(rank.rate, rate);
+    }
+  }
+
   private List<Resource> rank(String context, List<Resource> resources) {
-    return resources;
+    final List<ResourceAndRank> ranked = new ArrayList<>();
+    // Resources with specific classes are more important than things.
+    for (Resource r : resources) {
+      ResourceAndRank rr = new ResourceAndRank(r,
+          (r.getClassTree() == null || r.getClassTree().size() <= 1) ? 0.0f : 0.5f);
+      ranked.add(rr);
+    }
+    Collections.sort(ranked);
+    return ranked.stream().map(it -> it.resource).collect(Collectors.toList());
   }
 
   private List<ResolvedEntityToken> extract(String context, List<TaggedWord> taggedWords,
