@@ -6,9 +6,7 @@ import ir.ac.iust.dml.kg.resource.extractor.client.MatchedResource;
 import ir.ac.iust.dml.kg.resource.extractor.client.Resource;
 import ir.ac.iust.dml.kg.resource.extractor.client.ResourceType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("WeakerAccess")
@@ -121,6 +119,21 @@ public class EnhancedEntityExtractor {
       result.add(token);
     }
     return result;
+  }
+
+  public List<List<ResolvedEntityToken>> resolveByName(List<List<ResolvedEntityToken>> sentences) {
+    final Map<String, ResolvedEntityTokenResource> cache = new HashMap<>();
+    for (List<ResolvedEntityToken> sentence : sentences)
+      for (ResolvedEntityToken token : sentence) {
+        final String pos = token.getPos();
+        if (cache.containsKey(token.getWord())) {
+          token.getAmbiguities().add(0, token.getResource());
+          token.setResource(cache.get(token.getWord()));
+        }
+        if (pos.equals("N") || pos.equals("Ne") && !token.getResource().getClasses().isEmpty())
+          cache.put(token.getWord(), token.getResource());
+      }
+    return sentences;
   }
 
   private ResolvedEntityTokenResource convert(Resource resource) {
