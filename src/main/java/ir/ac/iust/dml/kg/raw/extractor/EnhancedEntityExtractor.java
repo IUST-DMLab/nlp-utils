@@ -130,7 +130,9 @@ public class EnhancedEntityExtractor {
           token.getAmbiguities().add(0, token.getResource());
           token.setResource(cache.get(token.getWord()));
         }
-        if (pos.equals("N") || pos.equals("Ne") && !token.getResource().getClasses().isEmpty())
+        if (pos.equals("N") || pos.equals("Ne") && token.getResource() != null &&
+            token.getResource().getClasses() != null &&
+            !token.getResource().getClasses().isEmpty())
           cache.put(token.getWord(), token.getResource());
       }
     return sentences;
