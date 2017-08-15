@@ -121,7 +121,7 @@ public class EnhancedEntityExtractor {
     return result;
   }
 
-  public List<List<ResolvedEntityToken>> resolveByName(List<List<ResolvedEntityToken>> sentences) {
+  public void resolveByName(List<List<ResolvedEntityToken>> sentences) {
     final Map<String, ResolvedEntityTokenResource> cache = new HashMap<>();
     for (List<ResolvedEntityToken> sentence : sentences)
       for (ResolvedEntityToken token : sentence) {
@@ -135,7 +135,41 @@ public class EnhancedEntityExtractor {
             !token.getResource().getClasses().isEmpty())
           cache.put(token.getWord(), token.getResource());
       }
-    return sentences;
+  }
+
+  final String prefix = "http://fkg.iust.ac.ir/ontology/";
+
+  private boolean matchClass(ResolvedEntityToken token, String ontologyClass) {
+    return token.getResource() != null && token.getResource().getClasses() != null
+        && token.getResource().getClasses().contains(prefix + ontologyClass);
+  }
+
+  private void addToQueue(List<ResolvedEntityTokenResource> queue, ResolvedEntityTokenResource item) {
+    if (queue.contains(item)) queue.remove(item);
+    queue.add(item);
+  }
+
+  private void setResources(ResolvedEntityToken token, List<ResolvedEntityTokenResource> resources) {
+    if (resources.size() == 0) return;
+    token.setResource(resources.get(resources.size() - 1));
+    for (int i = 0; i < resources.size() - 1; i++) token.getAmbiguities().add(resources.get(i));
+  }
+
+  public void resolvePronouns(List<List<ResolvedEntityToken>> sentences) {
+    final List<ResolvedEntityTokenResource> allPersons = new ArrayList<>();
+    final List<ResolvedEntityTokenResource> allPlaces = new ArrayList<>();
+    final List<ResolvedEntityTokenResource> allOrganizations = new ArrayList<>();
+    for (List<ResolvedEntityToken> sentence : sentences)
+      for (ResolvedEntityToken token : sentence) {
+        final String word = token.getWord();
+        if (matchClass(token, "Person")) addToQueue(allPersons, token.getResource());
+        if (matchClass(token, "Place") || matchClass(token, "Organisation"))
+          addToQueue(allPlaces, token.getResource());
+        if (matchClass(token, "Organisation")) addToQueue(allOrganizations, token.getResource());
+        if (word.equals("او") || word.equals("وی")) setResources(token, allPersons);
+        if (word.equals("اینجا") || word.equals("آنجا")) setResources(token, allPlaces);
+        if (word.equals("آن‌ها") || word.equals("آنها")) setResources(token, allOrganizations);
+      }
   }
 
   private ResolvedEntityTokenResource convert(Resource resource) {
