@@ -81,6 +81,11 @@
       <version>0.2</version>
     </dependency>
     <dependency>
+      <groupId>ir.ac.iust.dml.kg</groupId>
+      <artifactId>utils</artifactId>
+      <version>0.2.3</version>
+    </dependency>
+    <dependency>
       <groupId>ir.ac.iust.dml.kg.services</groupId>
       <artifactId>resource-extractor-client</artifactId>
       <version>0.2.0</version>

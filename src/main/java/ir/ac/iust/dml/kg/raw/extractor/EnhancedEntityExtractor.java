@@ -1,11 +1,21 @@
 package ir.ac.iust.dml.kg.raw.extractor;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import edu.stanford.nlp.ling.TaggedWord;
 import ir.ac.iust.dml.kg.raw.POSTagger;
+import ir.ac.iust.dml.kg.raw.utils.ConfigReader;
+import ir.ac.iust.dml.kg.raw.utils.PathWalker;
 import ir.ac.iust.dml.kg.resource.extractor.client.MatchedResource;
 import ir.ac.iust.dml.kg.resource.extractor.client.Resource;
 import ir.ac.iust.dml.kg.resource.extractor.client.ResourceType;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,10 +36,13 @@ public class EnhancedEntityExtractor {
     return extract(rawText, true, FilterType.CommonPosTags, FilterType.Properties);
   }
 
-  public List<List<ResolvedEntityToken>> extract(String rawText, boolean removeSubset, FilterType... filterTypes) {
+  public List<List<ResolvedEntityToken>> extract(String rawText,
+                                                 boolean removeSubset,
+                                                 FilterType... filterTypes) {
     final List<List<TaggedWord>> allTags = POSTagger.tagRaw(rawText);
     final List<List<ResolvedEntityToken>> result = new ArrayList<>();
-    for (List<TaggedWord> tags : allTags) result.add(extract(rawText, tags, removeSubset, filterTypes));
+    for (List<TaggedWord> tags : allTags)
+      result.add(extract(allTags, tags, removeSubset, filterTypes));
     return result;
   }
 
@@ -47,28 +60,28 @@ public class EnhancedEntityExtractor {
     }
   }
 
-  private class ResourceAndRank implements Comparable<ResourceAndRank> {
-    Resource resource;
+  private class RankedObject<T> implements Comparable<RankedObject<T>> {
+    T resource;
     float rate = 0f;
 
-    public ResourceAndRank(Resource resource, float rate) {
+    public RankedObject(T resource, float rate) {
       this.resource = resource;
       this.rate = rate;
     }
 
     @Override
     @SuppressWarnings("NotNull")
-    public int compareTo(ResourceAndRank rank) {
+    public int compareTo(RankedObject<T> rank) {
       // Sort descending
       return Float.compare(rank.rate, rate);
     }
   }
 
-  private List<Resource> rank(String context, List<Resource> resources) {
-    final List<ResourceAndRank> ranked = new ArrayList<>();
+  private List<Resource> rank(List<Resource> resources) {
+    final List<RankedObject<Resource>> ranked = new ArrayList<>();
     // Resources with specific classes are more important than things.
     for (Resource r : resources) {
-      ResourceAndRank rr = new ResourceAndRank(r,
+      RankedObject<Resource> rr = new RankedObject<>(r,
           (r.getClassTree() == null || r.getClassTree().size() <= 1) ? 0.0f : 0.5f);
       for (String variantLabel : r.getVariantLabel())
         // Check if it has dis-ambiguity.
@@ -83,8 +96,9 @@ public class EnhancedEntityExtractor {
     return ranked.stream().map(it -> it.resource).collect(Collectors.toList());
   }
 
-  private List<ResolvedEntityToken> extract(String context, List<TaggedWord> taggedWords,
-                                            boolean removeSubset, FilterType... filterTypes) {
+  private List<ResolvedEntityToken> extract(List<List<TaggedWord>> context,
+                                            List<TaggedWord> taggedWords, boolean removeSubset,
+                                            FilterType... filterTypes) {
     final List<MatchedResource> clientResult = client.extract(taggedWords, removeSubset, filterTypes);
     final List<ResourceAndIob> alignedResources = new ArrayList<>();
     for (int i = 0; i < taggedWords.size(); i++) alignedResources.add(null);
@@ -98,7 +112,7 @@ public class EnhancedEntityExtractor {
         if (matchedResource.getResource() != null) all.add(matchedResource.getResource());
         if (matchedResource.getAmbiguities() != null)
           all.addAll(matchedResource.getAmbiguities());
-        final List<Resource> rankedResources = rank(context, all);
+        final List<Resource> rankedResources = rank(all);
         if (rankedResources.isEmpty()) continue;
         alignedResources.set(i, new ResourceAndIob(rankedResources, i == matchedResource.getStart()));
       }
@@ -119,6 +133,148 @@ public class EnhancedEntityExtractor {
       result.add(token);
     }
     return result;
+  }
+
+  private Map<String, String> textsOfAllArticles = null;
+
+  private void loadTextOfAllArticles() {
+    try {
+      final Path path = ConfigReader.INSTANCE.getPath("wiki.folder.texts", "~/.pkg/data/texts");
+      final List<Path> files = PathWalker.INSTANCE.getPath(path, null);
+
+      Gson gson = new GsonBuilder().setPrettyPrinting().create();
+      Type type = new TypeToken<Map<String, String>>() {
+      }.getType();
+
+      textsOfAllArticles = new HashMap<>();
+      for (Path f : files) {
+        final Map<String, String> map = gson.fromJson(new BufferedReader(
+            new InputStreamReader(new FileInputStream(f.toFile()), "UTF-8")), type);
+        textsOfAllArticles.putAll(map);
+      }
+    } catch (Throwable throwable) {
+      throwable.printStackTrace();
+      textsOfAllArticles = new HashMap<>();
+    }
+  }
+
+  class WordCount {
+    private int count;
+
+    public WordCount(int count) {
+      this.count = count;
+    }
+  }
+
+  /**
+   * check whether a tag is good for similarity calculation or not. in this way we don't count
+   * stop words.
+   *
+   * @param tag POS tag of word
+   * @return true if it is a bad tag
+   */
+  private boolean isBadTag(String tag) {
+    return tag.equals("P") || tag.equals("CONJ") || tag.equals("PRO") || tag.equals("ADV");
+  }
+
+  private HashMap<String, HashMap<String, WordCount>> articleCache = new HashMap<>();
+
+  /**
+   * get words from article body. it has a cache to avoid calculation of frequently used articles.
+   *
+   * @param resource ambiguated resource
+   * @return words and its counts
+   */
+  private HashMap<String, WordCount> getArticleWords(ResolvedEntityTokenResource resource) {
+    final String url = resource.getIri();
+    if (!url.startsWith("http://fkg.iust.ac.ir/resource/")) return null;
+    String title = url.substring(31).replace("_", " ");
+    if (articleCache.containsKey(title)) return articleCache.get(title);
+    if (!textsOfAllArticles.containsKey(title)) return null;
+    final String body = textsOfAllArticles.get(title);
+    final HashMap<String, WordCount> articleWords = new HashMap<>();
+    final List<List<TaggedWord>> sentences = POSTagger.tagRaw(body);
+    for (List<TaggedWord> sentence : sentences)
+      for (TaggedWord token : sentence) {
+        if (isBadTag(token.tag())) continue;
+        final String word = token.word();
+        WordCount wc = articleWords.get(word);
+        if (wc == null) articleWords.put(word, new WordCount(1));
+        else wc.count = wc.count + 1;
+      }
+    articleCache.put(title, articleWords);
+    return articleWords;
+  }
+
+  /**
+   * calculates similarity between words of two texts
+   *
+   * @param text1 first text
+   * @param text2 second text
+   * @return similarity of two texts
+   */
+  private float calculateSimilarity(HashMap<String, WordCount> text1, Map<String, WordCount> text2) {
+    double text1SquareNorm = 0f, text2SquareNorm = 0f, product = 0.f;
+    for (WordCount count : text2.values()) text2SquareNorm += count.count * count.count;
+    for (String word1 : text1.keySet()) {
+      final int count1 = text1.get(word1).count;
+      text1SquareNorm += count1 * count1;
+      if (text2.containsKey(word1)) product += count1 * text2.get(word1).count;
+    }
+    return (float) (product / Math.sqrt(text1SquareNorm) * Math.sqrt(text2SquareNorm));
+  }
+
+  /**
+   * re-sort resources for each word with ambiguities based on its context
+   *
+   * @param sentences                      context of sentence.
+   * @param contextDisambiguationThreshold a threshold to retain ambiguities or not.
+   */
+  public void disambiguateByContext(List<List<ResolvedEntityToken>> sentences,
+                                    float contextDisambiguationThreshold) {
+    if (textsOfAllArticles == null) loadTextOfAllArticles();
+    if (textsOfAllArticles.isEmpty()) return;
+
+    final Map<String, WordCount> contextWords = new HashMap<>();
+    for (List<ResolvedEntityToken> sentence : sentences)
+      for (ResolvedEntityToken token : sentence) {
+        if (isBadTag(token.getPos())) continue;
+        final String word = token.getWord();
+        WordCount wc = contextWords.get(word);
+        if (wc == null) contextWords.put(word, new WordCount(1));
+        else wc.count = wc.count + 1;
+      }
+
+    for (List<ResolvedEntityToken> sentence : sentences)
+      for (ResolvedEntityToken token : sentence) {
+        if (token.getAmbiguities().isEmpty()) continue;
+        final List<RankedObject<ResolvedEntityTokenResource>> allResources = new ArrayList<>();
+        if (!token.getResource().getIri().contains("ابهام"))
+          allResources.add(new RankedObject<>(token.getResource(), 0));
+        for (ResolvedEntityTokenResource a : token.getAmbiguities())
+          if (!a.getIri().contains("ابهام")) allResources.add(new RankedObject<>(a, 0));
+        if (allResources.size() == 1) {
+          token.getAmbiguities().clear();
+          token.setResource(allResources.get(0).resource);
+          continue;
+        }
+        for (RankedObject<ResolvedEntityTokenResource> rr : allResources) {
+          if (rr.resource == null) continue;
+          final HashMap<String, WordCount> articleWords = getArticleWords(rr.resource);
+          if (articleWords != null) rr.rate = calculateSimilarity(articleWords, contextWords);
+        }
+        Collections.sort(allResources);
+
+        if (allResources.size() > 0) {
+          final RankedObject<ResolvedEntityTokenResource> r = allResources.get(0);
+          if (r.rate >= contextDisambiguationThreshold) token.setResource(r.resource);
+        }
+        token.getAmbiguities().clear();
+        for (int i = 1; i < allResources.size(); i++) {
+          final RankedObject<ResolvedEntityTokenResource> r = allResources.get(1);
+          if (r.rate >= contextDisambiguationThreshold) token.getAmbiguities().add(r.resource);
+        }
+      }
   }
 
   public void resolveByName(List<List<ResolvedEntityToken>> sentences) {
