@@ -10,6 +10,7 @@ import ir.ac.iust.dml.kg.raw.utils.PathWalker;
 import ir.ac.iust.dml.kg.resource.extractor.client.MatchedResource;
 import ir.ac.iust.dml.kg.resource.extractor.client.Resource;
 import ir.ac.iust.dml.kg.resource.extractor.client.ResourceType;
+import ir.ac.iust.nlp.jhazm.Stemmer;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -17,7 +18,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("WeakerAccess")
 public class EnhancedEntityExtractor {
@@ -60,42 +60,6 @@ public class EnhancedEntityExtractor {
     }
   }
 
-  private class RankedObject<T> implements Comparable<RankedObject<T>> {
-    T resource;
-    float rate = 0f;
-
-    public RankedObject(T resource, float rate) {
-      this.resource = resource;
-      this.rate = rate;
-    }
-
-    @Override
-    @SuppressWarnings("NotNull")
-    public int compareTo(RankedObject<T> rank) {
-      // Sort descending
-      return Float.compare(rank.rate, rate);
-    }
-  }
-
-  private List<Resource> rank(List<Resource> resources) {
-    final List<RankedObject<Resource>> ranked = new ArrayList<>();
-    // Resources with specific classes are more important than things.
-    for (Resource r : resources) {
-      RankedObject<Resource> rr = new RankedObject<>(r,
-          (r.getClassTree() == null || r.getClassTree().size() <= 1) ? 0.0f : 0.5f);
-      for (String variantLabel : r.getVariantLabel())
-        // Check if it has dis-ambiguity.
-        if (variantLabel.contains("(")) {
-          rr.rate = rr.rate - 1;
-          break;
-        }
-      ranked.add(rr);
-    }
-    Collections.sort(ranked);
-    if (ranked.isEmpty() || ranked.get(0).rate < 0) return new ArrayList<>();
-    return ranked.stream().map(it -> it.resource).collect(Collectors.toList());
-  }
-
   private List<ResolvedEntityToken> extract(List<List<TaggedWord>> context,
                                             List<TaggedWord> taggedWords, boolean removeSubset,
                                             FilterType... filterTypes) {
@@ -112,9 +76,8 @@ public class EnhancedEntityExtractor {
         if (matchedResource.getResource() != null) all.add(matchedResource.getResource());
         if (matchedResource.getAmbiguities() != null)
           all.addAll(matchedResource.getAmbiguities());
-        final List<Resource> rankedResources = rank(all);
-        if (rankedResources.isEmpty()) continue;
-        alignedResources.set(i, new ResourceAndIob(rankedResources, i == matchedResource.getStart()));
+        if (all.isEmpty()) continue;
+        alignedResources.set(i, new ResourceAndIob(all, i == matchedResource.getStart()));
       }
     }
 
@@ -128,7 +91,7 @@ public class EnhancedEntityExtractor {
       else {
         token.setIobType(aligned.start ? IobType.Beginning : IobType.Inside);
         token.setResource(convert(aligned.resource));
-        for (Resource ambiguities : aligned.ambiguities) token.getAmbiguities().add(convert(ambiguities));
+        for (Resource ambiguity : aligned.ambiguities) token.getAmbiguities().add(convert(ambiguity));
       }
       result.add(token);
     }
@@ -197,7 +160,7 @@ public class EnhancedEntityExtractor {
     for (List<TaggedWord> sentence : sentences)
       for (TaggedWord token : sentence) {
         if (isBadTag(token.tag())) continue;
-        final String word = token.word();
+        final String word = Stemmer.i().stem(token.word());
         WordCount wc = articleWords.get(word);
         if (wc == null) articleWords.put(word, new WordCount(1));
         else wc.count = wc.count + 1;
@@ -208,20 +171,56 @@ public class EnhancedEntityExtractor {
 
   /**
    * calculates similarity between words of two texts
-   *
    * @param text1 first text
    * @param text2 second text
+   * @param ignoreCount ignores count of word in each texts and assume 1 instead count
+   * @param word ignores word in product calculation
    * @return similarity of two texts
    */
-  private float calculateSimilarity(HashMap<String, WordCount> text1, Map<String, WordCount> text2) {
+  private float calculateSimilarity(HashMap<String, WordCount> text1, Map<String, WordCount> text2,
+                                    boolean ignoreCount, String word) {
     double text1SquareNorm = 0f, text2SquareNorm = 0f, product = 0.f;
-    for (WordCount count : text2.values()) text2SquareNorm += count.count * count.count;
+    if (ignoreCount) text1SquareNorm = text2.size();
+    else for (WordCount count : text2.values()) text2SquareNorm += count.count * count.count;
     for (String word1 : text1.keySet()) {
-      final int count1 = text1.get(word1).count;
-      text1SquareNorm += count1 * count1;
-      if (text2.containsKey(word1)) product += count1 * text2.get(word1).count;
+      if (ignoreCount) {
+        text1SquareNorm += 1;
+        if (!word1.equals(word) && text2.containsKey(word1)) product += 1;
+      } else {
+        final int count1 = text1.get(word1).count;
+        text1SquareNorm += count1 * count1;
+        if (!word1.equals(word) && text2.containsKey(word1)) product += count1 * text2.get(word1).count;
+      }
     }
-    return (float) (product / Math.sqrt(text1SquareNorm) * Math.sqrt(text2SquareNorm));
+    return (float) (product / (Math.sqrt(text1SquareNorm) * Math.sqrt(text2SquareNorm)));
+  }
+
+//  private List<Resource> rank(List<Resource> resources) {
+//    final List<RankedObject<Resource>> ranked = new ArrayList<>();
+//    // Resources with specific classes are more important than things.
+//    for (Resource r : resources) {
+//      RankedObject<Resource> rr = new RankedObject<>(r,
+//          (r.getClassTree() == null || r.getClassTree().size() <= 1) ? 0.0f : 0.5f);
+//      for (String variantLabel : r.getVariantLabel())
+//        // Check if it has dis-ambiguity.
+//        if (variantLabel.contains("(")) {
+//          rr.rate = rr.rate - 1;
+//          break;
+//        }
+//      ranked.add(rr);
+//    }
+//    Collections.sort(ranked);
+//    if (ranked.isEmpty() || ranked.get(0).rate < 0) return new ArrayList<>();
+//    return ranked.stream().map(it -> it.resource).collect(Collectors.toList());
+//  }
+
+  private void setDefaultRank(ResolvedEntityTokenResource resource) {
+    if (resource == null) return;
+    float rank = 0f;
+    if (resource.getClasses().size() > 1) rank += 0.2;
+//    if (resource.getIri().contains(")")) rank -= 0.3;
+    if (resource.getIri().contains("ابهام")) rank -= 0.5;
+    resource.setRank(rank);
   }
 
   /**
@@ -239,7 +238,7 @@ public class EnhancedEntityExtractor {
     for (List<ResolvedEntityToken> sentence : sentences)
       for (ResolvedEntityToken token : sentence) {
         if (isBadTag(token.getPos())) continue;
-        final String word = token.getWord();
+        final String word = Stemmer.i().stem(token.getWord());
         WordCount wc = contextWords.get(word);
         if (wc == null) contextWords.put(word, new WordCount(1));
         else wc.count = wc.count + 1;
@@ -248,31 +247,35 @@ public class EnhancedEntityExtractor {
     for (List<ResolvedEntityToken> sentence : sentences)
       for (ResolvedEntityToken token : sentence) {
         if (token.getAmbiguities().isEmpty()) continue;
-        final List<RankedObject<ResolvedEntityTokenResource>> allResources = new ArrayList<>();
-        if (!token.getResource().getIri().contains("ابهام"))
-          allResources.add(new RankedObject<>(token.getResource(), 0));
-        for (ResolvedEntityTokenResource a : token.getAmbiguities())
-          if (!a.getIri().contains("ابهام")) allResources.add(new RankedObject<>(a, 0));
+        final List<ResolvedEntityTokenResource> allResources = new ArrayList<>();
+        setDefaultRank(token.getResource());
+        allResources.add(token.getResource());
+        for (ResolvedEntityTokenResource a : token.getAmbiguities()) {
+          setDefaultRank(a);
+          allResources.add(a);
+        }
         if (allResources.size() == 1) {
           token.getAmbiguities().clear();
-          token.setResource(allResources.get(0).resource);
+          token.setResource(allResources.get(0));
           continue;
         }
-        for (RankedObject<ResolvedEntityTokenResource> rr : allResources) {
-          if (rr.resource == null) continue;
-          final HashMap<String, WordCount> articleWords = getArticleWords(rr.resource);
-          if (articleWords != null) rr.rate = calculateSimilarity(articleWords, contextWords);
+        for (ResolvedEntityTokenResource rr : allResources) {
+          if (rr == null) continue;
+          final HashMap<String, WordCount> articleWords = getArticleWords(rr);
+          if (articleWords != null)
+            rr.setRank(rr.getRank() + calculateSimilarity(articleWords, contextWords,
+                false, token.getWord()));
         }
         Collections.sort(allResources);
 
         if (allResources.size() > 0) {
-          final RankedObject<ResolvedEntityTokenResource> r = allResources.get(0);
-          if (r.rate >= contextDisambiguationThreshold) token.setResource(r.resource);
+          final ResolvedEntityTokenResource r = allResources.get(0);
+          if (r.getRank() >= contextDisambiguationThreshold) token.setResource(r);
         }
         token.getAmbiguities().clear();
         for (int i = 1; i < allResources.size(); i++) {
-          final RankedObject<ResolvedEntityTokenResource> r = allResources.get(1);
-          if (r.rate >= contextDisambiguationThreshold) token.getAmbiguities().add(r.resource);
+          final ResolvedEntityTokenResource r = allResources.get(i);
+          if (r.getRank() >= contextDisambiguationThreshold) token.getAmbiguities().add(r);
         }
       }
   }

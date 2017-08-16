@@ -1,12 +1,15 @@
 package ir.ac.iust.dml.kg.raw.extractor;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashSet;
 import java.util.Set;
 
 @SuppressWarnings("WeakerAccess")
-public class ResolvedEntityTokenResource {
+public class ResolvedEntityTokenResource implements Comparable<ResolvedEntityTokenResource> {
   private String iri;
   private boolean isResource;
+  private float rank;
   private String mainClass;
   private Set<String> classes = new HashSet<>();
 
@@ -16,6 +19,14 @@ public class ResolvedEntityTokenResource {
 
   void setIri(String iri) {
     this.iri = iri;
+  }
+
+  public float getRank() {
+    return rank;
+  }
+
+  public void setRank(float rank) {
+    this.rank = rank;
   }
 
   public boolean isResource() {
@@ -62,5 +73,13 @@ public class ResolvedEntityTokenResource {
     if (iri != null ? !iri.equals(that.iri) : that.iri != null) return false;
     if (mainClass != null ? !mainClass.equals(that.mainClass) : that.mainClass != null) return false;
     return classes != null ? classes.equals(that.classes) : that.classes == null;
+  }
+
+  /**
+   * sorts descending
+   */
+  @Override
+  public int compareTo(@NotNull ResolvedEntityTokenResource o) {
+    return Float.compare(o.rank, rank);
   }
 }
