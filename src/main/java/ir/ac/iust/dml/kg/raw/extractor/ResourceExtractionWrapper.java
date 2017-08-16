@@ -123,7 +123,7 @@ public class ResourceExtractionWrapper {
 
   private boolean isBadTagForMatchedResource(TaggedWord taggedWord) {
     final String tag = taggedWord.tag();
-    return tag.equals("P") || tag.equals("Pe") || tag.equals("CONJ") || tag.equals("POSTP") ||
-        tag.equals("V") || tag.equals("PRO") || tag.equals("ADV");
+    return tag.equals("P") || tag.equals("Pe") || tag.equals("CONJ") || tag.equals("POSTP") || tag.equals("PUNC") ||
+        tag.equals("DET") || tag.equals("NUM") || tag.equals("V") || tag.equals("PRO") || tag.equals("ADV");
   }
 }

@@ -102,7 +102,8 @@ public class EnhancedEntityExtractor {
 
   private void loadTextOfAllArticles() {
     try {
-      final Path path = ConfigReader.INSTANCE.getPath("wiki.folder.texts", "~/.pkg/data/texts");
+      final Path path = ConfigReader.INSTANCE.getPath("wiki.folder.abstracts",
+          "~/.pkg/data/abstracts");
       final List<Path> files = PathWalker.INSTANCE.getPath(path, null);
 
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -138,6 +139,7 @@ public class EnhancedEntityExtractor {
    */
   private boolean isBadTag(String tag) {
     return tag.equals("P") || tag.equals("Pe") || tag.equals("POSTP") ||
+        tag.equals("DET") || tag.equals("NUM") || tag.equals("PUNC") ||
         tag.equals("CONJ") || tag.equals("PRO") || tag.equals("ADV");
   }
 
@@ -182,7 +184,7 @@ public class EnhancedEntityExtractor {
   private float calculateSimilarity(HashMap<String, WordCount> text1, Map<String, WordCount> text2,
                                     boolean ignoreCount, String word) {
     double text1SquareNorm = 0f, text2SquareNorm = 0f, product = 0.f;
-    if (ignoreCount) text1SquareNorm = text2.size();
+    if (ignoreCount) text2SquareNorm = text2.size();
     else for (WordCount count : text2.values()) text2SquareNorm += count.count * count.count;
     for (String word1 : text1.keySet()) {
       if (ignoreCount) {
@@ -219,9 +221,12 @@ public class EnhancedEntityExtractor {
   private void setDefaultRank(ResolvedEntityTokenResource resource) {
     if (resource == null) return;
     float rank = 0f;
-    if (resource.getClasses().size() > 1) rank += 0.2;
+    if (resource.getClasses().size() > 1) rank += 0.05;
+    if (resource.getClasses().contains(prefix + "Village")) rank -= 0.4;
+    if (resource.getClasses().contains(prefix + "Book")) rank -= 0.4;
+    if (resource.getClasses().contains(prefix + "Film")) rank -= 0.4;
 //    if (resource.getIri().contains(")")) rank -= 0.3;
-    if (resource.getIri().contains("ابهام")) rank -= 0.5;
+    if (resource.getIri().contains("ابهام")) rank += 0.04;
     resource.setRank(rank);
   }
 
@@ -264,9 +269,12 @@ public class EnhancedEntityExtractor {
         for (ResolvedEntityTokenResource rr : allResources) {
           if (rr == null) continue;
           final HashMap<String, WordCount> articleWords = getArticleWords(rr);
-          if (articleWords != null)
-            rr.setRank(rr.getRank() + calculateSimilarity(articleWords, contextWords,
-                false, token.getWord()));
+          if (articleWords != null) {
+            final float similarity = calculateSimilarity(articleWords, contextWords,
+                true, Stemmer.i().stem(token.getWord()));
+            System.out.println(similarity);
+            rr.setRank(rr.getRank() + similarity);
+          }
         }
         Collections.sort(allResources);
 
@@ -287,7 +295,7 @@ public class EnhancedEntityExtractor {
     for (List<ResolvedEntityToken> sentence : sentences)
       for (ResolvedEntityToken token : sentence) {
         final String pos = token.getPos();
-        if (cache.containsKey(token.getWord())) {
+        if (token.getResource() == null && cache.containsKey(token.getWord())) {
           token.getAmbiguities().add(0, token.getResource());
           token.setResource(cache.get(token.getWord()));
         }
