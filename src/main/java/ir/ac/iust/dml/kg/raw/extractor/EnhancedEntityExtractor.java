@@ -102,8 +102,8 @@ public class EnhancedEntityExtractor {
 
   private void loadTextOfAllArticles() {
     try {
-      final Path path = ConfigReader.INSTANCE.getPath("wiki.folder.abstracts",
-          "~/.pkg/data/abstracts");
+      final Path path = ConfigReader.INSTANCE.getPath("wiki.folder.texts",
+          "~/.pkg/data/texts");
       final List<Path> files = PathWalker.INSTANCE.getPath(path, null);
 
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -223,7 +223,7 @@ public class EnhancedEntityExtractor {
     if (resource.getClasses().contains(prefix + "Book")) rank -= 0.6;
     if (resource.getClasses().contains(prefix + "Film")) rank -= 0.6;
 //    if (resource.getIri().contains(")")) rank -= 0.3;
-    if (resource.getIri().contains("ابهام")) rank += 0.04;
+    if (resource.getIri().contains("ابهام")) rank -= 1;
     resource.setRank(rank);
   }
 
@@ -272,7 +272,7 @@ public class EnhancedEntityExtractor {
           if (articleWords != null) {
             float similarity = calculateSimilarity(articleWords, contextWords,
                 true, Stemmer.i().stem(token.getWord()));
-            if (token.getWord().equals(title)) similarity += 1;
+            if (token.getWord().equals(title)) similarity += 0.2;
             rr.setRank(rr.getRank() + similarity);
           }
         }
