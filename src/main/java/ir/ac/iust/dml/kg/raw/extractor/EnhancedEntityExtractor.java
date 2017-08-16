@@ -137,7 +137,8 @@ public class EnhancedEntityExtractor {
    * @return true if it is a bad tag
    */
   private boolean isBadTag(String tag) {
-    return tag.equals("P") || tag.equals("CONJ") || tag.equals("PRO") || tag.equals("ADV");
+    return tag.equals("P") || tag.equals("Pe") || tag.equals("POSTP") ||
+        tag.equals("CONJ") || tag.equals("PRO") || tag.equals("ADV");
   }
 
   private HashMap<String, HashMap<String, WordCount>> articleCache = new HashMap<>();
@@ -171,10 +172,11 @@ public class EnhancedEntityExtractor {
 
   /**
    * calculates similarity between words of two texts
-   * @param text1 first text
-   * @param text2 second text
+   *
+   * @param text1       first text
+   * @param text2       second text
    * @param ignoreCount ignores count of word in each texts and assume 1 instead count
-   * @param word ignores word in product calculation
+   * @param word        ignores word in product calculation
    * @return similarity of two texts
    */
   private float calculateSimilarity(HashMap<String, WordCount> text1, Map<String, WordCount> text2,

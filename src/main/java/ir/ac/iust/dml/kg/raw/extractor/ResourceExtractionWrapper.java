@@ -84,7 +84,7 @@ public class ResourceExtractionWrapper {
 
   private boolean mustFilter(List<TaggedWord> taggedWords, MatchedResource matchedResource,
                              Resource resource, FilterType filterType) {
-    if(resource == null) return true;
+    if (resource == null) return true;
     switch (filterType) {
       case AnyResources:
         if (resource.getType() == null || resource.getType() == ResourceType.Resource) return true;
@@ -123,6 +123,7 @@ public class ResourceExtractionWrapper {
 
   private boolean isBadTagForMatchedResource(TaggedWord taggedWord) {
     final String tag = taggedWord.tag();
-    return tag.equals("P") || tag.equals("CONJ") || tag.equals("V") || tag.equals("PRO") || tag.equals("ADV");
+    return tag.equals("P") || tag.equals("Pe") || tag.equals("CONJ") || tag.equals("POSTP") ||
+        tag.equals("V") || tag.equals("PRO") || tag.equals("ADV");
   }
 }
