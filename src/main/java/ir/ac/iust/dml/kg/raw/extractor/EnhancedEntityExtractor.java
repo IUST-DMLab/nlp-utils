@@ -148,13 +148,10 @@ public class EnhancedEntityExtractor {
   /**
    * get words from article body. it has a cache to avoid calculation of frequently used articles.
    *
-   * @param resource ambiguated resource
+   * @param title resource title
    * @return words and its counts
    */
-  private HashMap<String, WordCount> getArticleWords(ResolvedEntityTokenResource resource) {
-    final String url = resource.getIri();
-    if (!url.startsWith("http://fkg.iust.ac.ir/resource/")) return null;
-    String title = url.substring(31).replace("_", " ");
+  private HashMap<String, WordCount> getArticleWords(String title) {
     if (articleCache.containsKey(title)) return articleCache.get(title);
     if (!textsOfAllArticles.containsKey(title)) return null;
     final String body = textsOfAllArticles.get(title);
@@ -222,7 +219,7 @@ public class EnhancedEntityExtractor {
     if (resource == null) return;
     float rank = 0f;
     if (resource.getClasses().size() > 1) rank += 0.05;
-    if (resource.getClasses().contains(prefix + "Village")) rank -= 0.8;
+    if (resource.getClasses().contains(prefix + "Village")) rank -= 0.6;
     if (resource.getClasses().contains(prefix + "Book")) rank -= 0.6;
     if (resource.getClasses().contains(prefix + "Film")) rank -= 0.6;
 //    if (resource.getIri().contains(")")) rank -= 0.3;
@@ -268,11 +265,14 @@ public class EnhancedEntityExtractor {
         }
         for (ResolvedEntityTokenResource rr : allResources) {
           if (rr == null) continue;
-          final HashMap<String, WordCount> articleWords = getArticleWords(rr);
+          final String url = rr.getIri();
+          if (!url.startsWith("http://fkg.iust.ac.ir/resource/")) continue;
+          String title = url.substring(31).replace("_", " ");
+          final HashMap<String, WordCount> articleWords = getArticleWords(title);
           if (articleWords != null) {
-            final float similarity = calculateSimilarity(articleWords, contextWords,
+            float similarity = calculateSimilarity(articleWords, contextWords,
                 true, Stemmer.i().stem(token.getWord()));
-            System.out.println(similarity);
+            if (token.getWord().equals(title)) similarity += 1;
             rr.setRank(rr.getRank() + similarity);
           }
         }
