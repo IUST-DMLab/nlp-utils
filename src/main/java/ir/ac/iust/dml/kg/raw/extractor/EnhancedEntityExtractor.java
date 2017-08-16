@@ -10,7 +10,8 @@ import ir.ac.iust.dml.kg.raw.utils.PathWalker;
 import ir.ac.iust.dml.kg.resource.extractor.client.MatchedResource;
 import ir.ac.iust.dml.kg.resource.extractor.client.Resource;
 import ir.ac.iust.dml.kg.resource.extractor.client.ResourceType;
-import ir.ac.iust.nlp.jhazm.Stemmer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -23,6 +24,7 @@ import java.util.*;
 public class EnhancedEntityExtractor {
 
   private final ResourceExtractionWrapper client;
+  private static final Logger logger = LoggerFactory.getLogger(EnhancedEntityExtractor.class);
 
   public EnhancedEntityExtractor(String serviceAddress) {
     this.client = new ResourceExtractionWrapper(serviceAddress);
@@ -140,7 +142,7 @@ public class EnhancedEntityExtractor {
   private boolean isBadTag(String tag) {
     return tag.equals("P") || tag.equals("Pe") || tag.equals("POSTP") ||
         tag.equals("DET") || tag.equals("NUM") || tag.equals("PUNC") ||
-        tag.equals("CONJ") || tag.equals("PRO") || tag.equals("ADV");
+        tag.equals("CONJ") || tag.equals("PRO") || tag.equals("ADV") || tag.equals("V");
   }
 
   private HashMap<String, HashMap<String, WordCount>> articleCache = new HashMap<>();
@@ -157,14 +159,18 @@ public class EnhancedEntityExtractor {
     final String body = textsOfAllArticles.get(title);
     final HashMap<String, WordCount> articleWords = new HashMap<>();
     final List<List<TaggedWord>> sentences = POSTagger.tagRaw(body);
-    for (List<TaggedWord> sentence : sentences)
+    int sentenceNumber = 0;
+    for (List<TaggedWord> sentence : sentences) {
+      if (sentenceNumber > 20) break;
+      sentenceNumber++;
       for (TaggedWord token : sentence) {
         if (isBadTag(token.tag())) continue;
-        final String word = Stemmer.i().stem(token.word());
+        final String word = token.word();
         WordCount wc = articleWords.get(word);
         if (wc == null) articleWords.put(word, new WordCount(1));
         else wc.count = wc.count + 1;
       }
+    }
     articleCache.put(title, articleWords);
     return articleWords;
   }
@@ -196,34 +202,16 @@ public class EnhancedEntityExtractor {
     return (float) (product / (Math.sqrt(text1SquareNorm) * Math.sqrt(text2SquareNorm)));
   }
 
-//  private List<Resource> rank(List<Resource> resources) {
-//    final List<RankedObject<Resource>> ranked = new ArrayList<>();
-//    // Resources with specific classes are more important than things.
-//    for (Resource r : resources) {
-//      RankedObject<Resource> rr = new RankedObject<>(r,
-//          (r.getClassTree() == null || r.getClassTree().size() <= 1) ? 0.0f : 0.5f);
-//      for (String variantLabel : r.getVariantLabel())
-//        // Check if it has dis-ambiguity.
-//        if (variantLabel.contains("(")) {
-//          rr.rate = rr.rate - 1;
-//          break;
-//        }
-//      ranked.add(rr);
-//    }
-//    Collections.sort(ranked);
-//    if (ranked.isEmpty() || ranked.get(0).rate < 0) return new ArrayList<>();
-//    return ranked.stream().map(it -> it.resource).collect(Collectors.toList());
-//  }
-
-  private void setDefaultRank(ResolvedEntityTokenResource resource) {
+  private void setDefaultRankMultiplier(ResolvedEntityTokenResource resource) {
     if (resource == null) return;
-    float rank = 0f;
-    if (resource.getClasses().size() > 1) rank += 0.05;
-    if (resource.getClasses().contains(prefix + "Village")) rank -= 0.6;
-    if (resource.getClasses().contains(prefix + "Book")) rank -= 0.6;
-    if (resource.getClasses().contains(prefix + "Film")) rank -= 0.6;
+    float rank = 1f;
+//    if (resource.getClasses().size() > 1) rank *= 1.1;
+//    if (resource.getClasses().contains(prefix + "Thing")) rank *= 0.5;
+    if (resource.getClasses().contains(prefix + "Village")) rank *= 0.1;
+    if (resource.getClasses().contains(prefix + "Work")) rank *= 0.1;
+    if (resource.getClasses().contains(prefix + "Film")) rank *= 0.1;
 //    if (resource.getIri().contains(")")) rank -= 0.3;
-    if (resource.getIri().contains("ابهام")) rank -= 1;
+    if (resource.getIri().contains("ابهام")) rank *= 0.01;
     resource.setRank(rank);
   }
 
@@ -242,7 +230,7 @@ public class EnhancedEntityExtractor {
     for (List<ResolvedEntityToken> sentence : sentences)
       for (ResolvedEntityToken token : sentence) {
         if (isBadTag(token.getPos())) continue;
-        final String word = Stemmer.i().stem(token.getWord());
+        final String word = token.getWord();
         WordCount wc = contextWords.get(word);
         if (wc == null) contextWords.put(word, new WordCount(1));
         else wc.count = wc.count + 1;
@@ -252,10 +240,10 @@ public class EnhancedEntityExtractor {
       for (ResolvedEntityToken token : sentence) {
         if (token.getAmbiguities().isEmpty()) continue;
         final List<ResolvedEntityTokenResource> allResources = new ArrayList<>();
-        setDefaultRank(token.getResource());
+        setDefaultRankMultiplier(token.getResource());
         allResources.add(token.getResource());
         for (ResolvedEntityTokenResource a : token.getAmbiguities()) {
-          setDefaultRank(a);
+          setDefaultRankMultiplier(a);
           allResources.add(a);
         }
         if (allResources.size() == 1) {
@@ -269,12 +257,14 @@ public class EnhancedEntityExtractor {
           if (!url.startsWith("http://fkg.iust.ac.ir/resource/")) continue;
           String title = url.substring(31).replace("_", " ");
           final HashMap<String, WordCount> articleWords = getArticleWords(title);
+          float similarity;
           if (articleWords != null) {
-            float similarity = calculateSimilarity(articleWords, contextWords,
-                true, Stemmer.i().stem(token.getWord()));
-            if (token.getWord().equals(title)) similarity += 0.2;
-            rr.setRank(rr.getRank() + similarity);
-          }
+            similarity = calculateSimilarity(articleWords, contextWords,
+                true, token.getWord());
+            logger.info(String.format("similarity between %s and %s is %f.", token.getWord(), title, similarity));
+          } else similarity = 0.001f;
+          if (token.getWord().equals(title)) similarity *= 3;
+          rr.setRank(rr.getRank() * similarity);
         }
         Collections.sort(allResources);
 
