@@ -301,4 +301,8 @@ public class CorefTest {
         }
         return coreLabels;
     }
+
+    public void testCorefSpeed() {
+
+    }
 }
