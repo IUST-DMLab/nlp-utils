@@ -226,8 +226,18 @@ public class EnhancedEntityExtractor {
     if (textsOfAllArticles == null) loadTextOfAllArticles();
     if (textsOfAllArticles.isEmpty()) return;
 
-    final Map<String, WordCount> contextWords = new HashMap<>();
-    for (List<ResolvedEntityToken> sentence : sentences)
+//    final Map<String, WordCount> contextWords = new HashMap<>();
+//    for (List<ResolvedEntityToken> sentence : sentences)
+//      for (ResolvedEntityToken token : sentence) {
+//        if (isBadTag(token.getPos())) continue;
+//        final String word = token.getWord();
+//        WordCount wc = contextWords.get(word);
+//        if (wc == null) contextWords.put(word, new WordCount(1));
+//        else wc.count = wc.count + 1;
+//      }
+
+    for (List<ResolvedEntityToken> sentence : sentences) {
+      final Map<String, WordCount> contextWords = new HashMap<>();
       for (ResolvedEntityToken token : sentence) {
         if (isBadTag(token.getPos())) continue;
         final String word = token.getWord();
@@ -236,7 +246,6 @@ public class EnhancedEntityExtractor {
         else wc.count = wc.count + 1;
       }
 
-    for (List<ResolvedEntityToken> sentence : sentences)
       for (ResolvedEntityToken token : sentence) {
         if (token.getAmbiguities().isEmpty()) continue;
         final List<ResolvedEntityTokenResource> allResources = new ArrayList<>();
@@ -262,6 +271,7 @@ public class EnhancedEntityExtractor {
             similarity = calculateSimilarity(articleWords, contextWords,
                 true, token.getWord());
             logger.info(String.format("similarity between %s and %s is %f.", token.getWord(), title, similarity));
+            if (similarity == 0) similarity = 0.001f;
           } else similarity = 0.001f;
           if (token.getWord().equals(title)) similarity *= 3;
           rr.setRank(rr.getRank() * similarity);
@@ -278,6 +288,7 @@ public class EnhancedEntityExtractor {
           if (r.getRank() >= contextDisambiguationThreshold) token.getAmbiguities().add(r);
         }
       }
+    }
   }
 
   public void resolveByName(List<List<ResolvedEntityToken>> sentences) {
