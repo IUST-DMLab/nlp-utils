@@ -32,6 +32,8 @@ public class ResourceExtractionWrapper {
   }
 
   public List<MatchedResource> extract(List<TaggedWord> taggedWords, boolean removeSubset, FilterType... filterTypes) {
+    for (TaggedWord taggedWord : taggedWords)
+      if (taggedWord.word().contains(" ")) taggedWord.setWord(taggedWord.word().replace(' ', '\u200C'));
     final String text = taggedWords.stream().map(Word::word).collect(Collectors.joining(" "));
     final List<MatchedResource> result = client.match(text, removeSubset);
     for (MatchedResource resource : result) if (resource.getEnd() >= taggedWords.size()) return new ArrayList<>();
