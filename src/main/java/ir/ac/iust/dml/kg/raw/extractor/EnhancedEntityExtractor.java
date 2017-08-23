@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -363,7 +364,13 @@ public class EnhancedEntityExtractor {
     final List<Path> files = PathWalker.INSTANCE.getPath(path, new Regex(pattern));
     for (int fileIndex = 0; fileIndex < files.size(); fileIndex++) {
       final Path file = files.get(fileIndex);
+      final Path outputPath = file.getParent().resolve(file.getFileName() + ".json");
       logger.warn(String.format("writing file %s (file %d of %d) ...", file.toAbsolutePath(), fileIndex, files.size()));
+      if (Files.exists(outputPath)) {
+        logger.warn(String.format("file %s is existed. Skipping %s ...",
+            outputPath.toAbsolutePath(), file.toAbsolutePath()));
+        continue;
+      }
       try (BufferedReader in =
                new BufferedReader(new InputStreamReader(new FileInputStream(file.toFile()),
                    "UTF8"))) {
@@ -390,7 +397,7 @@ public class EnhancedEntityExtractor {
             th.printStackTrace();
           }
         }
-        exportToFile(file.getParent().resolve(file.getFileName() + ".json"), list);
+        exportToFile(outputPath, list);
       } catch (Throwable e) {
         e.printStackTrace();
       }
