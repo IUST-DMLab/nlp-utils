@@ -372,22 +372,26 @@ public class EnhancedEntityExtractor {
           final String line = in.readLine();
           logger.info(line);
           if (line == null) break;
-          final List<List<ResolvedEntityToken>> extracted = extract(line);
-          if (disambiguateByContext) disambiguateByContext(extracted, contextDisambiguationThreshold);
-          if (resolveByName) resolveByName(extracted);
-          if (resolvePronouns) resolvePronouns(extracted);
-          if (maxAmbiguities != null) {
-            for (List<ResolvedEntityToken> sentence : extracted)
-              for (ResolvedEntityToken token : sentence)
-                if (token.getAmbiguities().size() > maxAmbiguities) {
-                  for (int i = token.getAmbiguities().size() - 1; i > 1; i--)
-                    token.getAmbiguities().remove(i);
-                }
+          try {
+            final List<List<ResolvedEntityToken>> extracted = extract(line);
+            if (disambiguateByContext) disambiguateByContext(extracted, contextDisambiguationThreshold);
+            if (resolveByName) resolveByName(extracted);
+            if (resolvePronouns) resolvePronouns(extracted);
+            if (maxAmbiguities != null) {
+              for (List<ResolvedEntityToken> sentence : extracted)
+                for (ResolvedEntityToken token : sentence)
+                  if (token.getAmbiguities().size() > maxAmbiguities) {
+                    for (int i = token.getAmbiguities().size() - 1; i > 1; i--)
+                      token.getAmbiguities().remove(i);
+                  }
+            }
+            list.addAll(extracted);
+          } catch (Throwable th) {
+            th.printStackTrace();
           }
-          list.addAll(extracted);
         }
         exportToFile(file.getParent().resolve(file.getFileName() + ".json"), list);
-      } catch (IOException e) {
+      } catch (Throwable e) {
         e.printStackTrace();
       }
     }
