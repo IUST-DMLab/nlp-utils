@@ -13,6 +13,10 @@ public class EnhancedEntityExtractorTester {
     final EnhancedEntityExtractor extractor = new EnhancedEntityExtractor();
     final String sample = "من مجید هستم نه علی لاریجانی که نویسنده است و در روستای ابیانه زاده شده است.";
     final List<List<ResolvedEntityToken>> result = extractor.extract(sample);
+    extractor.dependencyParse(result);
+    for (List<ResolvedEntityToken> sentence : result)
+      for (ResolvedEntityToken token : sentence)
+        assert token.getDep() != null;
     final Path file = ConfigReader.INSTANCE.getPath("test.mode.export.triples", "~/raw/test.json");
     final boolean exported = EnhancedEntityExtractor.exportToFile(file, result);
     assert exported;

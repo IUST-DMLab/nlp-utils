@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import edu.stanford.nlp.ling.TaggedWord;
+import ir.ac.iust.dml.kg.raw.DependencyParser;
 import ir.ac.iust.dml.kg.raw.POSTagger;
 import ir.ac.iust.dml.kg.raw.utils.ConfigReader;
 import ir.ac.iust.dml.kg.raw.utils.PathWalker;
@@ -11,6 +12,8 @@ import ir.ac.iust.dml.kg.resource.extractor.client.MatchedResource;
 import ir.ac.iust.dml.kg.resource.extractor.client.Resource;
 import ir.ac.iust.dml.kg.resource.extractor.client.ResourceType;
 import kotlin.text.Regex;
+import org.maltparser.concurrent.graph.ConcurrentDependencyGraph;
+import org.maltparser.concurrent.graph.ConcurrentDependencyNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -346,6 +349,28 @@ public class EnhancedEntityExtractor {
         if (word.equals("اینجا") || word.equals("آنجا")) setResources(token, allPlaces);
         if (word.equals("آن‌ها") || word.equals("آنها")) setResources(token, allOrganizations);
       }
+  }
+
+  public void dependencyParse(List<List<ResolvedEntityToken>> sentences) {
+    for (List<ResolvedEntityToken> sentence : sentences) {
+      List<TaggedWord> taggedWords = new ArrayList<>();
+      for (ResolvedEntityToken token : sentence) taggedWords.add(new TaggedWord(token.getWord(), token.getPos()));
+      final ConcurrentDependencyGraph parseTree = DependencyParser.parse(taggedWords);
+      if (parseTree != null && parseTree.nTokenNodes() == taggedWords.size()) {
+        for (int i = 1; i <= parseTree.nTokenNodes(); i++) {
+          final ConcurrentDependencyNode node = parseTree.getDependencyNode(i);
+          DependencyInformation info = new DependencyInformation();
+          info.setPosition(Integer.parseInt(node.getLabel("ID")));
+          info.setLemma(node.getLabel("LEMMA"));
+          info.setcPOS(node.getLabel("CPOSTAG"));
+          info.setFeatures(node.getLabel("FEATS"));
+          String headIdLabel = node.getHead().getLabel("ID");
+          info.setHead(headIdLabel.isEmpty() ? 0 : Integer.parseInt(headIdLabel));
+          info.setRelation(node.getLabel("DEPREL"));
+          sentence.get(i - 1).setDep(info);
+        }
+      }
+    }
   }
 
   private ResolvedEntityTokenResource convert(Resource resource) {

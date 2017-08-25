@@ -7,6 +7,7 @@ import java.util.List;
 public class ResolvedEntityToken {
   private String word;
   private String pos;
+  private DependencyInformation dep;
   private IobType iobType;
   private ResolvedEntityTokenResource resource;
   private List<ResolvedEntityTokenResource> ambiguities = new ArrayList<>();
@@ -25,6 +26,14 @@ public class ResolvedEntityToken {
 
   void setPos(String pos) {
     this.pos = pos;
+  }
+
+  public DependencyInformation getDep() {
+    return dep;
+  }
+
+  public void setDep(DependencyInformation dep) {
+    this.dep = dep;
   }
 
   public IobType getIobType() {
