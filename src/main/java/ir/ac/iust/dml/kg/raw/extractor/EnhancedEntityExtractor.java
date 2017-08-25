@@ -382,14 +382,60 @@ public class EnhancedEntityExtractor {
     return converted;
   }
 
+  private List<List<ResolvedEntityToken>> extract(Integer maxAmbiguities, boolean disambiguateByContext,
+                                                  Float contextDisambiguationThreshold, boolean resolveByName,
+                                                  boolean resolvePronouns, boolean buildDependencies, String value) {
+    final List<List<ResolvedEntityToken>> extracted = extract(value);
+    if (disambiguateByContext) disambiguateByContext(extracted, contextDisambiguationThreshold);
+    if (resolveByName) resolveByName(extracted);
+    if (resolvePronouns) resolvePronouns(extracted);
+    if (buildDependencies) dependencyParse(extracted);
+    if (maxAmbiguities != null) {
+      for (List<ResolvedEntityToken> sentence : extracted)
+        for (ResolvedEntityToken token : sentence)
+          if (token.getAmbiguities().size() > maxAmbiguities) {
+            for (int i = token.getAmbiguities().size() - 1; i > 1; i--)
+              token.getAmbiguities().remove(i);
+          }
+    }
+    return extracted;
+  }
+
+  public void exportWiki(Path path, Integer maxAmbiguities,
+                         boolean disambiguateByContext, Float contextDisambiguationThreshold,
+                         boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
+    final List<Path> files = PathWalker.INSTANCE.getPath(path, new Regex("\\d+\\.json"));
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    Type type = new TypeToken<Map<String, String>>() {
+    }.getType();
+    for (Path f : files) {
+      final Path outputFolder = f.getParent().resolve(f.getFileName() + "_output");
+      if (Files.notExists(outputFolder)) Files.createDirectories(outputFolder);
+      final Map<String, String> map = gson.fromJson(new BufferedReader(
+          new InputStreamReader(new FileInputStream(f.toFile()), "UTF-8")), type);
+      for (final String key : map.keySet()) {
+        final String value = map.get(key);
+        try {
+          final List<List<ResolvedEntityToken>> result = extract(maxAmbiguities, disambiguateByContext,
+              contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies, value);
+          exportToFile(outputFolder.resolve(key + ".json"), result);
+        } catch (Throwable th) {
+          th.printStackTrace();
+        }
+      }
+    }
+  }
+
   public void exportFolder(Path path, String pattern, Integer maxAmbiguities,
                            boolean disambiguateByContext, Float contextDisambiguationThreshold,
-                           boolean resolveByName, boolean resolvePronouns) {
+                           boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
     if (pattern == null) pattern = ".*\\.txt";
     final List<Path> files = PathWalker.INSTANCE.getPath(path, new Regex(pattern));
     for (int fileIndex = 0; fileIndex < files.size(); fileIndex++) {
       final Path file = files.get(fileIndex);
-      final Path outputPath = file.getParent().resolve(file.getFileName() + ".json");
+      final Path outputFolder = file.getParent().resolve("output");
+      if (Files.notExists(outputFolder)) Files.createDirectories(outputFolder);
+      final Path outputPath = outputFolder.resolve(file.getFileName() + ".json");
       logger.warn(String.format("writing file %s (file %d of %d) ...", file.toAbsolutePath(), fileIndex, files.size()));
       if (Files.exists(outputPath)) {
         logger.warn(String.format("file %s is existed. Skipping %s ...",
@@ -405,18 +451,8 @@ public class EnhancedEntityExtractor {
           logger.info(line);
           if (line == null) break;
           try {
-            final List<List<ResolvedEntityToken>> extracted = extract(line);
-            if (disambiguateByContext) disambiguateByContext(extracted, contextDisambiguationThreshold);
-            if (resolveByName) resolveByName(extracted);
-            if (resolvePronouns) resolvePronouns(extracted);
-            if (maxAmbiguities != null) {
-              for (List<ResolvedEntityToken> sentence : extracted)
-                for (ResolvedEntityToken token : sentence)
-                  if (token.getAmbiguities().size() > maxAmbiguities) {
-                    for (int i = token.getAmbiguities().size() - 1; i > 1; i--)
-                      token.getAmbiguities().remove(i);
-                  }
-            }
+            final List<List<ResolvedEntityToken>> extracted = extract(maxAmbiguities, disambiguateByContext,
+                contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies, line);
             list.addAll(extracted);
           } catch (Throwable th) {
             th.printStackTrace();
