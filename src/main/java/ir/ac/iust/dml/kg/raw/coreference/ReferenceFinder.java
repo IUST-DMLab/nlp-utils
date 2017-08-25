@@ -69,7 +69,7 @@ public class ReferenceFinder {
         tp.preProcess(annotation);
         tp.annotateNamedEntity(annotation);
 
-      annotateCoreference(annotation);
+        extractChainsFromRawText(annotation);
 
       StringBuilder outputText = new StringBuilder();
         for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
