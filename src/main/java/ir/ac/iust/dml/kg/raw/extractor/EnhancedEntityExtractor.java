@@ -112,7 +112,7 @@ public class EnhancedEntityExtractor {
     try {
       final Path path = ConfigReader.INSTANCE.getPath("wiki.folder.texts",
           "~/.pkg/data/texts");
-      final List<Path> files = PathWalker.INSTANCE.getPath(path, null);
+      final List<Path> files = PathWalker.INSTANCE.getPath(path, (Regex) null);
 
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
       Type type = new TypeToken<Map<String, String>>() {

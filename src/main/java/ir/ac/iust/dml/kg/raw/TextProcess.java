@@ -7,6 +7,7 @@ import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.util.ArrayCoreMap;
 import edu.stanford.nlp.util.CoreMap;
 import ir.ac.iust.dml.kg.raw.coreference.CorefUtility;
+import ir.ac.iust.dml.kg.raw.extractor.ResolvedEntityToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -171,4 +172,16 @@ public class TextProcess {
     }
 
 
+    public Annotation getAnnotationFromEntityTokens(List<ResolvedEntityToken> sentence) {
+        Annotation annotation = new Annotation();
+        List<CoreLabel> coreLabels = new ArrayList<CoreLabel>();
+        for (ResolvedEntityToken resolvedEntityToken : sentence) {
+            CoreLabel coreLabel = new CoreLabel();
+            coreLabel.setWord(resolvedEntityToken.getWord());
+            coreLabel.setTag(resolvedEntityToken.getPos());
+            coreLabel.setOriginalText(resolvedEntityToken.getWord());
+            coreLabel.setWord(resolvedEntityToken.getWord());
+        }
+        return annotation;
+    }
 }
