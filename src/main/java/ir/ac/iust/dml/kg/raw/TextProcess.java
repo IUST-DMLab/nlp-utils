@@ -172,16 +172,38 @@ public class TextProcess {
     }
 
 
-    public Annotation getAnnotationFromEntityTokens(List<ResolvedEntityToken> sentence) {
+    public Annotation getAnnotationFromEntityTokens(List<List<ResolvedEntityToken>> tokens) {
         Annotation annotation = new Annotation();
-        List<CoreLabel> coreLabels = new ArrayList<CoreLabel>();
-        for (ResolvedEntityToken resolvedEntityToken : sentence) {
-            CoreLabel coreLabel = new CoreLabel();
-            coreLabel.setWord(resolvedEntityToken.getWord());
-            coreLabel.setTag(resolvedEntityToken.getPos());
-            coreLabel.setOriginalText(resolvedEntityToken.getWord());
-            coreLabel.setWord(resolvedEntityToken.getWord());
+        int tokenIndex = 0;
+        List<CoreLabel> allCoreLabels = new ArrayList<CoreLabel>();
+        List<CoreMap> allCoreMaps = new ArrayList<CoreMap>();
+        for (List<ResolvedEntityToken> resolvedEntityTokens : tokens) {
+            CoreMap sentenceCoreMap = new ArrayCoreMap();
+            List<CoreLabel> sentenceCoreLabels = new ArrayList<CoreLabel>();
+            for (ResolvedEntityToken resolvedEntityToken : resolvedEntityTokens) {
+                CoreLabel coreLabel = new CoreLabel();
+                coreLabel.setWord(resolvedEntityToken.getWord());
+                coreLabel.setTag(resolvedEntityToken.getPos());
+                coreLabel.setOriginalText(resolvedEntityToken.getWord());
+                coreLabel.setWord(resolvedEntityToken.getWord());
+                coreLabel.set(CoreAnnotations.IndexAnnotation.class, tokenIndex);
+                tokenIndex++;
+
+            }
+            sentenceCoreMap.set(CoreAnnotations.TokensAnnotation.class, sentenceCoreLabels);
+            allCoreLabels.addAll(sentenceCoreLabels);
+            allCoreMaps.add(sentenceCoreMap);
+
         }
+
+        annotation.set(CoreAnnotations.TokensAnnotation.class, allCoreLabels);
+        annotation.set(CoreAnnotations.SentencesAnnotation.class, allCoreMaps);
+
+
+
+
+
+
         return annotation;
     }
 }
