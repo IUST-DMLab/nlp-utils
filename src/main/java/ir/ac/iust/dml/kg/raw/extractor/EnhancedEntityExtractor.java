@@ -112,7 +112,7 @@ public class EnhancedEntityExtractor {
     try {
       final Path path = ConfigReader.INSTANCE.getPath("wiki.folder.texts",
           "~/.pkg/data/texts");
-      final List<Path> files = PathWalker.INSTANCE.getPath(path, (Regex) null);
+      final List<Path> files = PathWalker.INSTANCE.getPath(path);
 
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
       Type type = new TypeToken<Map<String, String>>() {
@@ -275,7 +275,7 @@ public class EnhancedEntityExtractor {
           if (articleWords != null) {
             similarity = calculateSimilarity(contextWords, articleWords,
                 true, token.getWord());
-            logger.info(String.format("similarity between %s and %s is %f.", token.getWord(), title, similarity));
+            logger.trace(String.format("similarity between %s and %s is %f.", token.getWord(), title, similarity));
             if (similarity == 0) similarity = 0.001f;
           } else similarity = 0f;
           if (token.getWord().equals(title)) similarity *= 3;
