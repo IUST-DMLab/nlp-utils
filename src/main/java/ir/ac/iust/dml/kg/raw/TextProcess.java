@@ -177,19 +177,26 @@ public class TextProcess {
         int tokenIndex = 0;
         List<CoreLabel> allCoreLabels = new ArrayList<CoreLabel>();
         List<CoreMap> allCoreMaps = new ArrayList<CoreMap>();
+
         for (List<ResolvedEntityToken> resolvedEntityTokens : tokens) {
             CoreMap sentenceCoreMap = new ArrayCoreMap();
             List<CoreLabel> sentenceCoreLabels = new ArrayList<CoreLabel>();
+            String senetceStr = "";
             for (ResolvedEntityToken resolvedEntityToken : resolvedEntityTokens) {
                 CoreLabel coreLabel = new CoreLabel();
+                senetceStr += resolvedEntityToken.getWord() + " ";
                 coreLabel.setWord(resolvedEntityToken.getWord());
                 coreLabel.setTag(resolvedEntityToken.getPos());
                 coreLabel.setOriginalText(resolvedEntityToken.getWord());
                 coreLabel.setWord(resolvedEntityToken.getWord());
                 coreLabel.set(CoreAnnotations.IndexAnnotation.class, tokenIndex);
+
                 tokenIndex++;
 
             }
+
+
+            sentenceCoreMap.set(CoreAnnotations.TextAnnotation.class, senetceStr.trim());
             sentenceCoreMap.set(CoreAnnotations.TokensAnnotation.class, sentenceCoreLabels);
             allCoreLabels.addAll(sentenceCoreLabels);
             allCoreMaps.add(sentenceCoreMap);
