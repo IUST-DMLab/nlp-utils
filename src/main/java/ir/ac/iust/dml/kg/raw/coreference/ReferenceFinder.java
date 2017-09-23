@@ -1,3 +1,9 @@
+/*
+ * Farsi Knowledge Graph Project
+ *  Iran University of Science and Technology (Year 2017)
+ *  Developed by Mohammad Abdous.
+ */
+
 package ir.ac.iust.dml.kg.raw.coreference;
 
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -10,144 +16,139 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-/**
- * @author Mohammad Abdous md.abdous@gmail.com
- * @version 1.1.0
- * @since 1/26/17 12:00 PM
- */
 public class ReferenceFinder {
 
-    public List<CorefChain> extractCorefChains(String inputText) {
-        Annotation annotation = new Annotation(inputText);
+  public List<CorefChain> extractCorefChains(String inputText) {
+    Annotation annotation = new Annotation(inputText);
 
-        TextProcess tp = new TextProcess();
-        tp.preProcess(annotation);
-        tp.annotateNamedEntity(annotation);
+    TextProcess tp = new TextProcess();
+    tp.preProcess(annotation);
+    tp.annotateNamedEntity(annotation);
 
-        ReferenceFinder rfinder = new ReferenceFinder();
-      return rfinder.annotateCoreference(annotation);
+    ReferenceFinder rfinder = new ReferenceFinder();
+    return rfinder.annotateCoreference(annotation);
+  }
+
+  public List<CorefChain> annotateCoreference(Annotation annotation) {
+    List<CorefChain> finalCorefChains;
+    QuotationExtractor quotationExtractor = new QuotationExtractor();
+    List<QuotationBound> quotationBounds = quotationExtractor.applyQuotationRules(annotation);
+    int index = 0;
+    List<Mention> allQuotationMentions = new ArrayList<>();
+    List<ReferenceEntity> allQuotationReference = new ArrayList<>();
+    List<Mention> allQuotationTellerMentions = new ArrayList<>();
+    List<ReferenceEntity> allQuotationTellerReference = new ArrayList<>();
+    if (quotationBounds.size() > 0) {
+      for (QuotationBound qBound : quotationBounds)
+
+      {
+        index++;
+        List<Mention> quotationTellerMentions = CorefUtility.getMentions(qBound.getTellerBoundCoreLabels(), index);
+        allQuotationTellerMentions.addAll(quotationTellerMentions);
+        List<ReferenceEntity> quotationTellerReferences = CorefUtility.getReferenceEntities(qBound.getTellerBoundCoreLabels(), index);
+        allQuotationTellerReference.addAll(quotationTellerReferences);
+
+        List<Mention> quotationMentions = CorefUtility.getMentions(qBound.getQuotationBoundCoreLabels(), index);
+        allQuotationMentions.addAll(quotationMentions);
+        List<ReferenceEntity> quotationReferences = CorefUtility.getReferenceEntities(qBound.getQuotationBoundCoreLabels(), index);
+        allQuotationReference.addAll(quotationReferences);
+      }
+
+      finalCorefChains = extractChainsFromQuotaionTellerBound(allQuotationTellerMentions, allQuotationTellerReference);
+
+      finalCorefChains.addAll(extractChainsFromQuotaionTellerBound(allQuotationMentions, allQuotationReference));
+    } else {
+      finalCorefChains = extractChainsFromRawText(annotation);
     }
+    return finalCorefChains;
+  }
 
-    public List<CorefChain> annotateCoreference(Annotation annotation) {
-      List<CorefChain> finalCorefChains;
-        QuotationExtractor quotationExtractor = new QuotationExtractor();
-        List<QuotationBound> quotationBounds = quotationExtractor.applyQuotationRules(annotation);
-        int index = 0;
-      List<Mention> allQuotationMentions = new ArrayList<>();
-      List<ReferenceEntity> allQuotationReference = new ArrayList<>();
-      List<Mention> allQuotationTellerMentions = new ArrayList<>();
-      List<ReferenceEntity> allQuotationTellerReference = new ArrayList<>();
-        if (quotationBounds.size() > 0) {
-            for (QuotationBound qBound : quotationBounds)
+  public String getAnnotationTextAfterCoref(String inputText) {
+    Annotation annotation = new Annotation(inputText);
 
-            {
-                index++;
-                List<Mention> quotationTellerMentions = CorefUtility.getMentions(qBound.getTellerBoundCoreLabels(), index);
-                allQuotationTellerMentions.addAll(quotationTellerMentions);
-                List<ReferenceEntity> quotationTellerReferences = CorefUtility.getReferenceEntities(qBound.getTellerBoundCoreLabels(), index);
-                allQuotationTellerReference.addAll(quotationTellerReferences);
+    TextProcess tp = new TextProcess();
+    tp.preProcess(annotation);
+    tp.annotateNamedEntity(annotation);
 
-                List<Mention> quotationMentions = CorefUtility.getMentions(qBound.getQuotationBoundCoreLabels(), index);
-                allQuotationMentions.addAll(quotationMentions);
-                List<ReferenceEntity> quotationReferences = CorefUtility.getReferenceEntities(qBound.getQuotationBoundCoreLabels(), index);
-                allQuotationReference.addAll(quotationReferences);
-            }
+    extractChainsFromRawText(annotation);
 
-            finalCorefChains = extractChainsFromQuotaionTellerBound(allQuotationTellerMentions, allQuotationTellerReference);
+    StringBuilder outputText = new StringBuilder();
+    for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
+      for (CoreLabel coreLabel : sentence.get(CoreAnnotations.TokensAnnotation.class))
+        outputText.append(" ").append(coreLabel.get(CoreAnnotations.TextAnnotation.class));
+      outputText.append(" ");
+    }
+    return outputText.toString();
+  }
 
-            finalCorefChains.addAll(extractChainsFromQuotaionTellerBound(allQuotationMentions, allQuotationReference));
-        } else {
-            finalCorefChains = extractChainsFromRawText(annotation);
+  public List<CorefChain> extractChainsFromRawText(Annotation annotation) {
+    List<CorefChain> corefChains = new ArrayList<>();
+    List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+    int sentenceIndex = 0;
+    for (int i = 0; i < sentences.size(); i++) {
+
+      List<CoreLabel> coreLabels = sentences.get(i).get(CoreAnnotations.TokensAnnotation.class);
+      List<Mention> mentions = CorefUtility.getMentions(coreLabels, sentenceIndex);
+      for (Mention mention : mentions) {
+        for (int j = i; j >= 0; j--) {
+          List<CoreLabel> sentenceCoreLabels = sentences.get(j).get(CoreAnnotations.TokensAnnotation.class);
+          List<ReferenceEntity> referenceEntities = CorefUtility.getReferenceEntities(sentenceCoreLabels, j);
+          CorefChain corefChain = extractChainsFromSentence(referenceEntities, mention);
+          if (corefChain.getMentions() != null) {
+            changeMentionText(corefChain);
+            corefChains.add(corefChain);
+            break;
+          }
         }
-        return finalCorefChains;
+      }
+      sentenceIndex++;
     }
+    return corefChains;
+  }
 
-    public String getAnnotationTextAfterCoref(String inputText) {
-        Annotation annotation = new Annotation(inputText);
+  private void changeMentionText(CorefChain corefChain) {
+    //Mention mention=corefChain.getMentions().get(0);
+    corefChain.getMentions().get(0).getMentionCoreLabel().set(CoreAnnotations.TextAnnotation.class, corefChain.getReferenceEntity().toString());
+  }
 
-        TextProcess tp = new TextProcess();
-        tp.preProcess(annotation);
-        tp.annotateNamedEntity(annotation);
+  private CorefChain extractChainsFromSentence(List<ReferenceEntity> referenceEntities, Mention mention) {
+    List<Mention> mentions = new ArrayList<>();
+    mentions.add(mention);
+    CorefChain corefChain = new CorefChain();
+    int mentionIndex = mention.getMentionCoreLabel().get(CoreAnnotations.IndexAnnotation.class);
 
-        extractChainsFromRawText(annotation);
-
-      StringBuilder outputText = new StringBuilder();
-        for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
-            for (CoreLabel coreLabel : sentence.get(CoreAnnotations.TokensAnnotation.class))
-              outputText.append(" ").append(coreLabel.get(CoreAnnotations.TextAnnotation.class));
-          outputText.append(" ");
-        }
-      return outputText.toString();
+    for (ReferenceEntity referenceEntity : referenceEntities) {
+      int referenceIndex = referenceEntity.getEntityTokens().get(0).get(CoreAnnotations.IndexAnnotation.class);
+      if (referenceEntity.getType().equals(mention.getType())) {
+        if (referenceIndex < mentionIndex)
+          corefChain.setMentions(mentions);
+        corefChain.setReferenceEntity(referenceEntity);
+      }
     }
+    return corefChain;
+  }
 
-    public List<CorefChain> extractChainsFromRawText(Annotation annotation) {
-      List<CorefChain> corefChains = new ArrayList<>();
-        List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
-        int sentenceIndex = 0;
-        for (int i = 0; i < sentences.size(); i++) {
+  private List<CorefChain> extractChainsFromQuotaionTellerBound(List<Mention> allMentionInQuotationTellerBound, List<ReferenceEntity> allReferencesInQuotationTellerBound) {
+    List<CorefChain> quotationTellerChains = new ArrayList<>();
 
-            List<CoreLabel> coreLabels = sentences.get(i).get(CoreAnnotations.TokensAnnotation.class);
-          List<Mention> mentions = CorefUtility.getMentions(coreLabels, sentenceIndex);
-            for (Mention mention : mentions) {
-                for (int j = i; j >= 0; j--) {
-                    List<CoreLabel> sentenceCoreLabels = sentences.get(j).get(CoreAnnotations.TokensAnnotation.class);
-                  List<ReferenceEntity> referenceEntities = CorefUtility.getReferenceEntities(sentenceCoreLabels, j);
-                    CorefChain corefChain = extractChainsFromSentence(referenceEntities, mention);
-                    if (corefChain.getMentions() != null) {
-                        changeMentionText(corefChain);
-                        corefChains.add(corefChain);
-                        break;
-                    }
-                }
-            }
-            sentenceIndex++;
-        }
-        return corefChains;
-    }
-
-    private void changeMentionText(CorefChain corefChain) {
-        //Mention mention=corefChain.getMentions().get(0);
-        corefChain.getMentions().get(0).getMentionCoreLabel().set(CoreAnnotations.TextAnnotation.class, corefChain.getReferenceEntity().toString());
-    }
-
-    private CorefChain extractChainsFromSentence(List<ReferenceEntity> referenceEntities, Mention mention) {
-      List<Mention> mentions = new ArrayList<>();
-        mentions.add(mention);
+    ListIterator li = allMentionInQuotationTellerBound.listIterator(allMentionInQuotationTellerBound.size());
+    while (li.hasPrevious()) {
+      Mention mention = (Mention) li.previous();
+      List<ReferenceEntity> referenceCandidateEntities = getCandidateReferenceEntities(allReferencesInQuotationTellerBound, mention);
+      if (referenceCandidateEntities.size() > 0) {
         CorefChain corefChain = new CorefChain();
-        int mentionIndex = mention.getMentionCoreLabel().get(CoreAnnotations.IndexAnnotation.class);
-
-        for (ReferenceEntity referenceEntity : referenceEntities) {
-            int referenceIndex = referenceEntity.getEntityTokens().get(0).get(CoreAnnotations.IndexAnnotation.class);
-            if (referenceEntity.getType().equals(mention.getType())) {
-                if (referenceIndex < mentionIndex)
-                    corefChain.setMentions(mentions);
-                corefChain.setReferenceEntity(referenceEntity);
-            }
-        }
-        return corefChain;
+        List<Mention> mentionList = new ArrayList<>();
+        mentionList.add(mention);
+        corefChain.setReferenceEntity(referenceCandidateEntities.get(0));
+        corefChain.setMentions(mentionList);
+        quotationTellerChains.add(corefChain);
+      }
     }
-
-    private List<CorefChain> extractChainsFromQuotaionTellerBound(List<Mention> allMentionInQuotationTellerBound, List<ReferenceEntity> allReferencesInQuotationTellerBound) {
-      List<CorefChain> quotationTellerChains = new ArrayList<>();
-
-        ListIterator li = allMentionInQuotationTellerBound.listIterator(allMentionInQuotationTellerBound.size());
-        while (li.hasPrevious()) {
-            Mention mention = (Mention) li.previous();
-            List<ReferenceEntity> referenceCandidateEntities = getCandidateReferenceEntities(allReferencesInQuotationTellerBound, mention);
-            if (referenceCandidateEntities.size() > 0) {
-                CorefChain corefChain = new CorefChain();
-              List<Mention> mentionList = new ArrayList<>();
-                mentionList.add(mention);
-                corefChain.setReferenceEntity(referenceCandidateEntities.get(0));
-                corefChain.setMentions(mentionList);
-                quotationTellerChains.add(corefChain);
-            }
-        }
-        return quotationTellerChains;
-    }
+    return quotationTellerChains;
+  }
 
   private List<ReferenceEntity> getCandidateReferenceEntities(List<ReferenceEntity> referenceEntities, Mention amention) {
-        return referenceEntities;
+    return referenceEntities;
 //        List<ReferenceEntity> referenceCandidate = new ArrayList<>();
 //        int mentionIndex = mention.getIndex();
 //        for (ReferenceEntity referenceEntity : referenceEntities) {
@@ -158,6 +159,6 @@ public class ReferenceFinder {
 //            }
 //        }
 //        return referenceEntities;
-    }
+  }
 
 }

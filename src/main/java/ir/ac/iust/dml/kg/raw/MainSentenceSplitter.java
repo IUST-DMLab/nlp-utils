@@ -1,3 +1,9 @@
+/*
+ * Farsi Knowledge Graph Project
+ *  Iran University of Science and Technology (Year 2017)
+ *  Developed by Mohammad Abdous.
+ */
+
 package ir.ac.iust.dml.kg.raw;
 
 import ir.ac.iust.nlp.jhazm.utility.RegexPattern;
@@ -6,11 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * @author Mohammad Abdous md.abdous@gmail.com
- * @version 1.1.0
- * @since 4/28/17 1:30 AM
- */
 public class MainSentenceSplitter {
     private static MainSentenceSplitter instance;
     private final RegexPattern pattern;

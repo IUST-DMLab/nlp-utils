@@ -1,13 +1,14 @@
+/*
+ * Farsi Knowledge Graph Project
+ *  Iran University of Science and Technology (Year 2017)
+ *  Developed by Majid Asgari.
+ */
+
 package ir.ac.iust.dml.kg.raw.triple;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * create by Majid Asgari
- * 96/04/22
- * Standard triple for raw data
- */
 @SuppressWarnings(value = {"unused", "WeakerAccess"})
 public class RawTriple {
   private String module;

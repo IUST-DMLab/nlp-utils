@@ -1,14 +1,15 @@
+/*
+ * Farsi Knowledge Graph Project
+ *  Iran University of Science and Technology (Year 2017)
+ *  Developed by Mohammad Abdous.
+ */
+
 package ir.ac.iust.dml.kg.raw;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Mohammad Abdous md.abdous@gmail.com
- * @version 1.1.0
- * @since 4/13/17 3:27 PM
- */
 public class ParagraphSplitter {
     static ir.ac.iust.nlp.jhazm.Lemmatizer lemmatizer;
 

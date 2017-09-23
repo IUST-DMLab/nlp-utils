@@ -1,3 +1,9 @@
+/*
+ * Farsi Knowledge Graph Project
+ *  Iran University of Science and Technology (Year 2017)
+ *  Developed by Mohammad Abdous.
+ */
+
 package ir.ac.iust.dml.kg.raw;
 
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -7,11 +13,6 @@ import ir.ac.iust.dml.kg.raw.coreference.CorefUtility;
 
 import java.util.List;
 
-/**
- * @author Mohammad Abdous md.abdous@gmail.com
- * @version 1.1.0
- * @since 4/13/17 4:42 PM
- */
 public class WikiEntityRecognizer {
     private List<String> entityList;
 

@@ -1,5 +1,11 @@
+/*
+ * Farsi Knowledge Graph Project
+ *  Iran University of Science and Technology (Year 2017)
+ *  Developed by Mohammad Abdous.
+ */
+
 package ir.ac.iust.dml.kg.raw.coreference;
-import edu.stanford.nlp.ie.machinereading.structure.AnnotationUtils;
+
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.util.ArrayCoreMap;
@@ -12,28 +18,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-/**
- * @author Mohammad Abdous md.abdous@gmail.com
- * @version 1.1.0
- * @since 1/26/17 8:21 AM
- */
 public class CorefUtility {
 
-  /*  public List<CorefEntity> getSentenceEntities(CoreMap coreMap)
-    {
-        List<CoreLabel> coreLabels=coreMap.get(CoreAnnotations.TokensAnnotation.class);
-        List<CorefEntity> corefEntities=new ArrayList<CorefEntity>();
-        for(CoreLabel coreLabel:coreLabels)
-        {
-            if(coreLabel.tag().equals("PRO") && coreLabel.word().matches("وی|او"))
-            {
-                CorefEntity corefEntity=new CorefEntity();
-             //   corefEntity.setEntityTokens(coreLabel);
-            }
-        }
-    }*/
-    public List<CoreMap> getSentences(List<CoreLabel> coreLabels)
-    {
+    /*  public List<CorefEntity> getSentenceEntities(CoreMap coreMap)
+      {
+          List<CoreLabel> coreLabels=coreMap.get(CoreAnnotations.TokensAnnotation.class);
+          List<CorefEntity> corefEntities=new ArrayList<CorefEntity>();
+          for(CoreLabel coreLabel:coreLabels)
+          {
+              if(coreLabel.tag().equals("PRO") && coreLabel.word().matches("وی|او"))
+              {
+                  CorefEntity corefEntity=new CorefEntity();
+               //   corefEntity.setEntityTokens(coreLabel);
+              }
+          }
+      }*/
+    public List<CoreMap> getSentences(List<CoreLabel> coreLabels) {
         List<String> sentenceDelimiterSet=new ArrayList<String>();
         sentenceDelimiterSet.add(".");
         sentenceDelimiterSet.add("?");
@@ -72,6 +72,7 @@ public class CorefUtility {
 
         return sentences;
     }
+
     public static List<String> readListedFile(Class<?> classs, String fileName)  {
         List<String> outputList = new ArrayList<String>();
 
@@ -110,6 +111,7 @@ public class CorefUtility {
 
         return in;
     }
+
     public List<String> readLines(String filePath){
         List<String> lines = new ArrayList<String>();
         FileInputStream fstream = null;
@@ -119,25 +121,20 @@ public class CorefUtility {
             String strLine;
             while ((strLine = br.readLine()) != null) {
                 if(strLine.length()>1)
-                lines.add(strLine.replace("  "," "));
+                    lines.add(strLine.replace("  "," "));
 
             }
-        }
-        catch(Exception ex)
-        {
+        } catch(Exception ex) {
 
         }
         return  lines;
 
     }
 
-    public  static List<Mention> getMentions(List<CoreLabel> coreLabels,int index)
-    {
+    public  static List<Mention> getMentions(List<CoreLabel> coreLabels,int index) {
         List<Mention> mentions=new ArrayList<Mention>();
-        for(CoreLabel coreLabel:coreLabels)
-        {
-            if(coreLabel.tag().matches("PRO?") && coreLabel.word().matches("وی|او"))
-            {
+        for(CoreLabel coreLabel:coreLabels) {
+            if(coreLabel.tag().matches("PRO?") && coreLabel.word().matches("وی|او")) {
                 Mention mention=new Mention();
                 mention.setMofrad(true);
                 mention.setMentionCoreLabel(coreLabel);
@@ -151,8 +148,7 @@ public class CorefUtility {
         return mentions;
     }
 
-    public static List<ReferenceEntity> getReferenceEntities(List<CoreLabel> coreLabels,int index)
-    {
+    public static List<ReferenceEntity> getReferenceEntities(List<CoreLabel> coreLabels,int index) {
         List<ReferenceEntity> entityList = new ArrayList<ReferenceEntity>();
         CoreLabel currentCoreLabel;
         ListIterator<CoreLabel> coreLabelIterator = coreLabels.listIterator();

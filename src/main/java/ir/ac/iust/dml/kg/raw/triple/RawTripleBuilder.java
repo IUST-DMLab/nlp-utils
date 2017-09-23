@@ -1,10 +1,11 @@
+/*
+ * Farsi Knowledge Graph Project
+ *  Iran University of Science and Technology (Year 2017)
+ *  Developed by Majid Asgari.
+ */
+
 package ir.ac.iust.dml.kg.raw.triple;
 
-/**
- * create by Majid Asgari
- * 96/04/22
- * This is a builder class for RawTriple standard object.
- */
 @SuppressWarnings(value = {"unused", "WeakerAccess"})
 public class RawTripleBuilder {
   private String module;
