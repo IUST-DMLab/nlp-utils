@@ -45,7 +45,7 @@ public class EnhancedEntityExtractor {
 
   public EnhancedEntityExtractor() {
     this.client = new ResourceExtractionWrapper(ConfigReader.INSTANCE.getString("resource.extractor.url",
-        "http://dmls.iust.ac.ir:8094"));
+        "http://localhost:8094"));
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText) {
