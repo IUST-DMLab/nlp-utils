@@ -9,11 +9,16 @@ package ir.ac.iust.dml.kg.raw.extractor;
 import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.ling.Word;
 import ir.ac.iust.dml.kg.raw.POSTagger;
+import ir.ac.iust.dml.kg.raw.utils.ConfigReader;
 import ir.ac.iust.dml.kg.resource.extractor.client.ExtractorClient;
 import ir.ac.iust.dml.kg.resource.extractor.client.MatchedResource;
 import ir.ac.iust.dml.kg.resource.extractor.client.Resource;
 import ir.ac.iust.dml.kg.resource.extractor.client.ResourceType;
 
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,6 +26,29 @@ import java.util.stream.Collectors;
 public class ResourceExtractionWrapper {
 
   private final ExtractorClient client;
+  private static final Set<String> ignoredWords = new HashSet<>();
+
+  private boolean isInIgnoredWords(String word) {
+    if (ignoredWords.isEmpty()) loadIgnoredWords();
+    return ignoredWords.contains(word);
+  }
+
+  private void loadIgnoredWords() {
+    final Path path = ConfigReader.INSTANCE.getPath("raw.enhanced.extractor.ignored.words",
+        "~/.pkg/ee_ignored.txt").toAbsolutePath();
+    try {
+      if (!Files.exists(path)) {
+        Files.createDirectories(path.getParent());
+        try (InputStream in = this.getClass().getClassLoader().getResourceAsStream("ee_ignore.txt")) {
+          Files.copy(in, path);
+        }
+      }
+      final List<String> lines = Files.readAllLines(path, Charset.forName("UTF-8"));
+      ignoredWords.addAll(lines);
+    } catch (Throwable th) {
+      th.printStackTrace();
+    }
+  }
 
   public ResourceExtractionWrapper(String serviceAddress) {
     this.client = new ExtractorClient(serviceAddress);
@@ -52,6 +80,10 @@ public class ResourceExtractionWrapper {
         for (int i = resource.getStart(); i <= resource.getEnd(); i++)
           if (!isBadTagForMatchedResource(taggedWords.get(i))) mustNotBeRemoved = true;
         if (!mustNotBeRemoved) continue;
+      }
+      if (filterTypeSet.contains(FilterType.FilteredWords)) {
+        if (resource.getStart() == resource.getEnd() && isInIgnoredWords(taggedWords.get(resource.getStart()).word()))
+          continue;
       }
 
       if (filterTypeSet.contains(FilterType.CommonPosTagsStrict)) {

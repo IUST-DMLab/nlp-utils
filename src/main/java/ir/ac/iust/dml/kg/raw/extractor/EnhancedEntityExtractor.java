@@ -49,7 +49,7 @@ public class EnhancedEntityExtractor {
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText) {
-    return extract(rawText, true, FilterType.CommonPosTags, FilterType.Properties);
+    return extract(rawText, true, FilterType.FilteredWords, FilterType.CommonPosTags, FilterType.Properties);
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText,
@@ -219,10 +219,10 @@ public class EnhancedEntityExtractor {
     if (resource == null) return;
     float rank = 1f;
 //    if (resource.getClasses().size() > 1) rank *= 1.1;
-//    if (resource.getClasses().contains(prefix + "Thing")) rank *= 0.5;
-    if (resource.getClasses().contains(prefix + "Village")) rank *= 0.1;
-    if (resource.getClasses().contains(prefix + "Work")) rank *= 0.1;
-    if (resource.getClasses().contains(prefix + "Film")) rank *= 0.1;
+    if (resource.getClasses().contains(prefix + "Thing")) rank *= 1.1;
+    if (resource.getClasses().contains(prefix + "Village")) rank *= 0.01;
+    if (resource.getClasses().contains(prefix + "Work")) rank *= 0.01;
+    if (resource.getClasses().contains(prefix + "Film")) rank *= 0.01;
 //    if (resource.getIri().contains(")")) rank -= 0.3;
     if (resource.getIri().contains("ابهام")) rank *= 0.01;
     resource.setRank(rank);
