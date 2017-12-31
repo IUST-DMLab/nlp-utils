@@ -219,12 +219,16 @@ public class EnhancedEntityExtractor {
     if (resource == null) return;
     float rank = 1f;
 //    if (resource.getClasses().size() > 1) rank *= 1.1;
-    if (resource.getClasses().contains(prefix + "Thing")) rank *= 1.1;
+//    if (resource.getClasses().contains(prefix + "Thing")) rank *= 1.1;
+    if (resource.getClasses().size() == 1) rank *= 1.1;
     if (resource.getClasses().contains(prefix + "Village")) rank *= 0.01;
     if (resource.getClasses().contains(prefix + "Work")) rank *= 0.01;
-    if (resource.getClasses().contains(prefix + "Film")) rank *= 0.01;
-//    if (resource.getIri().contains(")")) rank -= 0.3;
+    if (resource.getClasses().contains(prefix + "Film")
+        || resource.getIri().contains("(فیلم)")) rank *= 0.01;
     if (resource.getIri().contains("ابهام")) rank *= 0.01;
+    if (resource.getIri().contains("ابهام")) rank *= 0.01;
+//    if (resource.getIri().contains(")")) rank -= 0.3;
+    if (resource.getIri().contains("(")) rank *= 0.07;
     resource.setRank(rank);
   }
 
@@ -323,6 +327,7 @@ public class EnhancedEntityExtractor {
       }
   }
 
+  //  final String prefix = URIs.INSTANCE.prefixedToUri(URIs.INSTANCE.getFkgOntologyPrefix() + ":");
   final String prefix = "http://fkg.iust.ac.ir/ontology/";
 
   private boolean matchClass(ResolvedEntityToken token, String ontologyClass) {
