@@ -223,8 +223,8 @@ public class EnhancedEntityExtractor {
 //    if (resource.getClasses().size() == 1) rank *= 1.1;
     if (resource.getClasses().contains(prefix + "Village")
         || resource.getIri().contains("روستا")) rank *= 0.01;
-    if (resource.getClasses().contains(prefix + "Work")
-        || resource.getIri().contains("ترانه")) rank *= 0.01;
+    if ((resource.getMainClass() != null && resource.getMainClass().endsWith("Work"))
+        || resource.getIri().contains("ترانه")) rank *= 0.06;
     if (resource.getClasses().contains(prefix + "Film")
         || resource.getIri().contains("(فیلم")) rank *= 0.01;
     if (resource.getIri().contains("ابهام")) rank *= 0.01;
