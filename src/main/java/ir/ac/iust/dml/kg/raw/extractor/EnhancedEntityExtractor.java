@@ -220,8 +220,9 @@ public class EnhancedEntityExtractor {
     float rank = 1f;
 //    if (resource.getClasses().size() > 1) rank *= 1.1;
 //    if (resource.getClasses().contains(prefix + "Thing")) rank *= 1.1;
-    if (resource.getClasses().size() == 1) rank *= 1.1;
-    if (resource.getClasses().contains(prefix + "Village")) rank *= 0.01;
+//    if (resource.getClasses().size() == 1) rank *= 1.1;
+    if (resource.getClasses().contains(prefix + "Village")
+        || resource.getIri().contains("روستا")) rank *= 0.01;
     if (resource.getClasses().contains(prefix + "Work")
         || resource.getIri().contains("ترانه")) rank *= 0.01;
     if (resource.getClasses().contains(prefix + "Film")
@@ -229,7 +230,7 @@ public class EnhancedEntityExtractor {
     if (resource.getIri().contains("ابهام")) rank *= 0.01;
     if (resource.getIri().contains("ابهام")) rank *= 0.01;
 //    if (resource.getIri().contains(")")) rank -= 0.3;
-    if (resource.getIri().contains("(")) rank *= 0.07;
+    if (resource.getIri().contains("(")) rank *= 0.5;
     resource.setRank(rank);
   }
 
