@@ -6,6 +6,8 @@
 
 package ir.ac.iust.dml.kg.raw.extractor;
 
+import org.maltparser.concurrent.graph.ConcurrentDependencyNode;
+
 public class DependencyInformation {
   private int position;
   private String lemma;
@@ -13,6 +15,19 @@ public class DependencyInformation {
   private int head;
   private String relation;
   private String cPOS;
+
+  public DependencyInformation() {
+  }
+
+  public DependencyInformation(ConcurrentDependencyNode node) {
+    this.cPOS = node.getLabel("CPOSTAG");
+    this.features = node.getLabel("FEATS");
+    final String headIdLabel = node.getHead().getLabel("ID");
+    this.head = headIdLabel.isEmpty() ? 0 : Integer.parseInt(headIdLabel);
+    this.lemma = node.getLabel("LEMMA");
+    this.position = Integer.parseInt(node.getLabel("ID"));
+    this.relation = node.getLabel("DEPREL");
+  }
 
   public int getPosition() {
     return position;

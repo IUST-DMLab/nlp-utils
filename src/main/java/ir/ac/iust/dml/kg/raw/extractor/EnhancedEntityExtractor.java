@@ -345,6 +345,7 @@ public class EnhancedEntityExtractor {
   private void setResources(ResolvedEntityToken token, List<ResolvedEntityTokenResource> resources) {
     if (resources.size() == 0) return;
     token.setResource(resources.get(resources.size() - 1));
+    token.setIobType(IobType.Beginning);
     for (int i = 0; i < resources.size() - 1; i++) token.getAmbiguities().add(resources.get(i));
   }
 
