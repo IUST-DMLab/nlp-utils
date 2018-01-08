@@ -17,6 +17,7 @@ public class Normalizer {
   static ir.ac.iust.nlp.jhazm.Normalizer normalizer = new ir.ac.iust.nlp.jhazm.Normalizer();
 
   public static String normalize(String text) {
+    text = text.replaceAll("[\u064B\u064C\u064D\u064E\u064F\u0650\u0651\u0652\u0653\u0654\u0655]", "");
     logger.trace("normalizing text: " + text);
     return normalizer.run(text);
   }
