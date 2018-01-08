@@ -32,7 +32,8 @@ public class ResolvedEntityTokenResource implements Comparable<ResolvedEntityTok
   }
 
   public void setRank(float rank) {
-    this.rank = rank;
+    if (rank > 1) this.rank = 1;
+    else this.rank = rank;
   }
 
   public boolean isResource() {

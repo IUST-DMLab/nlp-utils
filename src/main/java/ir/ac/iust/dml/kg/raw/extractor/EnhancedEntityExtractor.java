@@ -275,13 +275,19 @@ public class EnhancedEntityExtractor {
         else wc.count = wc.count + 1;
       }
 
-      for (ResolvedEntityToken token : sentence) {
+      for (int tokenIndex = 0; tokenIndex < sentence.size(); tokenIndex++) {
+        ResolvedEntityToken token = sentence.get(tokenIndex);
         if (token.getResource() == null) continue;
         final List<ResolvedEntityTokenResource> allResources = new ArrayList<>();
         setDefaultRankMultiplier(token.getResource());
+        final ResolvedEntityToken nextToken = tokenIndex < sentence.size() - 1 ? sentence.get(tokenIndex + 1) : null;
+        // connected tokens are very important
+        if (isConnected(token.getResource(), nextToken))
+          token.getResource().setRank(token.getResource().getRank() + 0.5f);
         allResources.add(token.getResource());
         for (ResolvedEntityTokenResource a : token.getAmbiguities()) {
           setDefaultRankMultiplier(a);
+          if (isConnected(a, nextToken)) a.setRank(a.getRank() + 0.5f);
           allResources.add(a);
         }
         for (ResolvedEntityTokenResource rr : allResources) {
@@ -325,16 +331,26 @@ public class EnhancedEntityExtractor {
     }));
   }
 
+  private boolean isConnected(ResolvedEntityTokenResource resource, ResolvedEntityToken nextToken) {
+    if (nextToken == null) return false;
+    if (nextToken.getResource() != null && nextToken.getResource().getIri().equals(resource.getIri())) return true;
+    for (ResolvedEntityTokenResource a : nextToken.getAmbiguities()) {
+      if (a != null && a.getIri().equals(resource.getIri()))
+        return true;
+    }
+    return false;
+  }
+
   public void resolveByName(List<List<ResolvedEntityToken>> sentences) {
     final Map<String, ResolvedEntityTokenResource> cache = new HashMap<>();
     for (List<ResolvedEntityToken> sentence : sentences)
       for (ResolvedEntityToken token : sentence) {
         final String pos = token.getPos();
-        if (token.getResource() == null && pos.equals("N") || pos.equals("Ne") && cache.containsKey(token.getWord())) {
+        if (token.getResource() == null && (pos.equals("N") || pos.equals("Ne")) && cache.containsKey(token.getWord())) {
           token.getAmbiguities().add(0, token.getResource());
           token.setResource(cache.get(token.getWord()));
         }
-        if (pos.equals("N") || pos.equals("Ne") && token.getResource() != null &&
+        if ((pos.equals("N") || pos.equals("Ne")) && token.getResource() != null &&
             token.getResource().getClasses() != null &&
             !token.getResource().getClasses().isEmpty())
           cache.put(token.getWord(), token.getResource());
