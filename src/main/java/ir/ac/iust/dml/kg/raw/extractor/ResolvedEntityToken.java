@@ -54,7 +54,7 @@ public class ResolvedEntityToken {
     return resource;
   }
 
-  void setResource(ResolvedEntityTokenResource resource) {
+  public void setResource(ResolvedEntityTokenResource resource) {
     this.resource = resource;
   }
 

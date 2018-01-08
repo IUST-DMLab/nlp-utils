@@ -245,14 +245,20 @@ public class EnhancedEntityExtractor {
     return context;
   }
 
+  public void disambiguateByContext(List<List<ResolvedEntityToken>> sentences,
+                                    float contextDisambiguationThreshold) {
+    disambiguateByContext(sentences, contextDisambiguationThreshold, 1);
+  }
+
   /**
    * re-sort resources for each word with ambiguities based on its context
    *
    * @param sentences                      context of sentence.
    * @param contextDisambiguationThreshold a threshold to retain ambiguities or not.
+   * @param forceToDisambiguateThreshold a threshold to put resources to ambiguities.
    */
   public void disambiguateByContext(List<List<ResolvedEntityToken>> sentences,
-                                    float contextDisambiguationThreshold) {
+                                    float contextDisambiguationThreshold, float forceToDisambiguateThreshold) {
     if (textsOfAllArticles == null) loadTextOfAllArticles();
     if (textsOfAllArticles.isEmpty()) return;
 
@@ -311,6 +317,12 @@ public class EnhancedEntityExtractor {
         }
       }
     }
+    sentences.forEach(sentence -> sentence.forEach(token -> {
+      if (token.getResource() != null && token.getResource().getRank() < forceToDisambiguateThreshold) {
+        token.getAmbiguities().add(0, token.getResource());
+        token.setResource(null);
+      }
+    }));
   }
 
   public void resolveByName(List<List<ResolvedEntityToken>> sentences) {
