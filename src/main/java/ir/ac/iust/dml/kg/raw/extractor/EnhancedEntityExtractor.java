@@ -247,7 +247,7 @@ public class EnhancedEntityExtractor {
 
   public void disambiguateByContext(List<List<ResolvedEntityToken>> sentences,
                                     float contextDisambiguationThreshold) {
-    disambiguateByContext(sentences, contextDisambiguationThreshold, 1);
+    disambiguateByContext(sentences, contextDisambiguationThreshold, 0);
   }
 
   /**
