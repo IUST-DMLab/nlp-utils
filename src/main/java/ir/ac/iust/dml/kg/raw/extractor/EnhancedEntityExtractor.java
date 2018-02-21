@@ -17,6 +17,7 @@ import ir.ac.iust.dml.kg.raw.utils.PathWalker;
 import ir.ac.iust.dml.kg.resource.extractor.client.MatchedResource;
 import ir.ac.iust.dml.kg.resource.extractor.client.Resource;
 import ir.ac.iust.dml.kg.resource.extractor.client.ResourceType;
+import kotlin.Pair;
 import kotlin.text.Regex;
 import org.maltparser.concurrent.graph.ConcurrentDependencyGraph;
 import org.maltparser.concurrent.graph.ConcurrentDependencyNode;
@@ -159,6 +160,7 @@ public class EnhancedEntityExtractor {
   }
 
   private HashMap<String, HashMap<String, WordCount>> articleCache = new HashMap<>();
+  private HashMap<String, List<Pair<String, Integer>>> relatedCache = new HashMap<>();
 
   /**
    * get words from article body. it has a cache to avoid calculation of frequently used articles.
@@ -186,6 +188,37 @@ public class EnhancedEntityExtractor {
     }
     articleCache.put(title, articleWords);
     return articleWords;
+  }
+
+  public List<Pair<String, Integer>> relatedUris(String iri,
+                                                 float contextDisambiguationThreshold,
+                                                 float forceToDisambiguateThreshold) {
+    int last = iri.lastIndexOf('/');
+    String title = iri.substring(last + 1).replace('_', ' ');
+    if (relatedCache.containsKey(title))
+      return relatedCache.get(title);
+    if (!textsOfAllArticles.containsKey(title)) return null;
+    final String body = textsOfAllArticles.get(title)
+        .replaceAll("\\s+\\(.*\\)\\s+", " ").replaceAll("(?U)\\[\\d+\\]", "");
+    System.out.println("body is \n" + body);
+    final List<List<ResolvedEntityToken>> extracted = extract(body);
+
+    disambiguateByContext(extracted, contextDisambiguationThreshold, forceToDisambiguateThreshold);
+    final Map<String, Integer> map = new HashMap<>();
+    extracted.forEach(sentence -> sentence.forEach(token -> {
+      if (token.getResource() != null) {
+        final String relatedIri = token.getResource().getIri();
+        if (!relatedIri.equals(iri))
+          if (map.containsKey(relatedIri))
+            map.put(relatedIri, map.get(relatedIri) + 1);
+          else map.put(relatedIri, 1);
+      }
+    }));
+    final List<Pair<String, Integer>> list = new ArrayList<>();
+    map.forEach((relatedIri, count) -> list.add(new Pair<>(relatedIri, count)));
+    list.sort((o1, o2) -> o2.component2().compareTo(o1.component2())); // sort desc
+    relatedCache.put(title, list);
+    return relatedUris(title, contextDisambiguationThreshold, forceToDisambiguateThreshold);
   }
 
   /**
@@ -255,7 +288,7 @@ public class EnhancedEntityExtractor {
    *
    * @param sentences                      context of sentence.
    * @param contextDisambiguationThreshold a threshold to retain ambiguities or not.
-   * @param forceToDisambiguateThreshold a threshold to put resources to ambiguities.
+   * @param forceToDisambiguateThreshold   a threshold to put resources to ambiguities.
    */
   public void disambiguateByContext(List<List<ResolvedEntityToken>> sentences,
                                     float contextDisambiguationThreshold, float forceToDisambiguateThreshold) {
