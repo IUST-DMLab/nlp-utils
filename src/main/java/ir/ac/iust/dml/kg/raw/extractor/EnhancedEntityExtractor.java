@@ -12,7 +12,6 @@ import com.google.gson.reflect.TypeToken;
 import edu.stanford.nlp.ling.TaggedWord;
 import ir.ac.iust.dml.kg.raw.DependencyParser;
 import ir.ac.iust.dml.kg.raw.POSTagger;
-import ir.ac.iust.dml.kg.raw.utils.ConfigReader;
 import ir.ac.iust.dml.kg.raw.utils.PathWalker;
 import ir.ac.iust.dml.kg.resource.extractor.client.MatchedResource;
 import ir.ac.iust.dml.kg.resource.extractor.client.Resource;
@@ -36,21 +35,29 @@ public class EnhancedEntityExtractor {
   private final static Gson gson = new GsonBuilder().setPrettyPrinting().create();
   private final static Type EXPORT_GSON_TYPE = new TypeToken<List<List<ResolvedEntityToken>>>() {
   }.getType();
+  private static final int DEFAULT_CONTEXT_LEN = 2;
 
   private final ResourceExtractionWrapper client;
+  private final EntityArticleProcessor articleProcessor;
   private static final Logger logger = LoggerFactory.getLogger(EnhancedEntityExtractor.class);
+  private HashMap<String, List<Pair<String, Integer>>> relatedCache = new HashMap<>();
 
-  public EnhancedEntityExtractor(String serviceAddress) {
-    this.client = new ResourceExtractionWrapper(serviceAddress);
+  public EnhancedEntityExtractor(ResourceExtractionWrapper client) {
+    this.client = client;
+    this.articleProcessor = new EntityArticleProcessor(client);
   }
 
   public EnhancedEntityExtractor() {
-    this.client = new ResourceExtractionWrapper(ConfigReader.INSTANCE.getString("resource.extractor.url",
-        "http://localhost:8094"));
+    this.client = ResourceExtractionWrapper.i();
+    this.articleProcessor = new EntityArticleProcessor();
+  }
+
+  public List<List<ResolvedEntityToken>> extract(String rawText, boolean removeSubset) {
+    return extract(rawText, removeSubset, FilterType.FilteredWords, FilterType.CommonPosTags, FilterType.Properties);
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText) {
-    return extract(rawText, true, FilterType.FilteredWords, FilterType.CommonPosTags, FilterType.Properties);
+    return extract(rawText, true);
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText,
@@ -114,96 +121,25 @@ public class EnhancedEntityExtractor {
     return result;
   }
 
-  private Map<String, String> textsOfAllArticles = null;
-
-  private void loadTextOfAllArticles() {
-    try {
-      final Path path = ConfigReader.INSTANCE.getPath("wiki.folder.texts",
-          "~/.pkg/data/texts");
-      final List<Path> files = PathWalker.INSTANCE.getPath(path);
-
-      Gson gson = new GsonBuilder().setPrettyPrinting().create();
-      Type type = new TypeToken<Map<String, String>>() {
-      }.getType();
-
-      textsOfAllArticles = new HashMap<>();
-      for (Path f : files) {
-        final Map<String, String> map = gson.fromJson(new BufferedReader(
-            new InputStreamReader(new FileInputStream(f.toFile()), "UTF-8")), type);
-        textsOfAllArticles.putAll(map);
-      }
-    } catch (Throwable throwable) {
-      throwable.printStackTrace();
-      textsOfAllArticles = new HashMap<>();
-    }
-  }
-
-  class WordCount {
-    private int count;
-
-    public WordCount(int count) {
-      this.count = count;
-    }
-  }
-
-  /**
-   * check whether a tag is good for similarity calculation or not. in this way we don't count
-   * stop words.
-   *
-   * @param tag POS tag of word
-   * @return true if it is a bad tag
-   */
-  private boolean isBadTag(String tag) {
-    return tag.equals("P") || tag.equals("Pe") || tag.equals("POSTP") ||
-        tag.equals("DET") || tag.equals("NUM") || tag.equals("PUNC") ||
-        tag.equals("CONJ") || tag.equals("PRO") || tag.equals("ADV") || tag.equals("V");
-  }
-
-  private HashMap<String, HashMap<String, WordCount>> articleCache = new HashMap<>();
-  private HashMap<String, List<Pair<String, Integer>>> relatedCache = new HashMap<>();
-
-  /**
-   * get words from article body. it has a cache to avoid calculation of frequently used articles.
-   *
-   * @param title resource title
-   * @return words and its counts
-   */
-  private HashMap<String, WordCount> getArticleWords(String title) {
-    if (articleCache.containsKey(title)) return articleCache.get(title);
-    if (!textsOfAllArticles.containsKey(title)) return null;
-    final String body = textsOfAllArticles.get(title);
-    final HashMap<String, WordCount> articleWords = new HashMap<>();
-    final List<List<TaggedWord>> sentences = POSTagger.tagRaw(body);
-    int sentenceNumber = 0;
-    for (List<TaggedWord> sentence : sentences) {
-      if (sentenceNumber > 40) break;
-      sentenceNumber++;
-      for (TaggedWord token : sentence) {
-        if (isBadTag(token.tag())) continue;
-        final String word = token.word();
-        WordCount wc = articleWords.get(word);
-        if (wc == null) articleWords.put(word, new WordCount(1));
-        else wc.count = wc.count + 1;
-      }
-    }
-    articleCache.put(title, articleWords);
-    return articleWords;
-  }
-
   public List<Pair<String, Integer>> relatedUris(String iri,
+                                                 float contextDisambiguationThreshold,
+                                                 float forceToDisambiguateThreshold) {
+    return relatedUris(iri, DEFAULT_CONTEXT_LEN, contextDisambiguationThreshold, forceToDisambiguateThreshold);
+  }
+
+  public List<Pair<String, Integer>> relatedUris(String iri, int contextLength,
                                                  float contextDisambiguationThreshold,
                                                  float forceToDisambiguateThreshold) {
     int last = iri.lastIndexOf('/');
     String title = iri.substring(last + 1).replace('_', ' ');
     if (relatedCache.containsKey(title))
       return relatedCache.get(title);
-    if (!textsOfAllArticles.containsKey(title)) return null;
-    final String body = textsOfAllArticles.get(title)
-        .replaceAll("\\s+\\(.*\\)\\s+", " ").replaceAll("(?U)\\[\\d+\\]", "");
+    final String body = articleProcessor.getArticleBody(title);
+    if(body == null) return null;
     System.out.println("body is \n" + body);
     final List<List<ResolvedEntityToken>> extracted = extract(body);
 
-    disambiguateByContext(extracted, contextDisambiguationThreshold, forceToDisambiguateThreshold);
+    disambiguateByContext(extracted, contextLength, contextDisambiguationThreshold, forceToDisambiguateThreshold);
     final Map<String, Integer> map = new HashMap<>();
     extracted.forEach(sentence -> sentence.forEach(token -> {
       if (token.getResource() != null) {
@@ -218,7 +154,7 @@ public class EnhancedEntityExtractor {
     map.forEach((relatedIri, count) -> list.add(new Pair<>(relatedIri, count)));
     list.sort((o1, o2) -> o2.component2().compareTo(o1.component2())); // sort desc
     relatedCache.put(title, list);
-    return relatedUris(title, contextDisambiguationThreshold, forceToDisambiguateThreshold);
+    return relatedUris(title, contextLength, contextDisambiguationThreshold, forceToDisambiguateThreshold);
   }
 
   /**
@@ -230,11 +166,11 @@ public class EnhancedEntityExtractor {
    * @param word        ignores word in product calculation
    * @return similarity of two texts
    */
-  private float calculateSimilarity(Map<String, WordCount> text1, Map<String, WordCount> text2,
-                                    boolean ignoreCount, String word) {
+  private float calculateSimilarityOfWords(Map<String, WordInfo> text1, Map<String, WordInfo> text2,
+                                           boolean ignoreCount, String word) {
     double text1SquareNorm = 0f, text2SquareNorm = 0f, product = 0.f;
     if (ignoreCount) text2SquareNorm = text2.size();
-    else for (WordCount count : text2.values()) text2SquareNorm += count.count * count.count;
+    else for (WordInfo count : text2.values()) text2SquareNorm += count.count * count.count;
     for (String word1 : text1.keySet()) {
       if (ignoreCount) {
         text1SquareNorm += 1;
@@ -248,20 +184,67 @@ public class EnhancedEntityExtractor {
     return (float) (product / (Math.sqrt(text1SquareNorm) * Math.sqrt(text2SquareNorm)));
   }
 
-  private void setDefaultRankMultiplier(ResolvedEntityTokenResource resource) {
+  private boolean isAmbiguousPage(String iri) {
+    final String words = articleProcessor.getArticleBody(iri);
+    return words != null && (words.contains("معانی متفاوت") ||
+        words.contains("ممکن است به یکی از موارد زیر") ||
+        words.contains("می\u200Cتواند به مقاله\u200Cهای زیر") ||
+        words.contains("میتواند به مقاله\u200Cهای زیر") ||
+        words.contains("ممکن است به این\u200Cها اشاره") ||
+        words.contains("ممکن است به اینها اشاره") ||
+        words.contains("ممکن است به این ها اشاره") ||
+        words.contains("ممکن است به یکی از افراد زیر") ||
+        words.contains("می\u200Cتواند به موارد گوناگونی اشاره") ||
+        words.contains("میتواند به موارد گوناگونی اشاره") ||
+        words.contains("می\u200Cتواند به موارد زیر اشاره") ||
+        words.contains("میتواند به موارد زیر اشاره"));
+  }
+
+  private float calculateSimilarityOfEntities(List<ResolvedEntityToken> context, String iri) {
+    int count = 0;
+    final HashSet<String> entities = articleProcessor.getArticleResources(iri);
+    for(ResolvedEntityToken token : context) {
+      if(token.getResource() != null)
+          if(entities.contains(token.getResource().getIri())) count++;
+      for(ResolvedEntityTokenResource ar: token.getAmbiguities()) {
+          if(entities.contains(ar.getIri())) count++;
+      }
+    }
+    return ((float)count) / context.size();
+  }
+
+  private float calculateSimilarityOfVerbs(List<ResolvedEntityToken> context, String iri) {
+    int count = 0;
+    final HashSet<String> verbs = articleProcessor.getArticleVerbs(iri);
+    for(ResolvedEntityToken token : context) {
+      if(token.getPos().equals("V") && verbs.contains(token.getWord())) count++;
+    }
+    return ((float)count) / context.size();
+  }
+
+  private void setDefaultRankMultiplier(ResolvedEntityTokenResource resource, Map<String, WordInfo> contextWords) {
     if (resource == null) return;
     float rank = 1f;
 //    if (resource.getClasses().size() > 1) rank *= 1.1;
 //    if (resource.getClasses().contains(prefix + "Thing")) rank *= 1.1;
 //    if (resource.getClasses().size() == 1) rank *= 1.1;
-    if (resource.getClasses().contains(prefix + "Village")
-        || resource.getIri().contains("روستا")) rank *= 0.01;
-    if ((resource.getMainClass() != null && resource.getMainClass().endsWith("Work"))
-        || resource.getIri().contains("ترانه")) rank *= 0.06;
+    if ((resource.getClasses().contains(prefix + "Village")
+        || resource.getIri().contains("روستا")) &&
+        (!contextWords.containsKey("روستا") && !contextWords.containsKey("روستای"))) rank *= 0.01;
+    if ((resource.getMainClass() != null && resource.getMainClass().endsWith("Work")
+        || resource.getIri().contains("(روزنامه")
+        || resource.getIri().contains("(انتشارات")
+        || resource.getIri().contains("(آلبوم"))
+        || resource.getIri().contains("ترانه") &&
+        (!contextWords.containsKey("روزنامه") && !contextWords.containsKey("انتشارات")
+            && !contextWords.containsKey("آلبوم") && !contextWords.containsKey("ترانه"))) rank *= 0.01;
     if (resource.getClasses().contains(prefix + "Film")
-        || resource.getIri().contains("(فیلم")) rank *= 0.01;
+        || resource.getIri().contains("(فیلم")
+        || resource.getIri().contains("(مجموعه") &&
+        (!contextWords.containsKey("فیلم") && !contextWords.containsKey("تلویوزیون"))) rank *= 0.01;
     if (resource.getIri().contains("ابهام")) rank *= 0.01;
     if (resource.getIri().contains("ابهام")) rank *= 0.01;
+    if (isAmbiguousPage(resource.getIri())) rank *= 0.01;
 //    if (resource.getIri().contains(")")) rank -= 0.3;
     if (resource.getIri().contains("(")) rank *= 0.5;
     resource.setRank(rank);
@@ -280,7 +263,12 @@ public class EnhancedEntityExtractor {
 
   public void disambiguateByContext(List<List<ResolvedEntityToken>> sentences,
                                     float contextDisambiguationThreshold) {
-    disambiguateByContext(sentences, contextDisambiguationThreshold, 0);
+    disambiguateByContext(sentences, DEFAULT_CONTEXT_LEN, contextDisambiguationThreshold, 0);
+  }
+
+  public void disambiguateByContext(List<List<ResolvedEntityToken>> sentences, int contextLength,
+                                    float contextDisambiguationThreshold) {
+    disambiguateByContext(sentences, contextLength, contextDisambiguationThreshold, 0);
   }
 
   /**
@@ -290,21 +278,18 @@ public class EnhancedEntityExtractor {
    * @param contextDisambiguationThreshold a threshold to retain ambiguities or not.
    * @param forceToDisambiguateThreshold   a threshold to put resources to ambiguities.
    */
-  public void disambiguateByContext(List<List<ResolvedEntityToken>> sentences,
+  public void disambiguateByContext(List<List<ResolvedEntityToken>> sentences, int contextLength,
                                     float contextDisambiguationThreshold, float forceToDisambiguateThreshold) {
-    if (textsOfAllArticles == null) loadTextOfAllArticles();
-    if (textsOfAllArticles.isEmpty()) return;
-
     for (int sentenceIndex = 0; sentenceIndex < sentences.size(); sentenceIndex++) {
       final List<ResolvedEntityToken> sentence = sentences.get(sentenceIndex);
 
-      final List<ResolvedEntityToken> context = getContext(sentences, sentenceIndex, 1);
-      final Map<String, WordCount> contextWords = new HashMap<>();
+      final List<ResolvedEntityToken> context = getContext(sentences, sentenceIndex, contextLength);
+      final Map<String, WordInfo> contextWords = new HashMap<>();
       for (ResolvedEntityToken token : context) {
-        if (isBadTag(token.getPos())) continue;
+        if (Utils.isBadTag(token.getPos())) continue;
         final String word = token.getWord();
-        WordCount wc = contextWords.get(word);
-        if (wc == null) contextWords.put(word, new WordCount(1));
+        WordInfo wc = contextWords.get(word);
+        if (wc == null) contextWords.put(word, new WordInfo(1));
         else wc.count = wc.count + 1;
       }
 
@@ -312,14 +297,14 @@ public class EnhancedEntityExtractor {
         ResolvedEntityToken token = sentence.get(tokenIndex);
         if (token.getResource() == null) continue;
         final List<ResolvedEntityTokenResource> allResources = new ArrayList<>();
-        setDefaultRankMultiplier(token.getResource());
+        setDefaultRankMultiplier(token.getResource(), contextWords);
         final ResolvedEntityToken nextToken = tokenIndex < sentence.size() - 1 ? sentence.get(tokenIndex + 1) : null;
         // connected tokens are very important
         if (isConnected(token.getResource(), nextToken))
           token.getResource().setRank(token.getResource().getRank() + 0.5f);
         allResources.add(token.getResource());
         for (ResolvedEntityTokenResource a : token.getAmbiguities()) {
-          setDefaultRankMultiplier(a);
+          setDefaultRankMultiplier(a, contextWords);
           if (isConnected(a, nextToken)) a.setRank(a.getRank() + 0.5f);
           allResources.add(a);
         }
@@ -328,16 +313,27 @@ public class EnhancedEntityExtractor {
           final String url = rr.getIri();
           if (!url.startsWith("http://fkg.iust.ac.ir/resource/")) continue;
           String title = url.substring(31).replace("_", " ");
-          final HashMap<String, WordCount> articleWords = getArticleWords(title);
-          float similarity;
+          final HashMap<String, WordInfo> articleWords = articleProcessor.getArticleWords(title);
+          float similarity1;
+          float similarity2;
+          float similarity3;
           if (articleWords != null) {
-            similarity = calculateSimilarity(contextWords, articleWords,
-                true, token.getWord());
-            logger.trace(String.format("similarity between %s and %s is %f.", token.getWord(), title, similarity));
-            if (similarity == 0) similarity = 0.001f;
-          } else similarity = 0f;
-          if (token.getWord().equals(title)) similarity *= 3;
-          rr.setRank(rr.getRank() * similarity);
+            similarity1 = calculateSimilarityOfWords(contextWords, articleWords,true, token.getWord());
+            logger.trace(String.format("similarity1 between %s and %s is %f.", token.getWord(), title, similarity1));
+            similarity2 = calculateSimilarityOfEntities(context, rr.getIri());
+            logger.trace(String.format("similarity2 between %s and %s is %f.", token.getWord(), title, similarity2));
+            similarity3 = calculateSimilarityOfVerbs(context, rr.getIri());
+            logger.trace(String.format("similarity3 between %s and %s is %f.", token.getWord(), title, similarity3));
+            if (similarity1 == 0) similarity1 = 0.001f;
+            if (similarity2 == 0) similarity2 = 0.001f;
+            if (similarity3 == 0) similarity3 = 0.001f;
+          } else {
+            similarity1 = 0f;
+            similarity2 = 0f;
+            similarity3 = 0f;
+          }
+          if (token.getWord().equals(title)) similarity1 *= 3;
+          rr.setRank(rr.getRank() * (similarity1 + 3 * similarity2 + 2 * similarity3));
         }
         Collections.sort(allResources);
 
@@ -458,11 +454,12 @@ public class EnhancedEntityExtractor {
     return converted;
   }
 
-  private List<List<ResolvedEntityToken>> extract(Integer maxAmbiguities, boolean disambiguateByContext,
-                                                  Float contextDisambiguationThreshold, boolean resolveByName,
-                                                  boolean resolvePronouns, boolean buildDependencies, String value) {
+  private List<List<ResolvedEntityToken>> extract(Integer maxAmbiguities, int contextLength,
+                                                  boolean disambiguateByContext, Float contextDisambiguationThreshold,
+                                                  boolean resolveByName, boolean resolvePronouns,
+                                                  boolean buildDependencies, String value) {
     final List<List<ResolvedEntityToken>> extracted = extract(value);
-    if (disambiguateByContext) disambiguateByContext(extracted, contextDisambiguationThreshold);
+    if (disambiguateByContext) disambiguateByContext(extracted, contextLength, contextDisambiguationThreshold);
     if (resolveByName) resolveByName(extracted);
     if (resolvePronouns) resolvePronouns(extracted);
     if (buildDependencies) dependencyParse(extracted);
@@ -480,6 +477,13 @@ public class EnhancedEntityExtractor {
   public void exportWiki(Path path, Integer maxAmbiguities,
                          boolean disambiguateByContext, Float contextDisambiguationThreshold,
                          boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
+    exportWiki(path, maxAmbiguities, DEFAULT_CONTEXT_LEN, disambiguateByContext, contextDisambiguationThreshold,
+        resolveByName, resolvePronouns, buildDependencies);
+  }
+
+  public void exportWiki(Path path, Integer maxAmbiguities, int contextLength,
+                         boolean disambiguateByContext, Float contextDisambiguationThreshold,
+                         boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
     final List<Path> files = PathWalker.INSTANCE.getPath(path, new Regex("\\d+\\.json"));
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     Type type = new TypeToken<Map<String, String>>() {
@@ -492,7 +496,7 @@ public class EnhancedEntityExtractor {
       for (final String key : map.keySet()) {
         final String value = map.get(key);
         try {
-          final List<List<ResolvedEntityToken>> result = extract(maxAmbiguities, disambiguateByContext,
+          final List<List<ResolvedEntityToken>> result = extract(maxAmbiguities, contextLength, disambiguateByContext,
               contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies, value);
           exportToFile(outputFolder.resolve(key + ".json"), result);
         } catch (Throwable th) {
@@ -503,6 +507,14 @@ public class EnhancedEntityExtractor {
   }
 
   public void exportFolder(Path path, String pattern, Integer maxAmbiguities,
+                           boolean disambiguateByContext, Float contextDisambiguationThreshold,
+                           boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
+    exportFolder(path, pattern, maxAmbiguities, DEFAULT_CONTEXT_LEN, disambiguateByContext,
+        contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies);
+  }
+
+
+  public void exportFolder(Path path, String pattern, Integer maxAmbiguities, int contextLength,
                            boolean disambiguateByContext, Float contextDisambiguationThreshold,
                            boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
     if (pattern == null) pattern = ".*\\.txt";
@@ -527,8 +539,9 @@ public class EnhancedEntityExtractor {
           logger.info(line);
           if (line == null) break;
           try {
-            final List<List<ResolvedEntityToken>> extracted = extract(maxAmbiguities, disambiguateByContext,
-                contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies, line);
+            final List<List<ResolvedEntityToken>> extracted = extract(maxAmbiguities, contextLength,
+                disambiguateByContext, contextDisambiguationThreshold, resolveByName, resolvePronouns,
+                buildDependencies, line);
             list.addAll(extracted);
           } catch (Throwable th) {
             th.printStackTrace();

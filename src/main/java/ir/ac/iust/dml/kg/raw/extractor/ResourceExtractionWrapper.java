@@ -25,6 +25,14 @@ import java.util.stream.Collectors;
 @SuppressWarnings("WeakerAccess")
 public class ResourceExtractionWrapper {
 
+  private static ResourceExtractionWrapper instance = null;
+  public static ResourceExtractionWrapper i() {
+    if(instance == null)
+      instance = new ResourceExtractionWrapper(ConfigReader.INSTANCE.getString("resource.extractor.url",
+              "http://localhost:8094"));
+    return instance;
+  }
+
   private final ExtractorClient client;
   private static final Set<String> ignoredWords = new HashSet<>();
 
