@@ -198,6 +198,7 @@ public class EnhancedEntityExtractor {
         words.contains("میتواند به موارد گوناگونی اشاره") ||
         words.contains("می\u200Cتواند به موارد زیر اشاره") ||
         words.contains("میتواند به موارد زیر اشاره") ||
+        words.contains("ممکن است به موارد زیر") ||
         words.contains("می\u200Cتواند به موارد زیر") ||
         words.contains("میتواند به موارد زیر")
     );
