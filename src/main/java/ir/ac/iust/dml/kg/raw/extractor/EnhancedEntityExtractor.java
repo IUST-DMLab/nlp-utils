@@ -362,7 +362,7 @@ public class EnhancedEntityExtractor {
       }
     }));
     sentences.forEach(sentence -> sentence.forEach(token -> {
-      if (token.getAmbiguities().size() == 1 && token.getResource() != null &&
+      if (token.getAmbiguities().size() == 1 && token.getResource() == null &&
           !token.getAmbiguities().get(0).getIri().contains(")")) {
         token.setResource(token.getAmbiguities().get(0));
         token.getAmbiguities().clear();
