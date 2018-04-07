@@ -197,7 +197,10 @@ public class EnhancedEntityExtractor {
         words.contains("می\u200Cتواند به موارد گوناگونی اشاره") ||
         words.contains("میتواند به موارد گوناگونی اشاره") ||
         words.contains("می\u200Cتواند به موارد زیر اشاره") ||
-        words.contains("میتواند به موارد زیر اشاره"));
+        words.contains("میتواند به موارد زیر اشاره") ||
+        words.contains("می\u200Cتواند به موارد زیر") ||
+        words.contains("میتواند به موارد زیر")
+    );
   }
 
   private float calculateSimilarityOfEntities(List<ResolvedEntityToken> context, String iri) {
@@ -356,6 +359,13 @@ public class EnhancedEntityExtractor {
       if (token.getResource() != null && token.getResource().getRank() < forceToDisambiguateThreshold) {
         token.getAmbiguities().add(0, token.getResource());
         token.setResource(null);
+      }
+    }));
+    sentences.forEach(sentence -> sentence.forEach(token -> {
+      if (token.getAmbiguities().size() == 1 && token.getResource() != null &&
+          !token.getAmbiguities().get(0).getIri().contains(")")) {
+        token.setResource(token.getAmbiguities().get(0));
+        token.getAmbiguities().clear();
       }
     }));
   }
