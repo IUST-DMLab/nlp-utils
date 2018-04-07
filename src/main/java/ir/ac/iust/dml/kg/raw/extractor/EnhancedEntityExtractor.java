@@ -315,25 +315,25 @@ public class EnhancedEntityExtractor {
           String title = url.substring(31).replace("_", " ");
           final HashMap<String, WordInfo> articleWords = articleProcessor.getArticleWords(title);
           float similarity1;
-          float similarity2;
+//          float similarity2;
           float similarity3;
           if (articleWords != null) {
             similarity1 = calculateSimilarityOfWords(contextWords, articleWords,true, token.getWord());
             logger.trace(String.format("similarity1 between %s and %s is %f.", token.getWord(), title, similarity1));
-            similarity2 = calculateSimilarityOfEntities(context, rr.getIri());
-            logger.trace(String.format("similarity2 between %s and %s is %f.", token.getWord(), title, similarity2));
+//            similarity2 = calculateSimilarityOfEntities(context, rr.getIri());
+//            logger.trace(String.format("similarity2 between %s and %s is %f.", token.getWord(), title, similarity2));
             similarity3 = calculateSimilarityOfVerbs(context, rr.getIri());
             logger.trace(String.format("similarity3 between %s and %s is %f.", token.getWord(), title, similarity3));
             if (similarity1 == 0) similarity1 = 0.001f;
-            if (similarity2 == 0) similarity2 = 0.001f;
+//            if (similarity2 == 0) similarity2 = 0.001f;
             if (similarity3 == 0) similarity3 = 0.001f;
           } else {
             similarity1 = 0f;
-            similarity2 = 0f;
+//            similarity2 = 0f;
             similarity3 = 0f;
           }
           if (token.getWord().equals(title)) similarity1 *= 3;
-          rr.setRank(rr.getRank() * (similarity1 + 3 * similarity2 + 2 * similarity3));
+          rr.setRank(rr.getRank() * (similarity1 /*+ 3 * similarity2*/ + 2 * similarity3));
         }
         Collections.sort(allResources);
 
