@@ -122,6 +122,7 @@ public class EntityArticleProcessor {
     if(textsOfAllArticles == null) loadTextOfAllArticles();
     final List<List<TaggedWord>> sentences = getArticlePosTags(titleOrIri);
     final HashSet<String> result = new HashSet<>();
+    if (sentences == null) return result;
     final String uri = URIs.INSTANCE.getFkgResourceUri(titleOrIri);
     for (List<TaggedWord> sentence : sentences) {
       final List<MatchedResource> extracted = client.extract(sentence,
