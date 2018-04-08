@@ -10,10 +10,14 @@ import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.ling.Word;
 import ir.ac.iust.dml.kg.raw.POSTagger;
 import ir.ac.iust.dml.kg.raw.utils.ConfigReader;
+import ir.ac.iust.dml.kg.resource.extractor.IResourceExtractor;
+import ir.ac.iust.dml.kg.resource.extractor.IResourceReader;
+import ir.ac.iust.dml.kg.resource.extractor.ResourceCache;
 import ir.ac.iust.dml.kg.resource.extractor.client.ExtractorClient;
 import ir.ac.iust.dml.kg.resource.extractor.client.MatchedResource;
 import ir.ac.iust.dml.kg.resource.extractor.client.Resource;
 import ir.ac.iust.dml.kg.resource.extractor.client.ResourceType;
+import ir.ac.iust.dml.kg.resource.extractor.tree.TreeResourceExtractor;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -26,14 +30,16 @@ import java.util.stream.Collectors;
 public class ResourceExtractionWrapper {
 
   private static ResourceExtractionWrapper instance = null;
+
   public static ResourceExtractionWrapper i() {
-    if(instance == null)
+    if (instance == null)
       instance = new ResourceExtractionWrapper(ConfigReader.INSTANCE.getString("resource.extractor.url",
-              "http://localhost:8094"));
+          "http://localhost:8094"));
     return instance;
   }
 
   private final ExtractorClient client;
+  private final IResourceExtractor extractor;
   private static final Set<String> ignoredWords = new HashSet<>();
 
   private boolean isInIgnoredWords(String word) {
@@ -59,11 +65,24 @@ public class ResourceExtractionWrapper {
   }
 
   public ResourceExtractionWrapper(String serviceAddress) {
-    this.client = new ExtractorClient(serviceAddress);
+    if (serviceAddress == null || serviceAddress.length() == 0) {
+      this.client = null;
+      this.extractor = new TreeResourceExtractor();
+      final Path cacheAddress = ConfigReader.INSTANCE.getPath("searcher.cache.dir", "cache");
+      try (IResourceReader reader = new ResourceCache(cacheAddress.toString(), true)) {
+        extractor.setup(reader, 10000);
+      } catch (Throwable e) {
+        System.exit(1);
+      }
+    } else {
+      this.client = new ExtractorClient(serviceAddress);
+      this.extractor = null;
+    }
   }
 
   public ResourceExtractionWrapper() {
-    this.client = new ExtractorClient("http://194.225.227.161:8094");
+    this.client = new ExtractorClient("http://farsbase.net:8094");
+    this.extractor = null;
   }
 
   public List<List<MatchedResource>> extract(String rawText, boolean removeSubset, FilterType... filterTypes) {
@@ -73,11 +92,52 @@ public class ResourceExtractionWrapper {
     return result;
   }
 
+  private List<MatchedResource> convert(List<ir.ac.iust.dml.kg.resource.extractor.MatchedResource> resources) {
+    final List<MatchedResource> converted = new ArrayList<>();
+    for (ir.ac.iust.dml.kg.resource.extractor.MatchedResource r : resources) {
+      converted.add(convert(r));
+    }
+    return converted;
+  }
+
+  private MatchedResource convert(ir.ac.iust.dml.kg.resource.extractor.MatchedResource resource) {
+    final MatchedResource converted = new MatchedResource();
+    converted.setStart(resource.getStart());
+    converted.setEnd(resource.getEnd());
+    converted.setResource(convert(resource.getResource()));
+    converted.setAmbiguities(new ArrayList<>());
+    for (ir.ac.iust.dml.kg.resource.extractor.Resource a : resource.getAmbiguities()) {
+      converted.getAmbiguities().add(convert(a));
+    }
+    return converted;
+  }
+
+  private Resource convert(ir.ac.iust.dml.kg.resource.extractor.Resource resource) {
+    if (resource == null) return null;
+    final Resource converted = new Resource();
+    if (resource.getType() != null)
+      switch (resource.getType()) {
+        case Property:
+          converted.setType(ResourceType.Property);
+        case Entity:
+          converted.setType(ResourceType.Resource);
+        case Category:
+          converted.setType(ResourceType.Resource);
+      }
+    converted.setInstanceOf(resource.getInstanceOf());
+    converted.setIri(resource.getIri());
+    converted.setLabel(resource.getLabel());
+    return converted;
+  }
+
   public List<MatchedResource> extract(List<TaggedWord> taggedWords, boolean removeSubset, FilterType... filterTypes) {
     for (TaggedWord taggedWord : taggedWords)
       if (taggedWord.word().contains(" ")) taggedWord.setWord(taggedWord.word().replace(' ', '\u200C'));
     final String text = taggedWords.stream().map(Word::word).collect(Collectors.joining(" "));
-    final List<MatchedResource> result = client.match(text, removeSubset);
+    List<MatchedResource> result =
+        (client != null) ?
+            client.match(text, removeSubset) :
+            convert(extractor.search(text, removeSubset, true));
     for (MatchedResource resource : result) if (resource.getEnd() >= taggedWords.size()) return new ArrayList<>();
 
     final List<MatchedResource> filteredResult = new ArrayList<>();
@@ -142,7 +202,8 @@ public class ResourceExtractionWrapper {
         break;
       case Properties:
         if ((resource.getType() != null && resource.getType() == ResourceType.Property)
-            || (resource.getType() == null && resource.getIri() != null && resource.getIri().contains("ontology")))
+            || (resource.getType() == null && resource.getIri() != null &&
+            (resource.getIri().contains("ontology") || resource.getIri().contains("property"))))
           return true;
         break;
       case Things:
