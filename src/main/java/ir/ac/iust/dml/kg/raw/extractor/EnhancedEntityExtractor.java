@@ -236,13 +236,21 @@ public class EnhancedEntityExtractor {
         || resource.getIri().contains("روستا")) &&
         (!contextWords.containsKey("روستا") && !contextWords.containsKey("روستای"))) rank *= 0.01;
     if ((resource.getMainClass() != null && resource.getMainClass().endsWith("Work")
-        || resource.getIri().contains("(روزنامه")
-        || resource.getIri().contains("(کتاب")
-        || resource.getIri().contains("(انتشارات")
-        || resource.getIri().contains("(آلبوم"))
+        || resource.getIri().contains("روزنامه")
+        || resource.getIri().contains("کتاب")
+        || resource.getIri().contains("داستان")
+        || resource.getIri().contains("تورات")
+        || resource.getIri().contains("انجیل")
+        || resource.getIri().contains("قرآن")
+        || resource.getIri().contains("انتشارات")
+        || resource.getIri().contains("آلبوم"))
         || resource.getIri().contains("ترانه") &&
         (!contextWords.containsKey("روزنامه") &&
             !contextWords.containsKey("کتاب") &&
+            !contextWords.containsKey("داستان") &&
+            !contextWords.containsKey("تورات") &&
+            !contextWords.containsKey("انجیل") &&
+            !contextWords.containsKey("قرآن") &&
             !contextWords.containsKey("انتشارات")
             && !contextWords.containsKey("آلبوم") && !contextWords.containsKey("ترانه"))) rank *= 0.01;
     if (resource.getClasses().contains(prefix + "Film")
