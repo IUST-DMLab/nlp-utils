@@ -119,10 +119,13 @@ public class ResourceExtractionWrapper {
       switch (resource.getType()) {
         case Property:
           converted.setType(ResourceType.Property);
+          break;
         case Entity:
           converted.setType(ResourceType.Resource);
+          break;
         case Category:
           converted.setType(ResourceType.Resource);
+          break;
       }
     converted.setInstanceOf(resource.getInstanceOf());
     converted.setIri(resource.getIri());

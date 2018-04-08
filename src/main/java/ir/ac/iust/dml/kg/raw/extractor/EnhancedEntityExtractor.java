@@ -237,10 +237,13 @@ public class EnhancedEntityExtractor {
         (!contextWords.containsKey("روستا") && !contextWords.containsKey("روستای"))) rank *= 0.01;
     if ((resource.getMainClass() != null && resource.getMainClass().endsWith("Work")
         || resource.getIri().contains("(روزنامه")
+        || resource.getIri().contains("(کتاب")
         || resource.getIri().contains("(انتشارات")
         || resource.getIri().contains("(آلبوم"))
         || resource.getIri().contains("ترانه") &&
-        (!contextWords.containsKey("روزنامه") && !contextWords.containsKey("انتشارات")
+        (!contextWords.containsKey("روزنامه") &&
+            !contextWords.containsKey("کتاب") &&
+            !contextWords.containsKey("انتشارات")
             && !contextWords.containsKey("آلبوم") && !contextWords.containsKey("ترانه"))) rank *= 0.01;
     if (resource.getClasses().contains(prefix + "Film")
         || resource.getIri().contains("(فیلم")
