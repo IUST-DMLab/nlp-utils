@@ -65,8 +65,9 @@ public class SimpleConstituencyParser {
       final ResolvedEntityToken token = tokens.get(i);
       if (token.getPhraseMates() == null) token.setPhraseMates(new HashSet<>());
       // HEADS In Dependency Parser starts with 1
-      boolean linkedToNext = (token.getDep().getHead() == i + 2) ||
-          ((i < tokens.size() - 1) && (tokens.get(i + 1).getDep().getHead() == i + 1));
+      boolean linkedToNext = (token.getDep() != null && token.getDep().getHead() == i + 2) ||
+          ((i < tokens.size() - 1) && (tokens.get(i + 1).getDep() != null)
+              && (tokens.get(i + 1).getDep().getHead() == i + 1));
       if (linkedToNext) {
         token.getPhraseMates().add(i + 1);
         tokens.get(i + 1).getPhraseMates().add(i);
