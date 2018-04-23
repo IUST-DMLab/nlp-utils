@@ -141,6 +141,7 @@ public class ResourceExtractionWrapper {
         (client != null) ?
             client.match(text, removeSubset) :
             convert(extractor.search(text, removeSubset, true));
+    if (result == null) return new ArrayList<>();
     for (MatchedResource resource : result) if (resource.getEnd() >= taggedWords.size()) return new ArrayList<>();
 
     final List<MatchedResource> filteredResult = new ArrayList<>();
