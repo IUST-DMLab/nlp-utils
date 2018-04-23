@@ -7,6 +7,8 @@
 package ir.ac.iust.dml.kg.raw;
 
 import edu.stanford.nlp.ling.TaggedWord;
+import ir.ac.iust.dml.kg.raw.extractor.DependencyInformation;
+import ir.ac.iust.dml.kg.raw.extractor.ResolvedEntityToken;
 import org.maltparser.concurrent.graph.ConcurrentDependencyGraph;
 import org.maltparser.core.exception.MaltChainedException;
 import org.slf4j.Logger;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static ir.ac.iust.dml.kg.raw.POSTagger.tagger;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class DependencyParser {
 
   private static final Logger logger = LoggerFactory.getLogger(DependencyParser.class);
@@ -49,9 +52,28 @@ public class DependencyParser {
     return null;
   }
 
+  public static void addDependencyParse(List<ResolvedEntityToken> sentenceTokens) {
+    try {
+      final List<TaggedWord> taggedWords = new ArrayList<>();
+      for (ResolvedEntityToken token : sentenceTokens)
+        taggedWords.add(new TaggedWord(token.getWord(), token.getPos()));
+      final ConcurrentDependencyGraph parseTree = parser.rawParse(taggedWords);
+      for (int i = 0; i < sentenceTokens.size(); i++) {
+        final ResolvedEntityToken token = sentenceTokens.get(i);
+        token.setDep(new DependencyInformation(parseTree.getDependencyNode(i + 1)));
+      }
+    } catch (IOException | MaltChainedException e) {
+      logger.trace("error in dependency parse", e);
+    }
+  }
+
   public static List<ConcurrentDependencyGraph> parseSentences(List<List<TaggedWord>> sentences) {
     final List<ConcurrentDependencyGraph> result = new ArrayList<>();
     sentences.forEach(it -> result.add(parse(it)));
     return result;
+  }
+
+  public static void addDependencyParseSentences(List<List<ResolvedEntityToken>> sentences) {
+    for (List<ResolvedEntityToken> sentence : sentences) addDependencyParse(sentence);
   }
 }
