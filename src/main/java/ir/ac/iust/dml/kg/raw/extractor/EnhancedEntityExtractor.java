@@ -61,7 +61,7 @@ public class EnhancedEntityExtractor {
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText) {
-    return extract(rawText, true);
+    return extract(rawText, false);
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText,
