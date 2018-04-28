@@ -54,7 +54,9 @@ public class EnhancedEntityExtractor {
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText, boolean removeSubset) {
-    return extract(rawText, removeSubset, FilterType.FilteredWords, FilterType.CommonPosTags, FilterType.Properties);
+    return extract(rawText, removeSubset, FilterType.FilteredWords,
+        FilterType.CommonPosTags, FilterType.Properties, FilterType.Villages,
+        FilterType.TelevisionShows, FilterType.Films);
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText) {

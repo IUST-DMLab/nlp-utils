@@ -204,6 +204,12 @@ public class ResourceExtractionWrapper {
       case Villages:
         if (resource.getInstanceOf() != null && resource.getInstanceOf().contains("Village")) return true;
         break;
+      case TelevisionShows:
+        if (resource.getInstanceOf() != null && resource.getInstanceOf().contains("TelevisionShow")) return true;
+        break;
+      case Films:
+        if (resource.getInstanceOf() != null && resource.getInstanceOf().contains("Film")) return true;
+        break;
       case Properties:
         if ((resource.getType() != null && resource.getType() == ResourceType.Property)
             || (resource.getType() == null && resource.getIri() != null &&
