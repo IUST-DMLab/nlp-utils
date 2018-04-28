@@ -211,7 +211,7 @@ public class ResourceExtractionWrapper {
         if (resource.getInstanceOf() != null && resource.getInstanceOf().contains("Film")) return true;
         break;
       case MusicalWorks:
-        if (resource.getInstanceOf() != null && resource.getInstanceOf().contains("MusicalWorks")) return true;
+        if (resource.getInstanceOf() != null && resource.getInstanceOf().contains("MusicalWork")) return true;
         break;
       case Properties:
         if ((resource.getType() != null && resource.getType() == ResourceType.Property)
