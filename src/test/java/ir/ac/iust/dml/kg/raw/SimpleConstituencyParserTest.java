@@ -33,7 +33,7 @@ public class SimpleConstituencyParserTest {
 
   @Test
   public void constituency2() throws IOException {
-    InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("sample.txt");
+    InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("sample_sentences.txt");
     StringWriter writer = new StringWriter();
     IOUtils.copy(inputStream, writer, Charset.forName("UTF-8"));
     String input = writer.toString();
@@ -44,7 +44,7 @@ public class SimpleConstituencyParserTest {
   @Test
   public void constituencyAndRelation() throws IOException {
 //    String input = "حاجی میرزا نصرالله معروف به ملک\u200Cالمتکلمین یک دورهٔ کامل فلسفه را نزد آخوند ملا صالح فریدنی آموخت.";
-    InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("sample.txt");
+    InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("sample_sentences.txt");
     StringWriter writer = new StringWriter();
     IOUtils.copy(inputStream, writer, Charset.forName("UTF-8"));
     String input = writer.toString();

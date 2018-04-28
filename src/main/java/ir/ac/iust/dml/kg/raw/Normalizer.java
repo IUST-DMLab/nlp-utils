@@ -23,7 +23,7 @@ public class Normalizer {
   }
 
   public static String removeBrackets(String text) {
-    return text.replaceAll("[\\[\\({].*?[\\]\\)}]", "");
+    return text.replaceAll("\\s*[\\[\\({-][^\\.]*?[\\]\\)}-]\\s*", " ");
   }
 
   public void  annotate(Annotation annotation) {

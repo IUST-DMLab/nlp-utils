@@ -20,8 +20,10 @@ public class Tester {
 
     @Test
     public void normalizerBrackets() {
-        final String input = "مجید عسگری (زاده ۲۸ اسفند ۶۳) در تهران (محله جیحون) است.";
-        final String expected = "مجید عسگری در تهران است.";
+      final String input = "مجید عسگری (زاده ۲۸ اسفند ۶۳) در تهران" +
+          " [محله جیحون] -که پایتخت ایران بود- بدنیا آمد اما نتیجه ۲-۱ به نفع رم رقم خورد." +
+          "بازی بعدی ولی، ۳-۲ شد.";
+      final String expected = "مجید عسگری در تهران  بدنیا آمد اما نتیجه ۲-۱ به نفع رم رقم خورد.بازی بعدی ولی، ۳-۲ شد.";
         assert Objects.equals(expected, Normalizer.removeBrackets(input));
     }
 
