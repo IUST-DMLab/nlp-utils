@@ -9,10 +9,10 @@ package ir.ac.iust.dml.kg.raw;
 public class SentenceBranch {
 
   public static String summarize(String text) {
-    return text.replaceAll("\\s*" + "[\\،\\.و]*" + "\\s*" +
-            "(آنگاه|اما|ولی|به هر حال|بنابراین)" + "\\s*"
-        , ". ").replaceAll("\\s*" + "[\\،\\.]+" + "\\s*" +
-            "(که|البته|و)" + "\\s*"
+    return text.replaceAll("\\s*" + "[\\،\\.و]*" + "\\s+" +
+            "(آنگاه|اما|ولی|به هر حال|بنابراین)" + "\\s+"
+        , ". ").replaceAll("\\s*" + "[\\،\\.]+" + "\\s+" +
+            "(که|البته|و)" + "\\s+"
         , ". ");
   }
 }
