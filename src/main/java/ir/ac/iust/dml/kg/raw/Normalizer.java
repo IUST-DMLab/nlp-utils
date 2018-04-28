@@ -22,6 +22,10 @@ public class Normalizer {
     return normalizer.run(text);
   }
 
+  public static String removeBrackets(String text) {
+    return text.replaceAll("[\\[\\({].*?[\\]\\)}]", "");
+  }
+
   public void  annotate(Annotation annotation) {
     String annotationText=annotation.get(CoreAnnotations.TextAnnotation.class);
     annotation.set(CoreAnnotations.OriginalTextAnnotation.class,annotationText);

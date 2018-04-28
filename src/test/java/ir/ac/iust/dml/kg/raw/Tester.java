@@ -19,6 +19,13 @@ public class Tester {
     }
 
     @Test
+    public void normalizerBrackets() {
+        final String input = "مجید عسگری (زاده ۲۸ اسفند ۶۳) در تهران (محله جیحون) است.";
+        final String expected = "مجید عسگری در تهران است.";
+        assert Objects.equals(expected, Normalizer.removeBrackets(input));
+    }
+
+    @Test
     public void sentenceTokenizer() {
         final String input = "سلام من مجید عسکري هستم.";
         final String expected = "سلام من مجید عسکری هستم.";
