@@ -41,7 +41,7 @@ public class SimpleConstituencyParserTest {
     System.out.println(SimpleConstituencyParser.sentencesToString(result));
   }
 
-  //    @Test
+  @Test
   public void constituencyAndRelation() throws IOException {
 //    String input = "حاجی میرزا نصرالله معروف به ملک\u200Cالمتکلمین یک دورهٔ کامل فلسفه را نزد آخوند ملا صالح فریدنی آموخت.";
     InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("sample.txt");
@@ -54,7 +54,7 @@ public class SimpleConstituencyParserTest {
     enhancedEntityExtractor.resolveByName(resolved);
     enhancedEntityExtractor.resolvePronouns(resolved);
     resolved = enhancedEntityExtractor.shrinkNameEntitiesSentences(resolved);
-    DependencyParser.addDependencyParseSentences(resolved);
+    DependencyParser.addDependencyParseSentences(resolved, true);
     SimpleConstituencyParser.addConstituencyParseSentences(resolved);
 //    resolved = enhancedEntityExtractor.augmentNameEntities(resolved);
     System.out.println(SimpleConstituencyParser.sentencesToString(resolved));

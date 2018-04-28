@@ -52,14 +52,25 @@ public class DependencyParser {
     return null;
   }
 
-  public static void addDependencyParse(List<ResolvedEntityToken> sentenceTokens) {
+  public static void addDependencyParse(List<ResolvedEntityToken> sentenceTokens, boolean shrunk) {
     try {
-      final List<TaggedWord> taggedWords = new ArrayList<>();
-      for (ResolvedEntityToken token : sentenceTokens)
-        taggedWords.add(new TaggedWord(token.getWord(), token.getPos()));
+      final List<TaggedWord> taggedWords;
+      if (shrunk) {
+        List<String> text = new ArrayList<>();
+        for (ResolvedEntityToken token : sentenceTokens) {
+          if (token.getShrunkWords() != null) text.add("موجودیتاسمی");
+          else text.add(token.getWord());
+        }
+        taggedWords = POSTagger.tag(text);
+      } else {
+        taggedWords = new ArrayList<>();
+        for (ResolvedEntityToken token : sentenceTokens)
+          taggedWords.add(new TaggedWord(token.getWord(), token.getPos()));
+      }
       final ConcurrentDependencyGraph parseTree = parser.rawParse(taggedWords);
       for (int i = 0; i < sentenceTokens.size(); i++) {
         final ResolvedEntityToken token = sentenceTokens.get(i);
+        if (shrunk) token.setPos(taggedWords.get(i).tag());
         token.setDep(new DependencyInformation(parseTree.getDependencyNode(i + 1)));
       }
     } catch (IOException | MaltChainedException e) {
@@ -73,7 +84,7 @@ public class DependencyParser {
     return result;
   }
 
-  public static void addDependencyParseSentences(List<List<ResolvedEntityToken>> sentences) {
-    for (List<ResolvedEntityToken> sentence : sentences) addDependencyParse(sentence);
+  public static void addDependencyParseSentences(List<List<ResolvedEntityToken>> sentences, boolean shrunk) {
+    for (List<ResolvedEntityToken> sentence : sentences) addDependencyParse(sentence, shrunk);
   }
 }
