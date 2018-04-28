@@ -41,9 +41,13 @@ public class SimpleConstituencyParserTest {
     System.out.println(SimpleConstituencyParser.sentencesToString(result));
   }
 
-  @Test
-  public void constituencyAndRelation() {
-    String input = "حاجی میرزا نصرالله معروف به ملک\u200Cالمتکلمین یک دورهٔ کامل فلسفه را نزد آخوند ملا صالح فریدنی آموخت.";
+  //  @Test
+  public void constituencyAndRelation() throws IOException {
+//    String input = "حاجی میرزا نصرالله معروف به ملک\u200Cالمتکلمین یک دورهٔ کامل فلسفه را نزد آخوند ملا صالح فریدنی آموخت.";
+    InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("sample.txt");
+    StringWriter writer = new StringWriter();
+    IOUtils.copy(inputStream, writer, Charset.forName("UTF-8"));
+    String input = writer.toString();
     if (enhancedEntityExtractor == null) enhancedEntityExtractor = new EnhancedEntityExtractor();
     List<List<ResolvedEntityToken>> resolved = enhancedEntityExtractor.extract(input);
     enhancedEntityExtractor.disambiguateByContext(resolved, 3, 0.0001f);

@@ -86,7 +86,13 @@ public class EnhancedEntityExtractor {
           final ResolvedEntityToken previousToken = sentence.get(i - 1);
           if (previousToken.getShrunkWords() == null) {
             previousToken.setShrunkWords(new ArrayList<>());
-            previousToken.getShrunkWords().add(previousToken);
+            ResolvedEntityToken copy = new ResolvedEntityToken();
+            copy.setResource(previousToken.getResource());
+            copy.setAmbiguities(previousToken.getAmbiguities());
+            copy.setWord(previousToken.getWord());
+            copy.setPos(previousToken.getPos());
+            copy.setIobType(previousToken.getIobType());
+            previousToken.getShrunkWords().add(copy);
           }
           previousToken.getShrunkWords().add(token);
           previousToken.setWord("موجودیتاسمی");

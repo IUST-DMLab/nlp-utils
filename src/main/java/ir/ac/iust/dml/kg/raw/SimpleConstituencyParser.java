@@ -103,7 +103,8 @@ public class SimpleConstituencyParser {
       boolean linkedToNext = (token.getDep() != null && token.getDep().getHead() == i + 2) ||
           ((i < tokens.size() - 1) && (tokens.get(i + 1).getDep() != null)
               && (tokens.get(i + 1).getDep().getHead() == i + 1)) ||
-          (token.getPos().equals("P"));
+          (token.getPos().equals("از") ||
+              (token.getPos().equals("به")));
       if (linkedToNext) {
         token.getPhraseMates().add(i + 1);
         tokens.get(i + 1).getPhraseMates().add(i);
