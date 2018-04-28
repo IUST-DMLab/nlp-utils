@@ -48,7 +48,7 @@ public class TextProcess {
     int tokenIndex = 0;
     for (String paragraph : paragraphs) {
       CoreMap newParagraph = new ArrayCoreMap();
-      List<String> sentences = SentenceTokenizer.SentrenceSplitter(paragraph);
+      List<String> sentences = SentenceTokenizer.SentenceSplitter(paragraph);
       List<CoreMap> coreMaps = new ArrayList<>();
       List<CoreLabel> coreLabels = new ArrayList<>();
       for (String sentence : sentences) {

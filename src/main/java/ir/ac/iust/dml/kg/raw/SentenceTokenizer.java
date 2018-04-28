@@ -17,10 +17,10 @@ public class SentenceTokenizer {
   private static MainSentenceSplitter sentenceTokenizer = new MainSentenceSplitter();
 
   public static List<String> SentenceSplitterRaw(String text) {
-    return SentrenceSplitter(Normalizer.normalize(text));
+    return SentenceSplitter(Normalizer.normalize(text));
   }
 
-  public static List<String> SentrenceSplitter(String text) {
+  public static List<String> SentenceSplitter(String text) {
     logger.trace("tokenize to sentences: " + text);
     return sentenceTokenizer.tokenize(text);
   }

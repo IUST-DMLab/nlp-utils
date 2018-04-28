@@ -8,6 +8,7 @@ package ir.ac.iust.dml.kg.raw.extractor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @SuppressWarnings("WeakerAccess")
@@ -17,6 +18,7 @@ public class ResolvedEntityToken {
   private DependencyInformation dep;
   private IobType iobType;
   private Set<Integer> phraseMates;
+  private Map<Integer, DependencyInformation> dependencyMates;
   private ResolvedEntityTokenResource resource;
   private List<ResolvedEntityTokenResource> ambiguities = new ArrayList<>();
 
@@ -26,6 +28,14 @@ public class ResolvedEntityToken {
 
   public void setPhraseMates(Set<Integer> phraseMates) {
     this.phraseMates = phraseMates;
+  }
+
+  public Map<Integer, DependencyInformation> getDependencyMates() {
+    return dependencyMates;
+  }
+
+  public void setDependencyMates(Map<Integer, DependencyInformation> dependencyMates) {
+    this.dependencyMates = dependencyMates;
   }
 
   public String getWord() {

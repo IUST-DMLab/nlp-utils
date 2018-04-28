@@ -8,8 +8,13 @@ package ir.ac.iust.dml.kg.raw;
 
 import ir.ac.iust.dml.kg.raw.extractor.EnhancedEntityExtractor;
 import ir.ac.iust.dml.kg.raw.extractor.ResolvedEntityToken;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.List;
 
 public class SimpleConstituencyParserTest {
@@ -26,8 +31,18 @@ public class SimpleConstituencyParserTest {
     System.out.println(SimpleConstituencyParser.sentencesToString(result));
   }
 
+  @Test
+  public void constituency2() throws IOException {
+    InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("sample.txt");
+    StringWriter writer = new StringWriter();
+    IOUtils.copy(inputStream, writer, Charset.forName("UTF-8"));
+    String input = writer.toString();
+    List<List<ResolvedEntityToken>> result = SimpleConstituencyParser.constituency(input);
+    System.out.println(SimpleConstituencyParser.sentencesToString(result));
+  }
+
   //  @Test
-  public void constituency2() {
+  public void constituencyAndRelation() {
     String input = "علی دایی در سال ١٣٣٢ در شهر تهران و در خانواده ای سنتی متولد شد.";
     if (enhancedEntityExtractor == null) enhancedEntityExtractor = new EnhancedEntityExtractor();
     final List<List<ResolvedEntityToken>> resolved = enhancedEntityExtractor.extract(input);
