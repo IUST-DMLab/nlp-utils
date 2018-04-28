@@ -105,7 +105,7 @@ public class SimpleConstituencyParser {
               && (tokens.get(i + 1).getDep().getHead() == i + 1)) ||
           (token.getPos().equals("از") ||
               (token.getPos().equals("به")));
-      if (linkedToNext) {
+      if (linkedToNext && i < tokens.size() - 1) {
         token.getPhraseMates().add(i + 1);
         tokens.get(i + 1).getPhraseMates().add(i);
       }
