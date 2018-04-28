@@ -20,6 +20,7 @@ public class ResolvedEntityToken {
   private Set<Integer> phraseMates;
   private Map<Integer, DependencyInformation> dependencyMates;
   private ResolvedEntityTokenResource resource;
+  private List<ResolvedEntityToken> shrunkWords;
   private List<ResolvedEntityTokenResource> ambiguities = new ArrayList<>();
 
   public Set<Integer> getPhraseMates() {
@@ -56,6 +57,14 @@ public class ResolvedEntityToken {
 
   public DependencyInformation getDep() {
     return dep;
+  }
+
+  public List<ResolvedEntityToken> getShrunkWords() {
+    return shrunkWords;
+  }
+
+  public void setShrunkWords(List<ResolvedEntityToken> shrunkWords) {
+    this.shrunkWords = shrunkWords;
   }
 
   public void setDep(DependencyInformation dep) {

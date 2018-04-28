@@ -125,7 +125,12 @@ public class SimpleConstituencyParser {
     builder.append('[');
     for (int i = 0; i < tokens.size(); i++) {
       ResolvedEntityToken token = tokens.get(i);
-      builder.append(token.getWord());
+      if (token.getShrunkWords() == null) builder.append(token.getWord());
+      else {
+        for (ResolvedEntityToken shrunkWord : token.getShrunkWords())
+          builder.append(shrunkWord.getWord()).append(" ");
+        builder.setLength(builder.length() - 1);
+      }
       if (token.getPhraseMates().contains(i + 1)) builder.append(' ');
       else builder.append("] [");
     }

@@ -41,16 +41,18 @@ public class SimpleConstituencyParserTest {
     System.out.println(SimpleConstituencyParser.sentencesToString(result));
   }
 
-  //  @Test
+  @Test
   public void constituencyAndRelation() {
-    String input = "علی دایی در سال ١٣٣٢ در شهر تهران و در خانواده ای سنتی متولد شد.";
+    String input = "حاجی میرزا نصرالله معروف به ملک\u200Cالمتکلمین یک دورهٔ کامل فلسفه را نزد آخوند ملا صالح فریدنی آموخت.";
     if (enhancedEntityExtractor == null) enhancedEntityExtractor = new EnhancedEntityExtractor();
-    final List<List<ResolvedEntityToken>> resolved = enhancedEntityExtractor.extract(input);
+    List<List<ResolvedEntityToken>> resolved = enhancedEntityExtractor.extract(input);
     enhancedEntityExtractor.disambiguateByContext(resolved, 3, 0.0001f);
     enhancedEntityExtractor.resolveByName(resolved);
     enhancedEntityExtractor.resolvePronouns(resolved);
+    resolved = enhancedEntityExtractor.shrinkNameEntities(resolved);
     DependencyParser.addDependencyParseSentences(resolved);
     SimpleConstituencyParser.addConstituencyParseSentences(resolved);
+//    resolved = enhancedEntityExtractor.augmentNameEntities(resolved);
     System.out.println(SimpleConstituencyParser.sentencesToString(resolved));
   }
 }

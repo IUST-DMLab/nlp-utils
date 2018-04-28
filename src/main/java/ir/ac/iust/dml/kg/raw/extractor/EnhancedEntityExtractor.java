@@ -70,6 +70,48 @@ public class EnhancedEntityExtractor {
     return result;
   }
 
+  public List<List<ResolvedEntityToken>> shrinkNameEntities(List<List<ResolvedEntityToken>> sentences) {
+    List<List<ResolvedEntityToken>> shrunkSentences = new ArrayList<>();
+    for (List<ResolvedEntityToken> sentence : sentences) {
+      List<ResolvedEntityToken> shrunkSentence = new ArrayList<>();
+      for (int i = 0; i < sentence.size(); i++) {
+        final ResolvedEntityToken token = sentence.get(i);
+        final boolean linkedToPrevious = token.getResource() != null &&
+            !token.getResource().getClasses().contains("http://fkg.iust.ac.ir/ontology/Think") &&
+            !token.getResource().getClasses().contains("http://fkg.iust.ac.ir/ontology/TelevisionShow") &&
+            i > 0 &&
+            sentence.get(i - 1).getResource() != null &&
+            token.getResource().getIri().equals(sentence.get(i - 1).getResource().getIri());
+        if (linkedToPrevious) {
+          final ResolvedEntityToken previousToken = sentence.get(i - 1);
+          if (previousToken.getShrunkWords() == null) {
+            previousToken.setShrunkWords(new ArrayList<>());
+            previousToken.getShrunkWords().add(previousToken);
+          }
+          previousToken.getShrunkWords().add(token);
+          previousToken.setWord("موجودیتاسمی");
+        } else shrunkSentence.add(token);
+      }
+      shrunkSentences.add(shrunkSentence);
+    }
+    return shrunkSentences;
+  }
+
+  public List<List<ResolvedEntityToken>> augmentNameEntities(List<List<ResolvedEntityToken>> sentences) {
+    List<List<ResolvedEntityToken>> augmentedSentences = new ArrayList<>();
+    for (List<ResolvedEntityToken> sentence : sentences) {
+      List<ResolvedEntityToken> augmentedSentence = new ArrayList<>();
+      for (final ResolvedEntityToken token : sentence) {
+        if (token.getShrunkWords() != null) {
+          List<ResolvedEntityToken> shrunkWords = token.getShrunkWords();
+          augmentedSentence.addAll(shrunkWords);
+        } else augmentedSentence.add(token);
+      }
+      augmentedSentences.add(augmentedSentence);
+    }
+    return augmentedSentences;
+  }
+
   private class ResourceAndIob {
     Resource resource;
     List<Resource> ambiguities;
@@ -135,7 +177,7 @@ public class EnhancedEntityExtractor {
     if (relatedCache.containsKey(title))
       return relatedCache.get(title);
     final String body = articleProcessor.getArticleBody(title);
-    if(body == null) return null;
+    if (body == null) return null;
     System.out.println("body is \n" + body);
     final List<List<ResolvedEntityToken>> extracted = extract(body);
 
@@ -207,23 +249,23 @@ public class EnhancedEntityExtractor {
   private float calculateSimilarityOfEntities(List<ResolvedEntityToken> context, String iri) {
     int count = 0;
     final HashSet<String> entities = articleProcessor.getArticleResources(iri);
-    for(ResolvedEntityToken token : context) {
-      if(token.getResource() != null)
-          if(entities.contains(token.getResource().getIri())) count++;
-      for(ResolvedEntityTokenResource ar: token.getAmbiguities()) {
-          if(entities.contains(ar.getIri())) count++;
+    for (ResolvedEntityToken token : context) {
+      if (token.getResource() != null)
+        if (entities.contains(token.getResource().getIri())) count++;
+      for (ResolvedEntityTokenResource ar : token.getAmbiguities()) {
+        if (entities.contains(ar.getIri())) count++;
       }
     }
-    return ((float)count) / context.size();
+    return ((float) count) / context.size();
   }
 
   private float calculateSimilarityOfVerbs(List<ResolvedEntityToken> context, String iri) {
     int count = 0;
     final HashSet<String> verbs = articleProcessor.getArticleVerbs(iri);
-    for(ResolvedEntityToken token : context) {
-      if(token.getPos().equals("V") && verbs.contains(token.getWord())) count++;
+    for (ResolvedEntityToken token : context) {
+      if (token.getPos().equals("V") && verbs.contains(token.getWord())) count++;
     }
-    return ((float)count) / context.size();
+    return ((float) count) / context.size();
   }
 
   private void setDefaultRankMultiplier(ResolvedEntityTokenResource resource, Map<String, WordInfo> contextWords) {
@@ -333,7 +375,7 @@ public class EnhancedEntityExtractor {
 //          float similarity2;
           float similarity3;
           if (articleWords != null) {
-            similarity1 = calculateSimilarityOfWords(contextWords, articleWords,true, token.getWord());
+            similarity1 = calculateSimilarityOfWords(contextWords, articleWords, true, token.getWord());
             logger.trace(String.format("similarity1 between %s and %s is %f.", token.getWord(), title, similarity1));
 //            similarity2 = calculateSimilarityOfEntities(context, rr.getIri());
 //            logger.trace(String.format("similarity2 between %s and %s is %f.", token.getWord(), title, similarity2));
