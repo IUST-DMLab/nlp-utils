@@ -114,7 +114,7 @@ public class SimpleConstituencyParser {
           (token.getDep() != null && token.getDep().getRelation().equals("MOZ")) ||
               (token.getDep() != null && token.getDep().getRelation().equals("NCONJ")) ||
               (token.getPhraseMates().isEmpty() && token.getWord().equals("را"));
-      if (linkedToThePrevious) {
+      if (linkedToThePrevious && i > 1) {
         token.getPhraseMates().add(i - 1);
         tokens.get(i - 1).getPhraseMates().add(i);
       }
