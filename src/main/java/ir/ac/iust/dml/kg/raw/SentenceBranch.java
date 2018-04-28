@@ -10,9 +10,9 @@ public class SentenceBranch {
 
   public static String summarize(String text) {
     return text.replaceAll("\\s*" + "[\\،\\.و]*" + "\\s*" +
-            "(آنگاه|اما|ولی|به هر حال|بنابراین)"
+            "(آنگاه|اما|ولی|به هر حال|بنابراین)" + "\\s*"
         , ". ").replaceAll("\\s*" + "[\\،\\.]+" + "\\s*" +
-            "(که|البته|و)"
+            "(که|البته|و)" + "\\s*"
         , ". ");
   }
 }
