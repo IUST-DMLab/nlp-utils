@@ -17,7 +17,7 @@ public class SentenceBranchTester {
     String expected = "من تو را دوست دارم.  تو مرا دوست نداری.";
     assert Objects.equals(expected, SentenceBranch.summarize(input));
 
-    input = "من تو را دوست دارم که تو مرا دوست نداری.";
+    input = "من تو را دوست دارم، که تو مرا دوست نداری.";
     expected = "من تو را دوست دارم.  تو مرا دوست نداری.";
     assert Objects.equals(expected, SentenceBranch.summarize(input));
   }
