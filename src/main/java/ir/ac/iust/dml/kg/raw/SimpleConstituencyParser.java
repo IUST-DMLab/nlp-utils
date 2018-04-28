@@ -70,7 +70,7 @@ public class SimpleConstituencyParser {
     // Thinking to dependency links as bi-directional links.
     for (int i = 0; i < tokens.size(); i++) {
       final ResolvedEntityToken token = tokens.get(i);
-      if (token.getDep().getHead() == 0) continue;
+      if (token.getDep().getHead() == 0 || token.getDep().getHead() > tokens.size() - 2) continue;
       token.getDependencyMates().put(token.getDep().getHead() - 1, token.getDep());
       tokens.get(token.getDep().getHead() - 1).getDependencyMates().put(i, token.getDep());
     }
