@@ -53,7 +53,7 @@ public class SimpleConstituencyParserTest {
     enhancedEntityExtractor.disambiguateByContext(resolved, 3, 0.0001f);
     enhancedEntityExtractor.resolveByName(resolved);
     enhancedEntityExtractor.resolvePronouns(resolved);
-    resolved = enhancedEntityExtractor.shrinkNameEntities(resolved);
+    resolved = enhancedEntityExtractor.shrinkNameEntitiesSentences(resolved);
     DependencyParser.addDependencyParseSentences(resolved);
     SimpleConstituencyParser.addConstituencyParseSentences(resolved);
 //    resolved = enhancedEntityExtractor.augmentNameEntities(resolved);

@@ -18,6 +18,7 @@ import ir.ac.iust.dml.kg.resource.extractor.client.Resource;
 import ir.ac.iust.dml.kg.resource.extractor.client.ResourceType;
 import kotlin.Pair;
 import kotlin.text.Regex;
+import org.jetbrains.annotations.NotNull;
 import org.maltparser.concurrent.graph.ConcurrentDependencyGraph;
 import org.maltparser.concurrent.graph.ConcurrentDependencyNode;
 import org.slf4j.Logger;
@@ -70,37 +71,41 @@ public class EnhancedEntityExtractor {
     return result;
   }
 
-  public List<List<ResolvedEntityToken>> shrinkNameEntities(List<List<ResolvedEntityToken>> sentences) {
+  public List<List<ResolvedEntityToken>> shrinkNameEntitiesSentences(List<List<ResolvedEntityToken>> sentences) {
     List<List<ResolvedEntityToken>> shrunkSentences = new ArrayList<>();
-    for (List<ResolvedEntityToken> sentence : sentences) {
-      List<ResolvedEntityToken> shrunkSentence = new ArrayList<>();
-      for (int i = 0; i < sentence.size(); i++) {
-        final ResolvedEntityToken token = sentence.get(i);
-        final boolean linkedToPrevious = token.getResource() != null &&
-            !token.getResource().getClasses().contains("http://fkg.iust.ac.ir/ontology/Think") &&
-            !token.getResource().getClasses().contains("http://fkg.iust.ac.ir/ontology/TelevisionShow") &&
-            i > 0 &&
-            sentence.get(i - 1).getResource() != null &&
-            token.getResource().getIri().equals(sentence.get(i - 1).getResource().getIri());
-        if (linkedToPrevious) {
-          final ResolvedEntityToken previousToken = sentence.get(i - 1);
-          if (previousToken.getShrunkWords() == null) {
-            previousToken.setShrunkWords(new ArrayList<>());
-            ResolvedEntityToken copy = new ResolvedEntityToken();
-            copy.setResource(previousToken.getResource());
-            copy.setAmbiguities(previousToken.getAmbiguities());
-            copy.setWord(previousToken.getWord());
-            copy.setPos(previousToken.getPos());
-            copy.setIobType(previousToken.getIobType());
-            previousToken.getShrunkWords().add(copy);
-          }
-          previousToken.getShrunkWords().add(token);
-          previousToken.setWord("موجودیتاسمی");
-        } else shrunkSentence.add(token);
-      }
-      shrunkSentences.add(shrunkSentence);
-    }
+    for (List<ResolvedEntityToken> sentence : sentences)
+      shrunkSentences.add(shrinkNameEntities(sentence));
     return shrunkSentences;
+  }
+
+  @NotNull
+  public List<ResolvedEntityToken> shrinkNameEntities(List<ResolvedEntityToken> sentence) {
+    List<ResolvedEntityToken> shrunkSentence = new ArrayList<>();
+    for (int i = 0; i < sentence.size(); i++) {
+      final ResolvedEntityToken token = sentence.get(i);
+      final boolean linkedToPrevious = token.getResource() != null &&
+          !token.getResource().getClasses().contains("http://fkg.iust.ac.ir/ontology/Think") &&
+          !token.getResource().getClasses().contains("http://fkg.iust.ac.ir/ontology/TelevisionShow") &&
+          i > 0 &&
+          sentence.get(i - 1).getResource() != null &&
+          token.getResource().getIri().equals(sentence.get(i - 1).getResource().getIri());
+      if (linkedToPrevious) {
+        final ResolvedEntityToken previousToken = sentence.get(i - 1);
+        if (previousToken.getShrunkWords() == null) {
+          previousToken.setShrunkWords(new ArrayList<>());
+          ResolvedEntityToken copy = new ResolvedEntityToken();
+          copy.setResource(previousToken.getResource());
+          copy.setAmbiguities(previousToken.getAmbiguities());
+          copy.setWord(previousToken.getWord());
+          copy.setPos(previousToken.getPos());
+          copy.setIobType(previousToken.getIobType());
+          previousToken.getShrunkWords().add(copy);
+        }
+        previousToken.getShrunkWords().add(token);
+        previousToken.setWord("موجودیتاسمی");
+      } else shrunkSentence.add(token);
+    }
+    return shrunkSentence;
   }
 
   public List<List<ResolvedEntityToken>> augmentNameEntities(List<List<ResolvedEntityToken>> sentences) {
