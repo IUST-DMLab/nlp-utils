@@ -23,6 +23,18 @@ public class ResolvedEntityToken {
   private List<ResolvedEntityToken> shrunkWords;
   private List<ResolvedEntityTokenResource> ambiguities = new ArrayList<>();
 
+  public ResolvedEntityToken() {
+  }
+
+  public ResolvedEntityToken(ResolvedEntityToken copyFrom) {
+    this.word = copyFrom.word;
+    this.pos = copyFrom.pos;
+    this.dep = copyFrom.dep;
+    this.iobType = copyFrom.iobType;
+    this.resource = copyFrom.resource;
+    this.ambiguities = copyFrom.ambiguities;
+  }
+
   public Set<Integer> getPhraseMates() {
     return phraseMates;
   }
