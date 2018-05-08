@@ -81,8 +81,7 @@ public class EnhancedEntityExtractor {
     return shrunkSentences;
   }
 
-  final String thing = URIs.INSTANCE.getFkgOntologyClassUri("Thing");
-  final String show = URIs.INSTANCE.getFkgOntologyClassUri("TelevisionShow");
+  final String agent = URIs.INSTANCE.getFkgOntologyClassUri("Agent");
 
   @NotNull
   public List<ResolvedEntityToken> shrinkNameEntities(List<ResolvedEntityToken> sentence) {
@@ -90,8 +89,7 @@ public class EnhancedEntityExtractor {
     for (int i = 0; i < sentence.size(); i++) {
       final ResolvedEntityToken token = sentence.get(i);
       final boolean linkedToPrevious = token.getResource() != null &&
-          !token.getResource().getClasses().contains(thing) &&
-          !token.getResource().getClasses().contains(show) && i > 0 &&
+          token.getResource().getClasses().contains(agent) && i > 0 &&
           sentence.get(i - 1).getResource() != null &&
           token.getResource().getIri().equals(sentence.get(i - 1).getResource().getIri());
       if (linkedToPrevious) {
