@@ -127,6 +127,7 @@ public class ResourceExtractionWrapper {
           converted.setType(ResourceType.Resource);
           break;
       }
+    converted.getClassTree().addAll(resource.getClassTree());
     converted.setInstanceOf(resource.getInstanceOf());
     converted.setIri(resource.getIri());
     converted.setLabel(resource.getLabel());
