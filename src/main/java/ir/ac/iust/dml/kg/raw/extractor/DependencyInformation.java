@@ -19,6 +19,17 @@ public class DependencyInformation {
   public DependencyInformation() {
   }
 
+  public DependencyInformation copy() {
+    DependencyInformation copy = new DependencyInformation();
+    copy.position = this.position;
+    copy.lemma = this.lemma;
+    copy.features = this.features;
+    copy.head = this.head;
+    copy.relation = this.relation;
+    copy.cPOS = this.cPOS;
+    return copy;
+  }
+
   public DependencyInformation(ConcurrentDependencyNode node) {
     this.cPOS = node.getLabel("CPOSTAG");
     this.features = node.getLabel("FEATS");

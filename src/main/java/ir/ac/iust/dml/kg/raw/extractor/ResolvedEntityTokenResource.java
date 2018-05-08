@@ -19,6 +19,17 @@ public class ResolvedEntityTokenResource implements Comparable<ResolvedEntityTok
   private String mainClass;
   private Set<String> classes = new HashSet<>();
 
+
+  public ResolvedEntityTokenResource copy() {
+    ResolvedEntityTokenResource copy = new ResolvedEntityTokenResource();
+    copy.iri = this.iri;
+    copy.isResource = this.isResource;
+    copy.rank = this.rank;
+    copy.mainClass = this.mainClass;
+    copy.classes.addAll(this.classes);
+    return copy;
+  }
+
   public String getIri() {
     return iri;
   }
