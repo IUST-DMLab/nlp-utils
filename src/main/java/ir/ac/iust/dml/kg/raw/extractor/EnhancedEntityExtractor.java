@@ -56,8 +56,8 @@ public class EnhancedEntityExtractor {
 
   public List<List<ResolvedEntityToken>> extract(String rawText, boolean removeSubset) {
     return extract(rawText, removeSubset, FilterType.FilteredWords,
-        FilterType.CommonPosTags, FilterType.Properties, FilterType.Villages,
-        FilterType.TelevisionShows, FilterType.Films, FilterType.MusicalWorks);
+            FilterType.CommonPosTags, FilterType.Properties, FilterType.Villages,
+            FilterType.TelevisionShows, FilterType.Films, FilterType.MusicalWorks);
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText) {
@@ -89,9 +89,9 @@ public class EnhancedEntityExtractor {
     for (int i = 0; i < sentence.size(); i++) {
       final ResolvedEntityToken token = sentence.get(i);
       final boolean linkedToPrevious = token.getResource() != null &&
-          token.getResource().getClasses().contains(agent) && i > 0 &&
-          sentence.get(i - 1).getResource() != null &&
-          token.getResource().getIri().equals(sentence.get(i - 1).getResource().getIri());
+              token.getResource().getClasses().contains(agent) && i > 0 &&
+              sentence.get(i - 1).getResource() != null &&
+              token.getResource().getIri().equals(sentence.get(i - 1).getResource().getIri());
       if (linkedToPrevious) {
         final ResolvedEntityToken previousToken = sentence.get(i - 1);
         if (previousToken.getShrunkWords() == null) {
@@ -223,33 +223,37 @@ public class EnhancedEntityExtractor {
     for (String word1 : text1.keySet()) {
       if (ignoreCount) {
         text1SquareNorm += 1;
-        if (!word1.equals(word) && text2.containsKey(word1)) product += 1;
+        if (!word1.equals(word) && text2.containsKey(word1))
+          product += 1;
       } else {
         final int count1 = text1.get(word1).count;
         text1SquareNorm += count1 * count1;
-        if (!word1.equals(word) && text2.containsKey(word1)) product += count1 * text2.get(word1).count;
+        if (!word1.equals(word) && text2.containsKey(word1))
+          product += count1 * text2.get(word1).count;
       }
     }
     return (float) (product / (Math.sqrt(text1SquareNorm) * Math.sqrt(text2SquareNorm)));
   }
 
   private boolean isAmbiguousPage(String iri) {
-    final String words = articleProcessor.getArticleBody(iri);
+    final String words = articleProcessor.getArticleBodyByUrl(iri);
     return words != null && (words.contains("معانی متفاوت") ||
-        words.contains("ممکن است به یکی از موارد زیر") ||
-        words.contains("می\u200Cتواند به مقاله\u200Cهای زیر") ||
-        words.contains("میتواند به مقاله\u200Cهای زیر") ||
-        words.contains("ممکن است به این\u200Cها اشاره") ||
-        words.contains("ممکن است به اینها اشاره") ||
-        words.contains("ممکن است به این ها اشاره") ||
-        words.contains("ممکن است به یکی از افراد زیر") ||
-        words.contains("می\u200Cتواند به موارد گوناگونی اشاره") ||
-        words.contains("میتواند به موارد گوناگونی اشاره") ||
-        words.contains("می\u200Cتواند به موارد زیر اشاره") ||
-        words.contains("میتواند به موارد زیر اشاره") ||
-        words.contains("ممکن است به موارد زیر") ||
-        words.contains("می\u200Cتواند به موارد زیر") ||
-        words.contains("میتواند به موارد زیر")
+            words.contains("ممکن است به یکی از موارد زیر") ||
+            words.contains("ممکن است یکی از موارد زیر") ||
+            words.contains("یکی از این معانی به کار رود") ||
+            words.contains("می\u200Cتواند به مقاله\u200Cهای زیر") ||
+            words.contains("میتواند به مقاله\u200Cهای زیر") ||
+            words.contains("ممکن است به این\u200Cها اشاره") ||
+            words.contains("ممکن است به اینها اشاره") ||
+            words.contains("ممکن است به این ها اشاره") ||
+            words.contains("ممکن است به یکی از افراد زیر") ||
+            words.contains("می\u200Cتواند به موارد گوناگونی اشاره") ||
+            words.contains("میتواند به موارد گوناگونی اشاره") ||
+            words.contains("می\u200Cتواند به موارد زیر اشاره") ||
+            words.contains("میتواند به موارد زیر اشاره") ||
+            words.contains("ممکن است به موارد زیر") ||
+            words.contains("می\u200Cتواند به موارد زیر") ||
+            words.contains("میتواند به موارد زیر")
     );
   }
 
@@ -275,6 +279,12 @@ public class EnhancedEntityExtractor {
     return ((float) count) / context.size();
   }
 
+  final float VillageRankMultiplier = 0;
+  final float ArtRankMultiplier = 0;
+  final float OrganizationMultiplier = 0;
+  final float FilmRankMultiplier = 0;
+  final float AmbiguationMultiplier = 0;
+
   private void setDefaultRankMultiplier(ResolvedEntityTokenResource resource, Map<String, WordInfo> contextWords) {
     if (resource == null) return;
     float rank = 1f;
@@ -282,33 +292,72 @@ public class EnhancedEntityExtractor {
 //    if (resource.getClasses().contains(prefix + "Thing")) rank *= 1.1;
 //    if (resource.getClasses().size() == 1) rank *= 1.1;
     if ((resource.getClasses().contains(prefix + "Village")
-        || resource.getIri().contains("روستا")) &&
-        (!contextWords.containsKey("روستا") && !contextWords.containsKey("روستای"))) rank *= 0.01;
+            || resource.getIri().contains("روستا")) &&
+            (!contextWords.containsKey("روستا") && !contextWords.containsKey("روستای")))
+      rank *= VillageRankMultiplier;
+
+    if(resource.getIri().contains("ایران_(اوستیا-آلانیا)")) rank = 0;
     if ((resource.getMainClass() != null && resource.getMainClass().endsWith("Work")
-        || resource.getIri().contains("روزنامه")
-        || resource.getIri().contains("کتاب")
-        || resource.getIri().contains("داستان")
-        || resource.getIri().contains("تورات")
-        || resource.getIri().contains("انجیل")
-        || resource.getIri().contains("قرآن")
-        || resource.getIri().contains("انتشارات")
-        || resource.getIri().contains("آلبوم"))
-        || resource.getIri().contains("ترانه") &&
-        (!contextWords.containsKey("روزنامه") &&
-            !contextWords.containsKey("کتاب") &&
-            !contextWords.containsKey("داستان") &&
-            !contextWords.containsKey("تورات") &&
-            !contextWords.containsKey("انجیل") &&
-            !contextWords.containsKey("قرآن") &&
-            !contextWords.containsKey("انتشارات")
-            && !contextWords.containsKey("آلبوم") && !contextWords.containsKey("ترانه"))) rank *= 0.01;
+            || resource.getIri().contains("روزنامه")
+            || resource.getIri().contains("کتاب")
+            || resource.getIri().contains("شرکت")
+            || resource.getIri().contains("داستان")
+            || resource.getIri().contains("رمان")
+            || resource.getIri().contains("تورات")
+            || resource.getIri().contains("انجیل")
+            || resource.getIri().contains("قرآن")
+            || resource.getIri().contains("انتشارات")
+            || resource.getIri().contains("کمیک")) &&
+            (!contextWords.containsKey("روزنامه") &&
+                    !contextWords.containsKey("کتاب") &&
+                    !contextWords.containsKey("شرکت") &&
+                    !contextWords.containsKey("داستان") &&
+                    !contextWords.containsKey("رمان") &&
+                    !contextWords.containsKey("تورات") &&
+                    !contextWords.containsKey("انجیل") &&
+                    !contextWords.containsKey("قرآن") &&
+                    !contextWords.containsKey("انتشارات") &&
+                    !contextWords.containsKey("کمیک")))
+      rank *= ArtRankMultiplier;
+
+    if ((resource.getMainClass() != null && resource.getMainClass().endsWith("Work")
+            || resource.getIri().contains("استودیو")
+            || resource.getIri().contains("آلبوم")
+            || resource.getIri().contains("موسیقی")
+            || resource.getIri().contains("ترانه")) &&
+            (!contextWords.containsKey("موسیقی") &&
+                    !contextWords.containsKey("استودیو") &&
+                    !contextWords.containsKey("آلبوم") && !contextWords.containsKey("ترانه")))
+      rank *= ArtRankMultiplier;
+
+    if (resource.getIri().contains("سیاست")
+            || resource.getIri().contains("فرهنگ")
+            || resource.getIri().contains("سیاسی")
+            || resource.getIri().contains("فرهنگی")
+            || resource.getIri().contains("گروه") &&
+            (!contextWords.containsKey("سیاست")
+                    && !contextWords.containsKey("سیاسی")
+                    && !contextWords.containsKey("فرهنگ")
+                    && !contextWords.containsKey("فرهنگی")
+                    && !contextWords.containsKey("گروه")))
+      rank *= OrganizationMultiplier;
+
+    if (resource.getIri().contains("(شرکت")
+            || resource.getIri().contains("(سازمان") &&
+            (!contextWords.containsKey("شرکت")
+                    && !contextWords.containsKey("سازمان")))
+      rank *= OrganizationMultiplier;
+
     if (resource.getClasses().contains(prefix + "Film")
-        || resource.getIri().contains("(فیلم")
-        || resource.getIri().contains("(مجموعه") &&
-        (!contextWords.containsKey("فیلم") && !contextWords.containsKey("تلویوزیون"))) rank *= 0.01;
-    if (resource.getIri().contains("ابهام")) rank *= 0.01;
-    if (resource.getIri().contains("ابهام")) rank *= 0.01;
-    if (isAmbiguousPage(resource.getIri())) rank *= 0.01;
+            || resource.getIri().contains("(فیلم")
+            || resource.getIri().contains("ویدئویی")
+            || resource.getIri().contains("(مجموعه") &&
+            (!contextWords.containsKey("فیلم") &&
+                    !contextWords.containsKey("ویدئویی") &&
+                    !contextWords.containsKey("تلویوزیون"))) rank *= FilmRankMultiplier;
+    if (resource.getIri().contains("ابهام")) rank *= AmbiguationMultiplier;
+    if (resource.getIri().contains("ابهام")) rank *= AmbiguationMultiplier;
+    if (isAmbiguousPage(resource.getIri())) rank *= AmbiguationMultiplier;
 //    if (resource.getIri().contains(")")) rank -= 0.3;
     if (resource.getIri().contains("(")) rank *= 0.5;
     resource.setRank(rank);
@@ -349,8 +398,11 @@ public class EnhancedEntityExtractor {
 
       final List<ResolvedEntityToken> context = getContext(sentences, sentenceIndex, contextLength);
       final Map<String, WordInfo> contextWords = new HashMap<>();
+
+      // TODO: context must be smaller than all of text.
       for (ResolvedEntityToken token : context) {
         if (Utils.isBadTag(token.getPos())) continue;
+        if (Utils.isFrequentWord(token.getWord())) continue;
         final String word = token.getWord();
         WordInfo wc = contextWords.get(word);
         if (wc == null) contextWords.put(word, new WordInfo(1));
@@ -388,22 +440,23 @@ public class EnhancedEntityExtractor {
 //            logger.trace(String.format("similarity2 between %s and %s is %f.", token.getWord(), title, similarity2));
             similarity3 = calculateSimilarityOfVerbs(context, rr.getIri());
             logger.trace(String.format("similarity3 between %s and %s is %f.", token.getWord(), title, similarity3));
-            if (similarity1 == 0) similarity1 = 0.001f;
+//            if (similarity1 == 0) similarity1 = 0.001f;
 //            if (similarity2 == 0) similarity2 = 0.001f;
-            if (similarity3 == 0) similarity3 = 0.001f;
+//            if (similarity3 == 0) similarity3 = 0.001f;
           } else {
             similarity1 = 0f;
 //            similarity2 = 0f;
             similarity3 = 0f;
           }
           if (token.getWord().equals(title)) similarity1 *= 3;
-          rr.setRank(rr.getRank() * (similarity1 /*+ 3 * similarity2*/ + 2 * similarity3));
+          rr.setRank(rr.getRank() * (similarity1 /*+ 3 * similarity2*/ + 2 * similarity3 +
+                  (articleWords==null ? 0.001f : articleWords.size() / 1000f)));
         }
         Collections.sort(allResources);
 
         if (allResources.size() > 0) {
           final ResolvedEntityTokenResource r = allResources.get(0);
-          if (r.getRank() >= contextDisambiguationThreshold) token.setResource(r);
+          if (r.getRank() > contextDisambiguationThreshold) token.setResource(r);
           else {
             token.setIobType(IobType.Outside);
             token.setResource(null);
@@ -412,7 +465,7 @@ public class EnhancedEntityExtractor {
         token.getAmbiguities().clear();
         for (int i = 1; i < allResources.size(); i++) {
           final ResolvedEntityTokenResource r = allResources.get(i);
-          if (r.getRank() >= contextDisambiguationThreshold) token.getAmbiguities().add(r);
+          if (r.getRank() > contextDisambiguationThreshold) token.getAmbiguities().add(r);
         }
       }
     }
@@ -424,7 +477,7 @@ public class EnhancedEntityExtractor {
     }));
     sentences.forEach(sentence -> sentence.forEach(token -> {
       if (token.getAmbiguities().size() == 1 && token.getResource() == null &&
-          !token.getAmbiguities().get(0).getIri().contains(")")) {
+              !token.getAmbiguities().get(0).getIri().contains(")")) {
         token.setResource(token.getAmbiguities().get(0));
         token.getAmbiguities().clear();
       }
@@ -451,8 +504,8 @@ public class EnhancedEntityExtractor {
           token.setResource(cache.get(token.getWord()));
         }
         if ((pos.equals("N") || pos.equals("Ne")) && token.getResource() != null &&
-            token.getResource().getClasses() != null &&
-            !token.getResource().getClasses().isEmpty())
+                token.getResource().getClasses() != null &&
+                !token.getResource().getClasses().isEmpty())
           cache.put(token.getWord(), token.getResource());
       }
   }
@@ -462,7 +515,7 @@ public class EnhancedEntityExtractor {
 
   private boolean matchClass(ResolvedEntityToken token, String ontologyClass) {
     return token.getResource() != null && token.getResource().getClasses() != null
-        && token.getResource().getClasses().contains(prefix + ontologyClass);
+            && token.getResource().getClasses().contains(prefix + ontologyClass);
   }
 
   private void addToQueue(List<ResolvedEntityTokenResource> queue, ResolvedEntityTokenResource item) {
@@ -549,7 +602,7 @@ public class EnhancedEntityExtractor {
                          boolean disambiguateByContext, Float contextDisambiguationThreshold,
                          boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
     exportWiki(path, maxAmbiguities, DEFAULT_CONTEXT_LEN, disambiguateByContext, contextDisambiguationThreshold,
-        resolveByName, resolvePronouns, buildDependencies);
+            resolveByName, resolvePronouns, buildDependencies);
   }
 
   public void exportWiki(Path path, Integer maxAmbiguities, int contextLength,
@@ -563,12 +616,12 @@ public class EnhancedEntityExtractor {
       final Path outputFolder = f.getParent().resolve(f.getFileName() + "_output");
       if (Files.notExists(outputFolder)) Files.createDirectories(outputFolder);
       final Map<String, String> map = gson.fromJson(new BufferedReader(
-          new InputStreamReader(new FileInputStream(f.toFile()), "UTF-8")), type);
+              new InputStreamReader(new FileInputStream(f.toFile()), "UTF-8")), type);
       for (final String key : map.keySet()) {
         final String value = map.get(key);
         try {
           final List<List<ResolvedEntityToken>> result = extract(maxAmbiguities, contextLength, disambiguateByContext,
-              contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies, value);
+                  contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies, value);
           exportToFile(outputFolder.resolve(key + ".json"), result);
         } catch (Throwable th) {
           th.printStackTrace();
@@ -581,7 +634,7 @@ public class EnhancedEntityExtractor {
                            boolean disambiguateByContext, Float contextDisambiguationThreshold,
                            boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
     exportFolder(path, pattern, maxAmbiguities, DEFAULT_CONTEXT_LEN, disambiguateByContext,
-        contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies);
+            contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies);
   }
 
 
@@ -598,12 +651,12 @@ public class EnhancedEntityExtractor {
       logger.warn(String.format("writing file %s (file %d of %d) ...", file.toAbsolutePath(), fileIndex, files.size()));
       if (Files.exists(outputPath)) {
         logger.warn(String.format("file %s is existed. Skipping %s ...",
-            outputPath.toAbsolutePath(), file.toAbsolutePath()));
+                outputPath.toAbsolutePath(), file.toAbsolutePath()));
         continue;
       }
       try (BufferedReader in =
-               new BufferedReader(new InputStreamReader(new FileInputStream(file.toFile()),
-                   "UTF8"))) {
+                   new BufferedReader(new InputStreamReader(new FileInputStream(file.toFile()),
+                           "UTF8"))) {
         final List<List<ResolvedEntityToken>> list = new ArrayList<>();
         while (true) {
           final String line = in.readLine();
@@ -611,8 +664,8 @@ public class EnhancedEntityExtractor {
           if (line == null) break;
           try {
             final List<List<ResolvedEntityToken>> extracted = extract(maxAmbiguities, contextLength,
-                disambiguateByContext, contextDisambiguationThreshold, resolveByName, resolvePronouns,
-                buildDependencies, line);
+                    disambiguateByContext, contextDisambiguationThreshold, resolveByName, resolvePronouns,
+                    buildDependencies, line);
             list.addAll(extracted);
           } catch (Throwable th) {
             th.printStackTrace();

@@ -70,6 +70,11 @@ public class EntityArticleProcessor {
     return textsOfAllArticles.get(title);
   }
 
+  String getArticleBodyByUrl(String url) {
+    final String title = url.substring(url.lastIndexOf('/') + 1).replace('_', ' ');
+    return getArticleBody(title);
+  }
+
   /**
    * get words from article body. it has a cache to avoid calculation of frequently used articles.
    *
@@ -88,6 +93,7 @@ public class EntityArticleProcessor {
       sentenceNumber++;
       for (TaggedWord token : sentence) {
         if (Utils.isBadTag(token.tag())) continue;
+        if (Utils.isFrequentWord(token.word())) continue;
         final String word = token.word();
         WordInfo wc = articleWords.get(word);
         if (wc == null) articleWords.put(word, new WordInfo(1));
