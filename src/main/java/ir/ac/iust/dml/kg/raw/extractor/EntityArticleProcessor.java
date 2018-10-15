@@ -31,10 +31,23 @@ public class EntityArticleProcessor {
   private Map<String, String> textsOfAllArticles = null;
   private Map<String, List<List<TaggedWord>>> articlePosTags = new HashMap<>();
 
-  EntityArticleProcessor() {
+  private static EntityArticleProcessor instance;
+
+  public static EntityArticleProcessor i() {
+    if(instance == null) instance = new EntityArticleProcessor();
+    return instance;
+  }
+
+  public static EntityArticleProcessor i(ResourceExtractionWrapper client) {
+    if(instance == null) instance = new EntityArticleProcessor(client);
+    return instance;
+  }
+
+  private EntityArticleProcessor() {
     this.client = ResourceExtractionWrapper.i();
   }
-  EntityArticleProcessor(ResourceExtractionWrapper client) {
+
+  private EntityArticleProcessor(ResourceExtractionWrapper client) {
     this.client = client;
   }
 

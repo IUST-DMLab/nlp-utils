@@ -46,12 +46,12 @@ public class EnhancedEntityExtractor {
 
   public EnhancedEntityExtractor(ResourceExtractionWrapper client) {
     this.client = client;
-    this.articleProcessor = new EntityArticleProcessor(client);
+    this.articleProcessor = EntityArticleProcessor.i(client);
   }
 
   public EnhancedEntityExtractor() {
     this.client = ResourceExtractionWrapper.i();
-    this.articleProcessor = new EntityArticleProcessor();
+    this.articleProcessor = EntityArticleProcessor.i();
   }
 
   public List<List<ResolvedEntityToken>> extract(String rawText, boolean removeSubset) {
