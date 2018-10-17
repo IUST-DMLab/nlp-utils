@@ -425,7 +425,7 @@ public class EnhancedEntityExtractor {
     }
   }
 
-  private List<Integer> getResourceBoundry(List<ResolvedEntityToken> sentence, int position) {
+  private List<Integer> getResourceBoundary(List<ResolvedEntityToken> sentence, int position) {
     List<Integer> result = new ArrayList<>();
     ResolvedEntityToken token = sentence.get(position);
     if (token.getIobType() == IobType.Beginning) {
@@ -440,7 +440,7 @@ public class EnhancedEntityExtractor {
       for (; start > 0; start--) {
         if (sentence.get(start).getIobType() == IobType.Beginning) break;
       }
-      return getNameBoundary(sentence, start);
+      return getResourceBoundary(sentence, start);
     }
     return result;
   }
@@ -470,7 +470,7 @@ public class EnhancedEntityExtractor {
     List<List<Integer>> boundaries = new ArrayList<>();
     for (Integer j : nameBoundary) {
       ResolvedEntityTokenResource r = sentence.get(j).getResource();
-      if (r != null) boundaries.add(getResourceBoundry(sentence, j));
+      if (r != null) boundaries.add(getResourceBoundary(sentence, j));
     }
     return boundaries;
   }
