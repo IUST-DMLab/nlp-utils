@@ -51,6 +51,7 @@ public class SimpleConstituencyParserTest {
     if (enhancedEntityExtractor == null) enhancedEntityExtractor = new EnhancedEntityExtractor();
     List<List<ResolvedEntityToken>> resolved = enhancedEntityExtractor.extract(input);
     enhancedEntityExtractor.disambiguateByContext(resolved, 3, 0.0001f);
+    enhancedEntityExtractor.integrateNER(resolved);
     enhancedEntityExtractor.resolveByName(resolved);
     enhancedEntityExtractor.resolvePronouns(resolved);
     resolved = enhancedEntityExtractor.shrinkNameEntitiesSentences(resolved);

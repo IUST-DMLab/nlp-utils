@@ -12,6 +12,7 @@ import java.util.*;
 public class ResolvedEntityToken {
   private String word;
   private String pos;
+  private String ner;
   private DependencyInformation dep;
   private IobType iobType;
   private Set<Integer> phraseMates;
@@ -38,6 +39,7 @@ public class ResolvedEntityToken {
     ResolvedEntityToken copy = new ResolvedEntityToken();
     copy.word = this.word;
     copy.pos = this.pos;
+    copy.ner = this.ner;
     if (dep != null) copy.dep = this.dep.copy();
     copy.iobType = this.iobType;
     if (this.phraseMates != null) {
@@ -93,6 +95,14 @@ public class ResolvedEntityToken {
 
   public void setPos(String pos) {
     this.pos = pos;
+  }
+
+  public String getNer() {
+    return ner;
+  }
+
+  public void setNer(String ner) {
+    this.ner = ner;
   }
 
   public DependencyInformation getDep() {

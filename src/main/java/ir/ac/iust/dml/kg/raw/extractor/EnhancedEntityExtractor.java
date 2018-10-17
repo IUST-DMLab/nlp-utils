@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import edu.stanford.nlp.ling.TaggedWord;
 import ir.ac.iust.dml.kg.raw.DependencyParser;
+import ir.ac.iust.dml.kg.raw.NamedEntityRecognizer;
 import ir.ac.iust.dml.kg.raw.POSTagger;
 import ir.ac.iust.dml.kg.raw.utils.PathWalker;
 import ir.ac.iust.dml.kg.raw.utils.URIs;
@@ -187,8 +188,8 @@ public class EnhancedEntityExtractor {
     if (body == null) return null;
     System.out.println("body is \n" + body);
     final List<List<ResolvedEntityToken>> extracted = extract(body);
-
     disambiguateByContext(extracted, contextLength, contextDisambiguationThreshold, forceToDisambiguateThreshold);
+    integrateNER(extracted);
     final Map<String, Integer> map = new HashMap<>();
     extracted.forEach(sentence -> sentence.forEach(token -> {
       if (token.getResource() != null) {
@@ -296,7 +297,7 @@ public class EnhancedEntityExtractor {
             (!contextWords.containsKey("روستا") && !contextWords.containsKey("روستای")))
       rank *= VillageRankMultiplier;
 
-    if(resource.getIri().contains("ایران_(اوستیا-آلانیا)")) rank = 0;
+    if (resource.getIri().contains("ایران_(اوستیا-آلانیا)")) rank = 0;
     if ((resource.getMainClass() != null && resource.getMainClass().endsWith("Work")
             || resource.getIri().contains("روزنامه")
             || resource.getIri().contains("کتاب")
@@ -372,6 +373,178 @@ public class EnhancedEntityExtractor {
     for (int i = sentenceIndex + 1; i < sentenceIndex + contextLength && i <= sentences.size() - 1; i++)
       context.addAll(sentences.get(i));
     return context;
+  }
+
+  public void integrateNER(List<List<ResolvedEntityToken>> sentences) {
+    NamedEntityRecognizer.nerResolvedTokens(sentences, false);
+    for (List<ResolvedEntityToken> sentence : sentences) {
+      for (int i = 0; i < sentence.size(); i++) {
+        ResolvedEntityToken token = sentence.get(i);
+        if (!token.getNer().equals("O")) {
+          if (token.getResource() == null) {
+            if (token.getAmbiguities().isEmpty()) {
+              final List<Integer> nameBoundary = getNameBoundary(sentence, i);
+              final String name = getName(sentence, nameBoundary);
+              final ResolvedEntityTokenResource resource = getResource(name, token.getNer());
+
+              final int start = nameBoundary.get(0);
+              final int end = nameBoundary.get(nameBoundary.size() - 1);
+
+              // اگر همه IRI ها در آن بازه زیر مجموعه NE جاری بودند و طول آن‌ها کمتر از آن NE بود، با NE جایگزین می‌شوند.
+
+              final List<List<Integer>> conflicts = getConflictedResources(sentence, nameBoundary);
+              if (conflicts.isEmpty()) {
+                setResource(sentence, nameBoundary, resource);
+              } else {
+                for (List<Integer> resourceBoundary : conflicts) {
+                  if (resourceBoundary.size() < nameBoundary.size() &&
+                          resourceBoundary.get(0) >= start && resourceBoundary.get(resourceBoundary.size() - 1) <= end) {
+                    setResource(sentence, nameBoundary, resource);
+                  }
+                }
+              }
+            }
+            // TODO handle else: advanced changes
+          }
+        }
+      }
+    }
+  }
+
+  private void setResource(List<ResolvedEntityToken> sentence, List<Integer> nameBoundary,
+                           ResolvedEntityTokenResource resource) {
+    boolean beggining = true;
+    for (Integer j : nameBoundary) {
+      if(sentence.get(j).getResource() != null)
+        sentence.get(j).getAmbiguities().add(sentence.get(j).getResource());
+      sentence.get(j).setResource(resource);
+      if (beggining) {
+        sentence.get(j).setIobType(IobType.Beginning);
+        beggining = false;
+      } else sentence.get(j).setIobType(IobType.Inside);
+    }
+  }
+
+  private List<Integer> getResourceBoundry(List<ResolvedEntityToken> sentence, int position) {
+    List<Integer> result = new ArrayList<>();
+    ResolvedEntityToken token = sentence.get(position);
+    if (token.getIobType() == IobType.Beginning) {
+      result.add(position);
+      for (int i = position + 1; i < sentence.size(); i++) {
+        final ResolvedEntityToken t = sentence.get(i);
+        if (t.getIobType() == IobType.Beginning || t.getIobType() == IobType.Outside) break;
+        result.add(i);
+      }
+    } else if (token.getIobType() == IobType.Inside) {
+      int start = position - 1;
+      for (; start > 0; start--) {
+        if (sentence.get(start).getIobType() == IobType.Beginning) break;
+      }
+      return getNameBoundary(sentence, start);
+    }
+    return result;
+  }
+
+  private List<Integer> getNameBoundary(List<ResolvedEntityToken> sentence, int position) {
+    List<Integer> result = new ArrayList<>();
+    String tokenNER = sentence.get(position).getNer();
+    if (tokenNER.startsWith("B")) {
+      result.add(position);
+      for (int i = position + 1; i < sentence.size(); i++) {
+        final String ner = sentence.get(i).getNer();
+        if (ner.startsWith("B") || ner.equals("O")) break;
+        result.add(i);
+      }
+    } else if (tokenNER.startsWith("I")) {
+      int start = position - 1;
+      for (; start > 0; start--) {
+        if (sentence.get(start).getNer().startsWith("B")) break;
+      }
+      return getNameBoundary(sentence, start);
+    }
+    return result;
+  }
+
+  private List<List<Integer>> getConflictedResources(List<ResolvedEntityToken> sentence,
+                                                     List<Integer> nameBoundary) {
+    List<List<Integer>> boundaries = new ArrayList<>();
+    for (Integer j : nameBoundary) {
+      ResolvedEntityTokenResource r = sentence.get(j).getResource();
+      if (r != null) boundaries.add(getResourceBoundry(sentence, j));
+    }
+    return boundaries;
+  }
+
+  private String getName(List<ResolvedEntityToken> sentence, List<Integer> nameBoundary) {
+    final StringBuilder builder = new StringBuilder();
+    for (Integer j : nameBoundary) builder.append(sentence.get(j).getWord()).append(' ');
+    builder.setLength(builder.length() - 1);
+    return builder.toString();
+  }
+
+  private String autoUriPrefix = "http://fkg.iust.ac.ir/resource/auto/";
+//  private String autoUriPrefix = URIs.INSTANCE.replaceAllPrefixesInString(URIs.INSTANCE.getFkgResourcePrefix() + ":auto/");
+
+  private String getAutoUri(String name) {
+    return autoUriPrefix + name.replaceAll("\\s+", "_");
+  }
+
+  private ResolvedEntityTokenResource getResource(String name, String ner) {
+    final String iri = getAutoUri(name);
+    final ResolvedEntityTokenResource resource = new ResolvedEntityTokenResource();
+    resource.setResource(true);
+    resource.setIri(iri);
+    resource.setMainClass(getMainClass(ner));
+    resource.setClasses(getClasses(resource.getMainClass()));
+    return resource;
+  }
+
+  final static String[][] classes = {
+          {
+                  URIs.INSTANCE.getFkgOntologyClassUri("Person"),
+                  URIs.INSTANCE.getFkgOntologyClassUri("Agent"),
+                  URIs.INSTANCE.getFkgOntologyClassUri("Thing")
+          },
+          {
+                  URIs.INSTANCE.getFkgOntologyClassUri("Place"),
+                  URIs.INSTANCE.getFkgOntologyClassUri("Thing")
+          },
+          {
+                  URIs.INSTANCE.getFkgOntologyClassUri("Organisation"),
+                  URIs.INSTANCE.getFkgOntologyClassUri("Agent"),
+                  URIs.INSTANCE.getFkgOntologyClassUri("Thing")
+          },
+  };
+
+  final static Map<String, Set<String>> classParents = new HashMap<>();
+
+  static {
+    for (String[] c : classes) {
+      final Set<String> parents = new HashSet<>(Arrays.asList(c));
+      classParents.put(c[0], parents);
+    }
+  }
+
+
+  private Set<String> getClasses(String mainClass) {
+    return classParents.get(mainClass);
+  }
+
+  private String getMainClass(String nerIobClass) {
+    switch (nerIobClass) {
+      case "B-PER":
+      case "I-PER":
+      case "B-PERS":
+      case "I-PERS":
+        return classes[0][0];
+      case "B-LOC":
+      case "I-LOC":
+        return classes[1][0];
+      case "B-ORG":
+      case "I-ORG":
+        return classes[2][0];
+    }
+    return null;
   }
 
   public void disambiguateByContext(List<List<ResolvedEntityToken>> sentences,
@@ -450,7 +623,7 @@ public class EnhancedEntityExtractor {
           }
           if (token.getWord().equals(title)) similarity1 *= 3;
           rr.setRank(rr.getRank() * (similarity1 /*+ 3 * similarity2*/ + 2 * similarity3 +
-                  (articleWords==null ? 0.001f : articleWords.size() / 1000f)));
+                  (articleWords == null ? 0.001f : articleWords.size() / 1000f)));
         }
         Collections.sort(allResources);
 
@@ -578,12 +751,13 @@ public class EnhancedEntityExtractor {
     return converted;
   }
 
-  private List<List<ResolvedEntityToken>> extract(Integer maxAmbiguities, int contextLength,
+  private List<List<ResolvedEntityToken>> extract(Integer maxAmbiguities, int contextLength, boolean resolveNERs,
                                                   boolean disambiguateByContext, Float contextDisambiguationThreshold,
                                                   boolean resolveByName, boolean resolvePronouns,
                                                   boolean buildDependencies, String value) {
     final List<List<ResolvedEntityToken>> extracted = extract(value);
     if (disambiguateByContext) disambiguateByContext(extracted, contextLength, contextDisambiguationThreshold);
+    if (resolveNERs) integrateNER(extracted);
     if (resolveByName) resolveByName(extracted);
     if (resolvePronouns) resolvePronouns(extracted);
     if (buildDependencies) dependencyParse(extracted);
@@ -598,14 +772,14 @@ public class EnhancedEntityExtractor {
     return extracted;
   }
 
-  public void exportWiki(Path path, Integer maxAmbiguities,
+  public void exportWiki(Path path, Integer maxAmbiguities, boolean nerIntegration,
                          boolean disambiguateByContext, Float contextDisambiguationThreshold,
                          boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
-    exportWiki(path, maxAmbiguities, DEFAULT_CONTEXT_LEN, disambiguateByContext, contextDisambiguationThreshold,
-            resolveByName, resolvePronouns, buildDependencies);
+    exportWiki(path, maxAmbiguities, DEFAULT_CONTEXT_LEN, nerIntegration,
+            disambiguateByContext, contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies);
   }
 
-  public void exportWiki(Path path, Integer maxAmbiguities, int contextLength,
+  public void exportWiki(Path path, Integer maxAmbiguities, int contextLength, boolean nerIntegration,
                          boolean disambiguateByContext, Float contextDisambiguationThreshold,
                          boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
     final List<Path> files = PathWalker.INSTANCE.getPath(path, new Regex("\\d+\\.json"));
@@ -620,8 +794,9 @@ public class EnhancedEntityExtractor {
       for (final String key : map.keySet()) {
         final String value = map.get(key);
         try {
-          final List<List<ResolvedEntityToken>> result = extract(maxAmbiguities, contextLength, disambiguateByContext,
-                  contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies, value);
+          final List<List<ResolvedEntityToken>> result = extract(maxAmbiguities, contextLength, nerIntegration,
+                  disambiguateByContext, contextDisambiguationThreshold, resolveByName, resolvePronouns,
+                  buildDependencies, value);
           exportToFile(outputFolder.resolve(key + ".json"), result);
         } catch (Throwable th) {
           th.printStackTrace();
@@ -630,15 +805,15 @@ public class EnhancedEntityExtractor {
     }
   }
 
-  public void exportFolder(Path path, String pattern, Integer maxAmbiguities,
+  public void exportFolder(Path path, String pattern, Integer maxAmbiguities, boolean nerIntegration,
                            boolean disambiguateByContext, Float contextDisambiguationThreshold,
                            boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
-    exportFolder(path, pattern, maxAmbiguities, DEFAULT_CONTEXT_LEN, disambiguateByContext,
+    exportFolder(path, pattern, maxAmbiguities, DEFAULT_CONTEXT_LEN, nerIntegration, disambiguateByContext,
             contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies);
   }
 
 
-  public void exportFolder(Path path, String pattern, Integer maxAmbiguities, int contextLength,
+  public void exportFolder(Path path, String pattern, Integer maxAmbiguities, int contextLength, boolean nerIntegration,
                            boolean disambiguateByContext, Float contextDisambiguationThreshold,
                            boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
     if (pattern == null) pattern = ".*\\.txt";
@@ -663,7 +838,7 @@ public class EnhancedEntityExtractor {
           logger.info(line);
           if (line == null) break;
           try {
-            final List<List<ResolvedEntityToken>> extracted = extract(maxAmbiguities, contextLength,
+            final List<List<ResolvedEntityToken>> extracted = extract(maxAmbiguities, contextLength, nerIntegration,
                     disambiguateByContext, contextDisambiguationThreshold, resolveByName, resolvePronouns,
                     buildDependencies, line);
             list.addAll(extracted);
