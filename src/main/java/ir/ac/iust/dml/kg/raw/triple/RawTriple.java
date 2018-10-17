@@ -6,11 +6,13 @@
 
 package ir.ac.iust.dml.kg.raw.triple;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings(value = {"unused", "WeakerAccess"})
-public class RawTriple {
+public class RawTriple implements Comparable<RawTriple> {
   private String module;
   private String subject;
   private String predicate;
@@ -213,5 +215,10 @@ public class RawTriple {
     result = 31 * result + (accuracy != null ? accuracy.hashCode() : 0);
     result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
     return result;
+  }
+
+  @Override
+  public int compareTo(@NotNull RawTriple o) {
+    return Double.compare(accuracy, o.accuracy);
   }
 }

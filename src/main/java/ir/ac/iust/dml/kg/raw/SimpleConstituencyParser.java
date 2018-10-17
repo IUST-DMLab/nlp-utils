@@ -70,9 +70,12 @@ public class SimpleConstituencyParser {
     // Thinking to dependency links as bi-directional links.
     for (int i = 0; i < tokens.size(); i++) {
       final ResolvedEntityToken token = tokens.get(i);
-      if (token.getDep().getHead() == 0 || token.getDep().getHead() > tokens.size() - 2) continue;
-      token.getDependencyMates().put(token.getDep().getHead() - 1, token.getDep());
-      tokens.get(token.getDep().getHead() - 1).getDependencyMates().put(i, token.getDep());
+      if(token.getDep() != null) {
+        if (token.getDep().getHead() == 0 || token.getDep().getHead() > tokens.size() - 2)
+          continue;
+        token.getDependencyMates().put(token.getDep().getHead() - 1, token.getDep());
+        tokens.get(token.getDep().getHead() - 1).getDependencyMates().put(i, token.getDep());
+      }
     }
 //
 //    final List<Integer> lastPhrase = new ArrayList<>();
@@ -101,19 +104,19 @@ public class SimpleConstituencyParser {
       final ResolvedEntityToken token = tokens.get(i);
       // HEADS In Dependency Parser starts with 1
       boolean linkedToNext = (token.getDep() != null && token.getDep().getHead() == i + 2) ||
-          ((i < tokens.size() - 1) && (tokens.get(i + 1).getDep() != null)
-              && (tokens.get(i + 1).getDep().getHead() == i + 1)) ||
-          (token.getPos().equals("از") ||
-              (token.getPos().equals("به")));
+              ((i < tokens.size() - 1) && (tokens.get(i + 1).getDep() != null)
+                      && (tokens.get(i + 1).getDep().getHead() == i + 1)) ||
+              (token.getPos().equals("از") ||
+                      (token.getPos().equals("به")));
       if (linkedToNext && i < tokens.size() - 1) {
         token.getPhraseMates().add(i + 1);
         tokens.get(i + 1).getPhraseMates().add(i);
       }
 
       boolean linkedToThePrevious =
-          (token.getDep() != null && token.getDep().getRelation().equals("MOZ")) ||
-              (token.getDep() != null && token.getDep().getRelation().equals("NCONJ")) ||
-              (token.getPhraseMates().isEmpty() && token.getWord().equals("را"));
+              (token.getDep() != null && token.getDep().getRelation().equals("MOZ")) ||
+                      (token.getDep() != null && token.getDep().getRelation().equals("NCONJ")) ||
+                      (token.getPhraseMates().isEmpty() && token.getWord().equals("را"));
       if (linkedToThePrevious && i > 1) {
         token.getPhraseMates().add(i - 1);
         tokens.get(i - 1).getPhraseMates().add(i);

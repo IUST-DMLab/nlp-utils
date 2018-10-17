@@ -380,7 +380,8 @@ public class EnhancedEntityExtractor {
     for (List<ResolvedEntityToken> sentence : sentences) {
       for (int i = 0; i < sentence.size(); i++) {
         ResolvedEntityToken token = sentence.get(i);
-        if (!token.getNer().equals("O")) {
+        final String ner = token.getNer();
+        if (!ner.equals("O") && !ner.equals("B-MISC") && !ner.equals("I-MISC")) {
           if (token.getResource() == null) {
             if (token.getAmbiguities().isEmpty()) {
               final List<Integer> nameBoundary = getNameBoundary(sentence, i);
