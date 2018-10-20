@@ -58,7 +58,7 @@ public class ResolvedEntityToken {
         copy.shrunkWords.add(token.copy());
     }
     for (ResolvedEntityTokenResource am : ambiguities)
-      copy.ambiguities.add(am.copy());
+      if(am != null) copy.ambiguities.add(am.copy());
     return copy;
   }
 

@@ -806,15 +806,15 @@ public class EnhancedEntityExtractor {
     }
   }
 
-  public void exportFolder(Path path, String pattern, Integer maxAmbiguities, boolean nerIntegration,
+  public void exportFolder(Path path, String encoding,  String pattern, Integer maxAmbiguities, boolean nerIntegration,
                            boolean disambiguateByContext, Float contextDisambiguationThreshold,
                            boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
-    exportFolder(path, pattern, maxAmbiguities, DEFAULT_CONTEXT_LEN, nerIntegration, disambiguateByContext,
+    exportFolder(path, encoding, pattern, maxAmbiguities, DEFAULT_CONTEXT_LEN, nerIntegration, disambiguateByContext,
             contextDisambiguationThreshold, resolveByName, resolvePronouns, buildDependencies);
   }
 
 
-  public void exportFolder(Path path, String pattern, Integer maxAmbiguities, int contextLength, boolean nerIntegration,
+  public void exportFolder(Path path, String encoding, String pattern, Integer maxAmbiguities, int contextLength, boolean nerIntegration,
                            boolean disambiguateByContext, Float contextDisambiguationThreshold,
                            boolean resolveByName, boolean resolvePronouns, boolean buildDependencies) throws IOException {
     if (pattern == null) pattern = ".*\\.txt";
@@ -831,8 +831,7 @@ public class EnhancedEntityExtractor {
         continue;
       }
       try (BufferedReader in =
-                   new BufferedReader(new InputStreamReader(new FileInputStream(file.toFile()),
-                           "UTF8"))) {
+                   new BufferedReader(new InputStreamReader(new FileInputStream(file.toFile()), encoding))) {
         final List<List<ResolvedEntityToken>> list = new ArrayList<>();
         while (true) {
           final String line = in.readLine();
