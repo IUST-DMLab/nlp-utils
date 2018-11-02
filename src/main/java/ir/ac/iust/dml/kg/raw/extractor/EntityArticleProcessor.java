@@ -63,13 +63,17 @@ public class EntityArticleProcessor {
 
       textsOfAllArticles = new HashMap<>();
       for (Path f : files) {
-        final Map<String, String> map = gson.fromJson(new BufferedReader(
-            new InputStreamReader(new FileInputStream(f.toFile()), "UTF-8")), type);
-        map.forEach((title, body) -> {
-          body = body.replaceAll("\\s+\\(.*\\)\\s+", " ").replaceAll("(?U)\\[\\d+]", "");
-          textsOfAllArticles.put(title, body);
-          textsOfAllArticles.put(URIs.INSTANCE.getFkgResourceUri(title), body);
-        });
+        try {
+          final Map<String, String> map = gson.fromJson(new BufferedReader(
+                  new InputStreamReader(new FileInputStream(f.toFile()), "UTF-8")), type);
+          map.forEach((title, body) -> {
+            body = body.replaceAll("\\s+\\(.*\\)\\s+", " ").replaceAll("(?U)\\[\\d+]", "");
+            textsOfAllArticles.put(title, body);
+            textsOfAllArticles.put(URIs.INSTANCE.getFkgResourceUri(title), body);
+          });
+        } catch (Throwable th) {
+          logger.info("error in loading articles form file " + f.toAbsolutePath() + " " + th.getMessage());
+        }
       }
     } catch (Throwable throwable) {
       throwable.printStackTrace();
